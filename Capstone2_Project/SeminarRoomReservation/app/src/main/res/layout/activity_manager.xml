@@ -1,0 +1,40 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_manager"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    tools:context="kr.ac.kookmin.cs.capstone2.seminarroomreservation.ManagerActivity">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="340dp"
+        >
+    <Button
+        android:id="@+id/button_reservation_status"
+        android:layout_width="80dp"
+        android:layout_height="120dp"
+        android:layout_gravity="center_horizontal"
+        android:background="#70FFFFFF"
+        android:text="예약 현황"
+        android:textColor="#ff393939"
+        android:textSize="13dp"
+        />
+
+    <Button
+        android:id="@+id/button_management"
+        android:layout_width="80dp"
+        android:layout_height="120dp"
+        android:layout_gravity="center_horizontal"
+        android:background="#70FFFFFF"
+        android:text="세미나실 관리"
+        android:textColor="#ff393939"
+        android:textSize="13dp"
+        android:layout_marginLeft="40dp"
+        />
+    </LinearLayout>
+</LinearLayout>
