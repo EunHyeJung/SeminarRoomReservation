@@ -28,6 +28,10 @@
             android:name=".UserActivity"
             android:label="@string/title_activity_user" >
         </activity>
+        <activity
+            android:name=".AdminPageActivity"
+            android:label="@string/title_activity_admin_page" >
+        </activity>
     </application>
 
 </manifest>

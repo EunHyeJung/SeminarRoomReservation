@@ -1,0 +1,46 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="kr.ac.kookmin.cs.capstone2.seminarroomreservation.AdminPageActivity"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="300px">
+        <Button
+            android:id="@+id/button_ShowManageBook"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="예약 관리"
+            android:textSize="20px"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="300px">
+        <Button
+            android:id="@+id/button_ShowManageRoom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="세미나실 제어"
+            android:textSize="20px"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/button_ShowDoorLog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="출입 기록 열람"
+            android:textSize="20px"
+            />
+    </LinearLayout>
+
+</LinearLayout>
