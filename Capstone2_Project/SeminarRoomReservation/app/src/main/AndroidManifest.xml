@@ -28,6 +28,18 @@
             android:name=".UserActivity"
             android:label="@string/title_activity_user" >
         </activity>
+        <activity
+            android:name=".JoinActivity"
+            android:label="@string/title_activity_join" >
+        </activity>
+        <activity
+            android:name=".temp"
+            android:label="@string/title_activity_temp" >
+        </activity>
+        <activity
+            android:name=".ReservationStatusActivity"
+            android:label="@string/title_activity_reservation_status" >
+        </activity>
     </application>
 
 </manifest>

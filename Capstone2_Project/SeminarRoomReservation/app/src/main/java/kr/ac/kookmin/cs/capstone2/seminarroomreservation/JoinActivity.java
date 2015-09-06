@@ -1,46 +1,50 @@
 package kr.ac.kookmin.cs.capstone2.seminarroomreservation;
 
-import android.content.Intent;
+import android.app.Activity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
 
 
-public class MainActivity extends ActionBarActivity {
+public class JoinActivity extends Activity {
+
+    EditText editTextId;
+    EditText editTextPassword;
+    EditText editTextName ;
+    EditText editTextPhone;
+    Button buttonJoin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_join);
 
-        Button buttonLogin = (Button) findViewById(R.id.button_login);
+        EditText editTextId = (EditText) findViewById(R.id.editText_id);
+        EditText editTextPassword = (EditText) findViewById(R.id.editText_password);
+        EditText editTextName = (EditText) findViewById(R.id.editText_name);
+        EditText editTextPhone = (EditText) findViewById(R.id.editText_phone);
         Button buttonJoin = (Button) findViewById(R.id.button_join);
 
-        buttonLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ManagerActivity.class);
-                startActivity(intent);
-            }
-        });
         buttonJoin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), JoinActivity.class);
-                startActivity(intent);
+                signup();
             }
         });
-
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_join, menu);
         return true;
     }
 
@@ -58,4 +62,14 @@ public class MainActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
+    public void signup(){
+        String id = editTextId.getText().toString();
+        String password = editTextPassword.getText().toString();
+        String name = editTextName.getText().toString();
+        String phone  = editTextPassword.getText().toString();
+
+    }
+
 }

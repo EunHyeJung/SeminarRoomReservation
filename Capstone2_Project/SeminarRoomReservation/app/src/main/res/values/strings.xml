@@ -10,4 +10,6 @@
     <string name="title_activity_management">ManagementActivity</string>
     <string name="title_activity_temp">temp</string>
     <string name="title_activity_user">UserActivity</string>
+    <string name="title_activity_join">JoinActivity</string>
+    <string name="title_activity_reservation_status">ReservationStatusActivity</string>
 </resources>
