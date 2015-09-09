@@ -1,6 +1,8 @@
 package kr.ac.kookmin.cs.capstone2.seminarroomreservation;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,7 +57,8 @@ public class ListViewAdapter extends BaseAdapter {
             btn_SeminarInfo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    //화면에 세미나 정보 다이얼로그를 띄운다.
+                    context.startActivity(new Intent(context,SeminarInfoActivity.class));
                 }
             });
 
@@ -64,7 +67,8 @@ public class ListViewAdapter extends BaseAdapter {
             btn_SeminarLog.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    //화면에 세미나 로그 액티비티를 띄운다.
+                    context.startActivity(new Intent(context,SeminarLogActivity.class));
                 }
             });
 
@@ -72,7 +76,8 @@ public class ListViewAdapter extends BaseAdapter {
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    //화면에 세미나 정보 다이얼로그를 띄운다.
+                    context.startActivity(new Intent(context,SeminarInfoActivity.class));
                 }
             });
 

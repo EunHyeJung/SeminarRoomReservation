@@ -29,8 +29,13 @@
             android:label="@string/title_activity_user" >
         </activity>
         <activity
-            android:name=".AdminPageActivity"
-            android:label="@string/title_activity_admin_page" >
+            android:name=".SeminarInfoActivity"
+            android:label="@string/title_activity_seminar_info"
+            android:theme="@style/Theme.AppCompat.Dialog" >
+        </activity>
+        <activity
+            android:name=".SeminarLogActivity"
+            android:label="@string/title_activity_seminar_log" >
         </activity>
     </application>
 

@@ -11,4 +11,6 @@
     <string name="title_activity_temp">temp</string>
     <string name="title_activity_user">UserActivity</string>
     <string name="title_activity_admin_page">AdminPageActivity</string>
+    <string name="title_activity_seminar_info">SeminarInfoActivity</string>
+    <string name="title_activity_seminar_log">SeminarLogActivity</string>
 </resources>
