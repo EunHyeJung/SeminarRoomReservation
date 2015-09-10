@@ -2,10 +2,11 @@ package kr.ac.kookmin.cs.capstone2.seminarroomreservation;
 
 
 import android.os.Bundle;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 
 
 /**
@@ -13,6 +14,8 @@ import android.view.ViewGroup;
  */
 public class ReservationStatusFragment extends Fragment {
 
+    GridView gridViewReservationSchedule;
+    private String[] itemList;
 
     public ReservationStatusFragment() {
         // Required empty public constructor
@@ -23,7 +26,19 @@ public class ReservationStatusFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_reservation_status, container, false);
+        View rootView =inflater.inflate(R.layout.fragment_using_status, container, false);
+
+        CustomGridAdapter adapter = new CustomGridAdapter(getActivity().getApplicationContext(), itemList);
+       gridViewReservationSchedule = (GridView) rootView.findViewById(R.id.girdView_usingStatus);
+
+
+        return rootView;
+    }
+
+    public void initUsingStatus(){
+        for(int i=0 ; i<=50 ; i++){
+
+        }
     }
 
 

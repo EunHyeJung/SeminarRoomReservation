@@ -1,36 +1,40 @@
 package kr.ac.kookmin.cs.capstone2.seminarroomreservation;
 
 import android.app.Activity;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+
+import retrofit.client.Response;
 
 
 public class JoinActivity extends Activity {
 
-    EditText editTextId;
-    EditText editTextPassword;
-    EditText editTextName ;
-    EditText editTextPhone;
-    Button buttonJoin;
+    private EditText editTextId;
+    private EditText editTextPassword;
+    private EditText editTextName ;
+    private EditText editTextPhone;
+    private Button buttonJoin;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join);
 
-        EditText editTextId = (EditText) findViewById(R.id.editText_id);
-        EditText editTextPassword = (EditText) findViewById(R.id.editText_password);
-        EditText editTextName = (EditText) findViewById(R.id.editText_name);
-        EditText editTextPhone = (EditText) findViewById(R.id.editText_phone);
-        Button buttonJoin = (Button) findViewById(R.id.button_join);
+        editTextId = (EditText) findViewById(R.id.editText_id);
+        editTextPassword = (EditText) findViewById(R.id.editText_password);
+        editTextName = (EditText) findViewById(R.id.editText_name);
+         editTextPhone = (EditText) findViewById(R.id.editText_phone);
+        buttonJoin = (Button) findViewById(R.id.button_join);
 
         buttonJoin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,8 +72,25 @@ public class JoinActivity extends Activity {
         String id = editTextId.getText().toString();
         String password = editTextPassword.getText().toString();
         String name = editTextName.getText().toString();
-        String phone  = editTextPassword.getText().toString();
+        String phone  = editTextPhone.getText().toString();
+
+        RestRequestHelper requestHelper = RestRequestHelper.newInstance();
+        requestHelper.signUp(id, password, name, phone, new Callback<Integer>(){
+
+            @Override
+            public void success(Integer signUpCallback, Response response) {
+                System.out.println("signup success"+signUpCallback);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                error.printStackTrace();
+            }
+        });
 
     }
+
+
+
 
 }

@@ -1,6 +1,8 @@
 package kr.ac.kookmin.cs.capstone2.seminarroomreservation;
 
+import android.app.ActionBar;
 import android.content.Intent;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,38 +11,22 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.astuetz.PagerSlidingTabStrip;
+
 
 public class ManagerActivity extends AppCompatActivity {
 
 
-    Button buttonReservationStatus;
-    Button buttonManagment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manager);
 
-
-        buttonReservationStatus = (Button) findViewById(R.id.button_reservation_status);
-        buttonManagment = (Button) findViewById(R.id.button_management);
-
-        buttonReservationStatus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ReservationStatusActivity.class );
-                startActivity(intent);
-            }
-        });
-
-        buttonManagment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ManagementActivity.class );
-                startActivity(intent);
-            }
-        });
-
+        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager.setAdapter(new CustomPagerAdapter(getSupportFragmentManager()));
+        PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+        tabs.setViewPager(viewPager);
 
     }
 
