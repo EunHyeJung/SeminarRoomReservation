@@ -30,14 +30,14 @@ public class RestRequestHelper {
 
     public RestRequestHelper(){
         restAdapter = new RestAdapter.Builder()
-                .setEndpoint("http://203.246.112.69").build();
+                .setEndpoint("http://192.168.1.101:8081/smartdoorlock").build();
         restRequest = restAdapter.create(RestRequest.class);
 
     }
 
     public interface RestRequest{
         @FormUrlEncoded
-        @POST("/SignUp")
+        @POST("/signup")
         void signUp(@Field("id") String id,
                     @Field("password") String password,
                     @Field("name") String name,
