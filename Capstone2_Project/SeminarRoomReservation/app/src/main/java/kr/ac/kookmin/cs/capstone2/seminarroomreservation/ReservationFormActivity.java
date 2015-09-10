@@ -7,7 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -18,11 +20,30 @@ import java.util.GregorianCalendar;
 //jh
 //예약신청 페이지
 public class ReservationFormActivity extends AppCompatActivity {
+
+    private EditText check_in_date = (EditText) findViewById(R.id.check_in_date);
+    private EditText check_in_time = (EditText) findViewById(R.id.check_in_time);
+    private EditText check_out_time = (EditText) findViewById(R.id.check_out_time);
+    private EditText useTime = (EditText) findViewById(R.id.useTime);
+    private EditText roomNumber = (EditText) findViewById(R.id.roomNumber);
+    private EditText reason = (EditText) findViewById(R.id.reason);
+    private EditText otherMembers = (EditText) findViewById(R.id.otherMembers);
+    private Button button_makereservation = (Button) findViewById(R.id.button_makereservation);
+
     int year, month, day, hour, minute;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reservationform);
+
+        button_makereservation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                makereservation();
+            }
+        }); //예약하기 함수 호출
+
 
         GregorianCalendar calendar = new GregorianCalendar();
         year = calendar.get(Calendar.YEAR);
@@ -31,14 +52,17 @@ public class ReservationFormActivity extends AppCompatActivity {
         hour = calendar.get(Calendar.HOUR_OF_DAY);
         minute = calendar.get(Calendar.MINUTE);
 
-        //리스너 설정
-        findViewById(R.id.check_in_date).setOnClickListener(new View.OnClickListener() {
-
+        //각 선택기로부터 값을 조사
+        //findViewById(R.id.check_in_date).setOnClickListener(new View.OnClickListener() {
+        check_in_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
+                // 버튼 클릭시 DatePicker로부터 값을 읽어와서 Toast메시지로 보여준다
                 new DatePickerDialog(ReservationFormActivity.this, dateSetListener, year, month, day).show();
             }
+
+
         });
         findViewById(R.id.check_in_time).setOnClickListener(new View.OnClickListener() {
 
@@ -79,13 +103,30 @@ public class ReservationFormActivity extends AppCompatActivity {
         }
     };
 
+
+
+
+    public void onClickedMakeReservation(View v){
+        Toast.makeText(getApplicationContext(), "예약하기버튼눌림", Toast.LENGTH_LONG).show();
+        finish();
+    }
+
+
+
+
+
+
+
+
+
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_user, menu);
         return true;
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -100,4 +141,16 @@ public class ReservationFormActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    //예약하기 함수
+    public void makereservation(){ //예약하기 함수
+        String id = check_in_date.getText().toString();
+        String password = check_in_time.getText().toString();
+        String name = check_out_time.getText().toString();
+        //추가
+
+
+    }
+
+
 }
