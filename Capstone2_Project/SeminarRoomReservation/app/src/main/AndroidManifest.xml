@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="kr.ac.kookmin.cs.capstone2.seminarroomreservation" >
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -29,6 +32,7 @@
             android:label="@string/title_activity_user" >
         </activity>
         <activity
+<<<<<<< HEAD
             android:name=".SeminarInfoActivity"
             android:label="@string/title_activity_seminar_info"
             android:theme="@style/Theme.AppCompat.Dialog" >
@@ -36,6 +40,18 @@
         <activity
             android:name=".SeminarLogActivity"
             android:label="@string/title_activity_seminar_log" >
+=======
+            android:name=".JoinActivity"
+            android:label="@string/title_activity_join" >
+        </activity>
+        <activity
+            android:name=".ReservationStatusActivity"
+            android:label="@string/title_activity_reservation_status" >
+        </activity>
+        <activity
+            android:name=".MainActivity2Activity"
+            android:label="@string/title_activity_main_activity2" >
+>>>>>>> eunhye
         </activity>
     </application>
 
