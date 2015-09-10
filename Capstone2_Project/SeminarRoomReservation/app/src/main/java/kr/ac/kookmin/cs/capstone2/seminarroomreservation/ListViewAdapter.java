@@ -1,6 +1,5 @@
 package kr.ac.kookmin.cs.capstone2.seminarroomreservation;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -39,8 +38,8 @@ public class ListViewAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        final int pos=position;
         final Context context=parent.getContext();
+        Button btn_SeminarControl=null;
 
         //리스트가 길어져서 현재 화면에 보이지 않은 아이템은 convertView가 null 상태로 들어옴
         if(convertView==null){
@@ -52,36 +51,18 @@ public class ListViewAdapter extends BaseAdapter {
             TextView SeminarRoomName=(TextView)convertView.findViewById(R.id.SeminarListText);
             SeminarRoomName.setText(SeminarArrayList.get(position));
 
-            //세미나 정보 버튼 터치 이벤트
-            Button btn_SeminarInfo=(Button)convertView.findViewById(R.id.btn_SeminarInfo);
-            btn_SeminarInfo.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //화면에 세미나 정보 다이얼로그를 띄운다.
-                    context.startActivity(new Intent(context,SeminarInfoActivity.class));
-                }
-            });
-
-            //세미나 로그 버튼 터치 이벤트
-            Button btn_SeminarLog=(Button)convertView.findViewById(R.id.btn_SeminarLog);
-            btn_SeminarLog.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //화면에 세미나 로그 액티비티를 띄운다.
-                    context.startActivity(new Intent(context,SeminarLogActivity.class));
-                }
-            });
-
-            //리스트 아이템 터치 이벤트
-            convertView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //화면에 세미나 정보 다이얼로그를 띄운다.
-                    context.startActivity(new Intent(context,SeminarInfoActivity.class));
-                }
-            });
-
+            //버튼 매핑
+            btn_SeminarControl=(Button)convertView.findViewById(R.id.btn_SeminarControl);
         }
+
+        //제어 버튼 이벤트
+        btn_SeminarControl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //제어창 표시
+                context.startActivity(new Intent(context,ControlDialogActivity.class));
+            }
+        });
         return convertView;
     }
 

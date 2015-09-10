@@ -11,7 +11,6 @@
 
     <string name="title_activity_temp">temp</string>
     <string name="title_activity_user">UserActivity</string>
-    <string name="title_activity_admin_page">AdminPageActivity</string>
     <string name="title_activity_seminar_info">SeminarInfoActivity</string>
     <string name="title_activity_seminar_log">SeminarLogActivity</string>
 
@@ -21,5 +20,11 @@
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
+    <string name="title_activity_control_dialog">Doorlock Control</string>
+
+    <string name="text_door_status">Door Status : Close</string>
+    <string name="btn_control_dialog_open">Open</string>
+    <string name="btn_control_dialog_close">Close</string>
+    <string name="btn_control_dialog_cancel">Cancel</string>
 
 </resources>
