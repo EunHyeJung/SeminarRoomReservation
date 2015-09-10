@@ -1,12 +1,12 @@
 package kr.ac.kookmin.cs.capstone2.seminarroomreservation;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class UserActivity extends ActionBarActivity {
+public class UserActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

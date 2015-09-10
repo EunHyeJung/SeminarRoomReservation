@@ -1,37 +1,23 @@
 package kr.ac.kookmin.cs.capstone2.seminarroomreservation;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 
 
-public class ManagementActivity extends ActionBarActivity{
+public class ManagementActivity extends AppCompatActivity {
     ListView SeminarListView;
-    ListViewAdapter SeminarListViewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_management);
 
-        //Create Custom Adapter
-        SeminarListViewAdapter=new ListViewAdapter();
-
         //Mapping the ListView
         SeminarListView=(ListView)findViewById(R.id.SeminarList);
 
-        SeminarListView.setAdapter(SeminarListViewAdapter);
-
-        //Add the item to listview
-        SeminarListViewAdapter.add("Seminar Room A");
-        SeminarListViewAdapter.add("Seminar Room B");
-        SeminarListViewAdapter.add("Seminar Room C");
-        SeminarListViewAdapter.add("Seminar Room D");
-        SeminarListViewAdapter.add("Seminar Room E");
-        SeminarListViewAdapter.add("Seminar Room F");
-        SeminarListViewAdapter.add("Seminar Room G");
     }
 
 
