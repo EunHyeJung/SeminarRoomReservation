@@ -81,7 +81,7 @@ public class ListViewAdapter extends BaseAdapter {
                 }
             });
 
-        }
+x        }
         return convertView;
     }
 
