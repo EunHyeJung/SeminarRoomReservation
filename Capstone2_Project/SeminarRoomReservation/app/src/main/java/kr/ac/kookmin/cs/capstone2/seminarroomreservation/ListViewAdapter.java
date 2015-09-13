@@ -2,6 +2,7 @@ package kr.ac.kookmin.cs.capstone2.seminarroomreservation;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +38,7 @@ public class ListViewAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         final Context context=parent.getContext();
         Button btn_SeminarControl=null;
 
@@ -59,8 +60,11 @@ public class ListViewAdapter extends BaseAdapter {
         btn_SeminarControl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //제어창 표시
-                context.startActivity(new Intent(context,ControlDialogActivity.class));
+                //제어창 표시및 방이름 보내기
+                Intent intent=new Intent(context,ControlDialogActivity.class);
+                intent.putExtra("Room",SeminarArrayList.get(position));
+                Log.i("Room : ",SeminarArrayList.get(position));
+                context.startActivity(intent);
             }
         });
         return convertView;

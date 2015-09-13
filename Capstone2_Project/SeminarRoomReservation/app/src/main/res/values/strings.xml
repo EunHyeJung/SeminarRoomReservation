@@ -26,5 +26,6 @@
     <string name="btn_control_dialog_open">Open</string>
     <string name="btn_control_dialog_close">Close</string>
     <string name="btn_control_dialog_cancel">Cancel</string>
+    <string name="text_seminar_log">Seminar Room Log</string>
 
 </resources>

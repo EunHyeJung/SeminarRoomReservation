@@ -7,6 +7,7 @@
     android:orientation="vertical"
     tools:context="kr.ac.kookmin.cs.capstone2.seminarroomreservation.ControlDialogActivity">
     <TextView
+        android:id="@+id/text_DoorStatus"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="4dp"
@@ -19,21 +20,23 @@
         android:orientation="horizontal"
         >
         <Button
+            android:id="@+id/btn_DoorOpen"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textColor="#7CFC00"
+            android:drawableLeft="@drawable/img_unlock"
             android:text="@string/btn_control_dialog_open"/>
 
         <Button
+            android:id="@+id/btn_DoorClose"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textColor="#DC143C"
+            android:drawableLeft="@drawable/img_lock"
             android:text="@string/btn_control_dialog_close"/>
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/btn_control_dialog_cancel"/>
+
 
     </LinearLayout>
 

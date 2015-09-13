@@ -74,7 +74,7 @@ public class JoinActivity extends Activity {
         String name = editTextName.getText().toString();
         String phone  = editTextPhone.getText().toString();
 
-        RestRequestHelper requestHelper = RestRequestHelper.newInstance();
+        RestRequestHelper requestHelper = RestRequestHelper.newInstance("smartdoorlock");
         requestHelper.signUp(id, password, name, phone, new Callback<Integer>(){
 
             @Override
