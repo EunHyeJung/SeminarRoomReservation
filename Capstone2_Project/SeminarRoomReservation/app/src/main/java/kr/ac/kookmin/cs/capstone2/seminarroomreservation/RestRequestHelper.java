@@ -21,16 +21,17 @@ public class RestRequestHelper {
     private RestAdapter restAdapter;
     private RestRequest restRequest;
 
-    public static RestRequestHelper newInstance(){
+
+    public static RestRequestHelper newInstance(String addr){
         if(instance == null){
-            instance = new RestRequestHelper();
+            instance = new RestRequestHelper(addr);
         }
         return instance;
     }
 
-    public RestRequestHelper(){
+    public RestRequestHelper(String addr){
         restAdapter = new RestAdapter.Builder()
-                .setEndpoint("http://192.168.1.101:8081/smartdoorlock").build();
+                .setEndpoint("http://192.168.1.101:8081/"+addr).build();
         restRequest = restAdapter.create(RestRequest.class);
 
     }
@@ -43,10 +44,18 @@ public class RestRequestHelper {
                     @Field("name") String name,
                     @Field("phone") String phone,
                     Callback<Integer> signUpCallback);
+
+        @FormUrlEncoded
+        @POST("/doorcontrol")
+        void controlDoor(@Field("id") String id,
+                         @Field("doorName") String doorName,
+                         @Field("status") boolean status);
     }
     public void signUp(String id, String password, String name, String phone, Callback<Integer> signUpCallback){
         restRequest.signUp(id, password, name, phone, signUpCallback);
     }
 
-
+    public void controlDoor(String id, String doorName, boolean status ){
+        restRequest.controlDoor(id,doorName,status);
+    }
 }
