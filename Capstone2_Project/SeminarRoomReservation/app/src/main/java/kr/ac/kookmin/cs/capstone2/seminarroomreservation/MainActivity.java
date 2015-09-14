@@ -38,7 +38,7 @@ public class MainActivity extends ActionBarActivity {
 
             @Override
             public void onClick(View v) {
-                RestRequestHelper requestHelper = RestRequestHelper.newInstance();
+                RestRequestHelper requestHelper = RestRequestHelper.newInstance("join");
                 requestHelper.login(id, password, new Callback<Integer>() {
                     @Override
                     public void success(Integer integer, Response response) {
@@ -70,8 +70,8 @@ public class MainActivity extends ActionBarActivity {
         buttonJoin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), JoinActivity.class);
-                startActivity(intent);
+                /*Intent intent = new Intent(getApplicationContext(), JoinActivity.class);
+                startActivity(intent);*/
             }
         });
 
