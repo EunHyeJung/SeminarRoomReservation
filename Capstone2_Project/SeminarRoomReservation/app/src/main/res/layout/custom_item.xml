@@ -14,16 +14,10 @@
         />
 
     <Button
-        android:id="@+id/btn_SeminarInfo"
+        android:id="@+id/btn_SeminarControl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="정보"
-        />
-    <Button
-        android:id="@+id/btn_SeminarLog"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="로그"
+        android:text="제어"
         />
 
 </LinearLayout>
