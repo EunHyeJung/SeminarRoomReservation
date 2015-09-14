@@ -58,7 +58,7 @@ public class ListViewAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     //화면에 세미나 정보 다이얼로그를 띄운다.
-                    context.startActivity(new Intent(context,SeminarInfoActivity.class));
+                    //context.startActivity(new Intent(context,SeminarInfoActivity.class));
                 }
             });
 
@@ -68,7 +68,7 @@ public class ListViewAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     //화면에 세미나 로그 액티비티를 띄운다.
-                    context.startActivity(new Intent(context,SeminarLogActivity.class));
+                   // context.startActivity(new Intent(context,SeminarLogActivity.class));
                 }
             });
 
@@ -77,11 +77,11 @@ public class ListViewAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     //화면에 세미나 정보 다이얼로그를 띄운다.
-                    context.startActivity(new Intent(context,SeminarInfoActivity.class));
+                    //context.startActivity(new Intent(context,SeminarInfoActivity.class));
                 }
             });
 
-x        }
+        }
         return convertView;
     }
 

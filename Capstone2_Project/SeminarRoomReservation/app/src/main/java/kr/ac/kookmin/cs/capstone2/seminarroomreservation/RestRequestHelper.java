@@ -30,7 +30,7 @@ public class RestRequestHelper {
 
     public RestRequestHelper(){
         restAdapter = new RestAdapter.Builder()
-                .setEndpoint("http://192.168.1.101:8081/smartdoorlock").build();
+                .setEndpoint("http://192.168.1.102:8081/smartdoorlock").build();
         restRequest = restAdapter.create(RestRequest.class);
 
     }
@@ -42,10 +42,21 @@ public class RestRequestHelper {
                     @Field("password") String password,
                     @Field("name") String name,
                     @Field("phone") String phone,
-                    Callback<Integer> signUpCallback);
+                    Callback<Integer> Callback);
+
+        @FormUrlEncoded
+        @POST("/login")
+        void login(@Field("id") String id,
+                    @Field("password") String password,
+                    Callback<Integer> Callback);
+
     }
     public void signUp(String id, String password, String name, String phone, Callback<Integer> signUpCallback){
         restRequest.signUp(id, password, name, phone, signUpCallback);
+    }
+
+    public void login(String id, String password, Callback<Integer> loginCallback){
+        restRequest.login(id, password, loginCallback);
     }
 
 

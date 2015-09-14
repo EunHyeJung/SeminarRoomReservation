@@ -1,10 +1,13 @@
 package kr.ac.kookmin.cs.capstone2.seminarroomreservation;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.support.v4.widget.DrawerLayout;
 import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
@@ -13,43 +16,49 @@ import android.widget.TextView;
  */
 public class CustomGridAdapter extends BaseAdapter {
 
-    Context mContext;
-    private String[] itemList;
+    private Context mContext;
+    private LayoutInflater mLayoutInflater;
+    private final String[] inputValues;
 
 
-    public CustomGridAdapter(Context context, String[] itemList){
-        super();
-        mContext = context;
-        itemList = itemList;
+    public CustomGridAdapter(Context mContext, String[] inputValues){
+       this. mContext = mContext;
+        this.mLayoutInflater = LayoutInflater.from(mContext);
+        this.inputValues = inputValues;
     }
 
     @Override
     public int getCount() {
-        if(itemList == null)
-            return 0;
-        return itemList.length;
+        return inputValues.length;
     }
 
     @Override
     public Object getItem(int position) {
-        return itemList;
+        return null;
     }
 
     @Override
     public long getItemId(int position) {
-        return position;
+        return 0;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        if(convertView == null){
-            LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.item_gridview, parent, false);
+        if(convertView == null) {
+            convertView = mLayoutInflater.inflate(R.layout.item_gridview, parent, false);
+            TextView textViewGridItem = (TextView) convertView.findViewById(R.id.textView_gridItem);
+            //textViewGridItem.setText("p : "+position);
+            if(position%6==0 ){
+                textViewGridItem.setText(inputValues[position]);
+                textViewGridItem.setTextSize(15);
+                textViewGridItem.setWidth(200);
+                textViewGridItem.setBackgroundColor(Color.parseColor("#7fa2d5"));
+
+            }
+            if(inputValues[position].equals("booked")){
+                textViewGridItem.setBackgroundColor(Color.parseColor("#ffffff"));
+            }
         }
-
-        TextView textViewGridItem = (TextView) convertView.findViewById(R.id.textView_gridItem);
-        textViewGridItem.setText(itemList[position]);
-
         return convertView;
     }
 }

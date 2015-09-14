@@ -1,6 +1,8 @@
 package kr.ac.kookmin.cs.capstone2.seminarroomreservation;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,6 +12,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.EncryptionClass;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.ManagerActivity;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.RestRequestHelper;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 
@@ -24,6 +30,9 @@ public class JoinActivity extends Activity {
     private EditText editTextPhone;
     private Button buttonJoin;
 
+    SharedPreferences setting;
+    SharedPreferences.Editor editor;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,12 +45,14 @@ public class JoinActivity extends Activity {
          editTextPhone = (EditText) findViewById(R.id.editText_phone);
         buttonJoin = (Button) findViewById(R.id.button_join);
 
+
         buttonJoin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 signup();
             }
         });
+
     }
 
 
@@ -70,18 +81,25 @@ public class JoinActivity extends Activity {
 
     public void signup(){
         String id = editTextId.getText().toString();
-        String password = editTextPassword.getText().toString();
+        String password = EncryptionClass.testSHA256(editTextPassword.getText().toString());
         String name = editTextName.getText().toString();
         String phone  = editTextPhone.getText().toString();
 
+
+/*
+        editor.putString("ID", id);
+        editor.putString("Password", password);
+        editor.commit();
+*/
+
         RestRequestHelper requestHelper = RestRequestHelper.newInstance();
         requestHelper.signUp(id, password, name, phone, new Callback<Integer>(){
-
-            @Override
+         @Override
             public void success(Integer signUpCallback, Response response) {
-                System.out.println("signup success"+signUpCallback);
+                Toast.makeText(getApplicationContext(),"Signup Success",Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getApplicationContext(), ManagerActivity.class);
+                startActivity(intent);
             }
-
             @Override
             public void failure(RetrofitError error) {
                 error.printStackTrace();

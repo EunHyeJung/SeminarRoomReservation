@@ -8,6 +8,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -28,10 +33,38 @@ public class MainActivity extends ActionBarActivity {
         Button buttonJoin = (Button) findViewById(R.id.button_join);
 
         buttonLogin.setOnClickListener(new View.OnClickListener() {
+            String id = editTextId.getText().toString();
+            String password = EncryptionClass.testSHA256(editTextPassword.getText().toString());
+
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ManagerActivity.class);
-                startActivity(intent);
+                RestRequestHelper requestHelper = RestRequestHelper.newInstance();
+                requestHelper.login(id, password, new Callback<Integer>() {
+                    @Override
+                    public void success(Integer integer, Response response) {
+                        switch (integer) {
+                            case 0:         // 로그인 오류
+                                Toast.makeText(getApplicationContext(), "Invalid ID", Toast.LENGTH_LONG).show();
+                                break;
+                            case 1:             // 일반 사용자
+                                Toast.makeText(getApplicationContext(), "Login Success, User Mode", Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(getApplicationContext(), ManagerActivity.class);
+                                startActivity(intent);
+                                break;
+                            case 2:             // 관리자 로그인
+                                Toast.makeText(getApplicationContext(), "Login Success, Admin Mode", Toast.LENGTH_LONG).show();
+                                 intent = new Intent(getApplicationContext(), ManagerActivity.class);
+                                startActivity(intent);
+                                break;
+                        }
+
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        error.printStackTrace();
+                    }
+                });
             }
         });
         buttonJoin.setOnClickListener(new View.OnClickListener() {

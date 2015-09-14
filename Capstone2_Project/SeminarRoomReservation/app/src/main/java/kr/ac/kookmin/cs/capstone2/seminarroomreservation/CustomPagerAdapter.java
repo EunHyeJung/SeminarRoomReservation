@@ -14,8 +14,7 @@ public class CustomPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-
-        switch (position){
+       switch (position){
             case 0:
                 return "이용현황";
             case 1:
@@ -30,9 +29,7 @@ public class CustomPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-
-        Fragment currentFragment = null;
-
+       Fragment currentFragment = null;
         switch (position){
             case 0:
                 currentFragment =  new UsingStatusFragment();
