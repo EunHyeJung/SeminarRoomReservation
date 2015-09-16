@@ -47,7 +47,7 @@ public class SignUp extends HttpServlet {
 			String sql = "insert into user (text_id, password, name, phone) values ('"+ text_id + "', '" + password + "', '" + name + "', '" + phone + "');";
 			int n = stmt.executeUpdate(sql);// return the row count for SQL DML statements 
 			
-			//서버에게 response
+			//response to client
 			if (n == 1) {
 				pw.println(StaticVariables.SUCCESS);
 			} else

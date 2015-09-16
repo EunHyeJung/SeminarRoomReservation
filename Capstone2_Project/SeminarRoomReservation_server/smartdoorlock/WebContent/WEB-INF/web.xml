@@ -51,11 +51,21 @@
 	</servlet-mapping>
 	
 	<servlet>
-		<servlet-name>UsingStatus</servlet-name>
-		<servlet-class>UsingStatus</servlet-class>
+		<servlet-name>kookmin.cs.capstone2.reservation.UsingStatus</servlet-name>
+		<servlet-class>kookmin.cs.capstone2.reservation.UsingStatus</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>UsingStatus</servlet-name>
+		<servlet-name>kookmin.cs.capstone2.reservation.UsingStatus</servlet-name>
 		<url-pattern>/usingstatus</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>kookmin.cs.capstone2.reservation.ReservationRequest</servlet-name>
+		<servlet-class>kookmin.cs.capstone2.reservation.ReservationRequest</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>kookmin.cs.capstone2.reservation.ReservationRequest</servlet-name>
+		<url-pattern>/bookrequest</url-pattern>
+	</servlet-mapping>
+	
 </web-app>

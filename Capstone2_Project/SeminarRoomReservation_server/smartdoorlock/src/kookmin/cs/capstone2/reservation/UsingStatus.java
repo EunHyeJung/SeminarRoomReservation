@@ -28,6 +28,7 @@ public class UsingStatus extends HttpServlet {
 		
 		// request 파라미터로 전송된 값 얻기
 		String date = request.getParameter("date");
+		System.out.println(date);
 		
 		String jocl = "jdbc:apache:commons:dbcp:/pool1"; //커넥션 풀을 위한 DBCP 설정 파일
 		Connection conn = null; //DB 연결을 위한 Connection 객체
@@ -38,14 +39,14 @@ public class UsingStatus extends HttpServlet {
 		try {
 			conn = DriverManager.getConnection(jocl); //커넥션 풀에서 대기 상태인 커넥션을 얻는다
 			stmt = conn.createStatement(); //DB에 SQL문을 보내기 위한 Statement를 생성
-			String sql = "select * from schedule where date='" + date + "';";
+			String sql = "select * from reservationinfo where date='" + date + "';";
 			rs = stmt.executeQuery(sql);
 			while (rs.next()) {
 				int id = rs.getInt("id");
 				int room_id = rs.getInt("room_id");
 				String start_time = rs.getString("start_time");
 				String end_time = rs.getString("end_time");
-				pw.println("id=" + id + "room_id=" + room_id + "&start_time=" + start_time
+				pw.println("id=" + id + "&room_id=" + room_id + "&start_time=" + start_time
 						+ "&end_time=" + end_time);
 			}
 		} catch (SQLException e) {
