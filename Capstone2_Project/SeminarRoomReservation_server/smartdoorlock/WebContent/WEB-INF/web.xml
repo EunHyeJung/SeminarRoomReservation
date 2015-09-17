@@ -13,28 +13,59 @@
 		<welcome-file>default.jsp</welcome-file>
 	</welcome-file-list>
 	
-	<resource-ref>
-	    <description>DB Connection</description>
-	    <res-ref-name>jdbc/connection</res-ref-name>
-	    <res-type>javax.sql.DataSource</res-type>
-	    <res-auth>Container</res-auth>
-	</resource-ref>
+	<context-param>
+	    <param-name>jdbc</param-name>
+	    <param-value>com.mysql.jdbc.Driver</param-value>
+	</context-param>
 
 	<servlet>
-		<servlet-name>SignUp</servlet-name>
-		<servlet-class>SignUp</servlet-class>
+	    <servlet-name>kookmin.cs.capstone2.dbcp.jdbcloader</servlet-name>
+	    <servlet-class>kookmin.cs.capstone2.dbcp.JOCLLoader</servlet-class>
+	    <load-on-startup>1</load-on-startup> <!-- JOCLLoader파일을 사용자 요청 없이 실행시키라는 명령 -->
+	</servlet>
+	<servlet>
+		<servlet-name>kookmin.cs.capstone2.user.SignUp</servlet-name>
+		<servlet-class>kookmin.cs.capstone2.user.SignUp</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>SignUp</servlet-name>
+		<servlet-name>kookmin.cs.capstone2.user.SignUp</servlet-name>
 		<url-pattern>/signup</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>
-		<servlet-name>Login</servlet-name>
-		<servlet-class>Login</servlet-class>
+		<servlet-name>kookmin.cs.capstone2.user.Login</servlet-name>
+		<servlet-class>kookmin.cs.capstone2.user.Login</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>Login</servlet-name>
+		<servlet-name>kookmin.cs.capstone2.user.Login</servlet-name>
 		<url-pattern>/login</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>kookmin.cs.capstone2.room.Room</servlet-name>
+		<servlet-class>kookmin.cs.capstone2.room.Room</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>kookmin.cs.capstone2.room.Room</servlet-name>
+		<url-pattern>/room</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>kookmin.cs.capstone2.reservation.UsingStatus</servlet-name>
+		<servlet-class>kookmin.cs.capstone2.reservation.UsingStatus</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>kookmin.cs.capstone2.reservation.UsingStatus</servlet-name>
+		<url-pattern>/usingstatus</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>kookmin.cs.capstone2.reservation.ReservationRequest</servlet-name>
+		<servlet-class>kookmin.cs.capstone2.reservation.ReservationRequest</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>kookmin.cs.capstone2.reservation.ReservationRequest</servlet-name>
+		<url-pattern>/bookrequest</url-pattern>
+	</servlet-mapping>
+	
 </web-app>

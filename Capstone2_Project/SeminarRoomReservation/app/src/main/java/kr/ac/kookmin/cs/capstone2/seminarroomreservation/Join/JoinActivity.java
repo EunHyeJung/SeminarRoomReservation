@@ -9,6 +9,11 @@ import android.widget.Button;
 import android.widget.EditText;
 
 
+<<<<<<< HEAD
+=======
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Authentication.MainActivity;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.EncryptionClass;
+>>>>>>> 84933e22fc6fe968b226446fa058f3c3e6a20ee4
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Network.RestRequestHelper;
 import retrofit.Callback;
@@ -16,6 +21,11 @@ import retrofit.RetrofitError;
 
 import retrofit.client.Response;
 
+<<<<<<< HEAD
+=======
+//import static kr.ac.kookmin.cs.capstone2.seminarroomreservation.EncryptionClass.testSHA256;
+
+>>>>>>> 84933e22fc6fe968b226446fa058f3c3e6a20ee4
 
 public class JoinActivity extends Activity {
 
@@ -31,11 +41,19 @@ public class JoinActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join);
 
+<<<<<<< HEAD
         editTextId = (EditText) findViewById(R.id.editText_id);
         editTextPassword = (EditText) findViewById(R.id.editText_password);
         editTextName = (EditText) findViewById(R.id.editText_name);
          editTextPhone = (EditText) findViewById(R.id.editText_phone);
         buttonJoin = (Button) findViewById(R.id.button_join);
+=======
+        editTextId = (EditText) findViewById(R.id.editText_joinId);
+        editTextPassword = (EditText) findViewById(R.id.editText_joinPassword);
+        editTextName = (EditText) findViewById(R.id.editText_joinName);
+        editTextPhone = (EditText) findViewById(R.id.editText_joinPhone);
+        buttonJoin = (Button) findViewById(R.id.button_joinRequest);
+>>>>>>> 84933e22fc6fe968b226446fa058f3c3e6a20ee4
 
         buttonJoin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,27 +89,47 @@ public class JoinActivity extends Activity {
 
     public void signup(){
         String id = editTextId.getText().toString();
+<<<<<<< HEAD
         String password = editTextPassword.getText().toString();
+=======
+        String password =  MainActivity.encrpytion.testSHA256(editTextPassword.getText().toString());
+>>>>>>> 84933e22fc6fe968b226446fa058f3c3e6a20ee4
         String name = editTextName.getText().toString();
         String phone  = editTextPhone.getText().toString();
 
         RestRequestHelper requestHelper = RestRequestHelper.newInstance();
         requestHelper.signUp(id, password, name, phone, new Callback<Integer>(){
+<<<<<<< HEAD
 
+=======
+>>>>>>> 84933e22fc6fe968b226446fa058f3c3e6a20ee4
             @Override
             public void success(Integer signUpCallback, Response response) {
                 System.out.println("signup success"+signUpCallback);
             }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 84933e22fc6fe968b226446fa058f3c3e6a20ee4
             @Override
             public void failure(RetrofitError error) {
                 error.printStackTrace();
             }
         });
+<<<<<<< HEAD
+=======
+        System.out.println("password in Sign up  : "+password);
+        System.out.println("tt_join:"+(editTextPassword.getText().toString()).length());
+
+>>>>>>> 84933e22fc6fe968b226446fa058f3c3e6a20ee4
 
     }
 
 
 
 
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 84933e22fc6fe968b226446fa058f3c3e6a20ee4

@@ -3,11 +3,17 @@ package kr.ac.kookmin.cs.capstone2.seminarroomreservation.Authentication;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+<<<<<<< HEAD
+=======
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+>>>>>>> 84933e22fc6fe968b226446fa058f3c3e6a20ee4
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+<<<<<<< HEAD
 
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Join.JoinActivity;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Manager.ManagerActivity;
@@ -15,27 +21,98 @@ import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
 
 
 public class MainActivity extends ActionBarActivity {
+=======
+import android.widget.Toast;
+
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.EncryptionClass;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Join.JoinActivity;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Manager.ManagerActivity;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Network.RestRequestHelper;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.User.UserActivity;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+
+
+public class MainActivity extends AppCompatActivity {
+>>>>>>> 84933e22fc6fe968b226446fa058f3c3e6a20ee4
 
     EditText editTextId;
     EditText editTextPassword;
 
 
+<<<<<<< HEAD
+=======
+    public static EncryptionClass encrpytion;
+>>>>>>> 84933e22fc6fe968b226446fa058f3c3e6a20ee4
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+<<<<<<< HEAD
         editTextId = (EditText) findViewById(R.id.editText_id);
          editTextPassword = (EditText) findViewById(R.id.editText_password);
+=======
+        editTextId = (EditText) findViewById(R.id.editText_loginId);
+        editTextPassword = (EditText) findViewById(R.id.editText_loginPassword);
+>>>>>>> 84933e22fc6fe968b226446fa058f3c3e6a20ee4
 
         Button buttonLogin = (Button) findViewById(R.id.button_login);
         Button buttonJoin = (Button) findViewById(R.id.button_join);
 
+<<<<<<< HEAD
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), ManagerActivity.class);
                 startActivity(intent);
+=======
+        encrpytion = new EncryptionClass();
+
+        buttonLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String id = editTextId.getText().toString();
+                String password = encrpytion.testSHA256(editTextPassword.getText().toString());
+
+                Intent intent = new Intent(getApplicationContext(), ManagerActivity.class);
+                startActivity(intent);
+
+                RestRequestHelper requestHelper = RestRequestHelper.newInstance();
+                requestHelper.login(id, password, new Callback<Integer>() {
+                    @Override
+                    public void success(Integer integer, Response response) {
+                        switch (integer) {
+                            case 0:         // 로그인 오류
+                                Toast.makeText(getApplicationContext(), "Invalid ID", Toast.LENGTH_LONG).show();
+                                break;
+                            case 1:             // 일반 사용자
+                                Toast.makeText(getApplicationContext(), "Login Success, User Mode", Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(getApplicationContext(), UserActivity.class);
+                                startActivity(intent);
+                                break;
+                            case 2:             // 관리자 로그인
+                                Toast.makeText(getApplicationContext(), "Login Success, Admin Mode", Toast.LENGTH_LONG).show();
+                                intent = new Intent(getApplicationContext(), ManagerActivity.class);
+                                startActivity(intent);
+                                break;
+                        }
+
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        error.printStackTrace();
+                        Intent intent = new Intent(getApplicationContext(), ManagerActivity.class);
+                        startActivity(intent);
+
+
+                    }
+                });
+
+>>>>>>> 84933e22fc6fe968b226446fa058f3c3e6a20ee4
             }
         });
         buttonJoin.setOnClickListener(new View.OnClickListener() {
@@ -70,4 +147,8 @@ public class MainActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 84933e22fc6fe968b226446fa058f3c3e6a20ee4
 }

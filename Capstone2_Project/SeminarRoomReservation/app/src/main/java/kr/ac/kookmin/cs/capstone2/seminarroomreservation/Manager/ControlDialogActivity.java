@@ -3,7 +3,10 @@ package kr.ac.kookmin.cs.capstone2.seminarroomreservation.Manager;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+<<<<<<< HEAD
 import android.util.Log;
+=======
+>>>>>>> 84933e22fc6fe968b226446fa058f3c3e6a20ee4
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,9 +15,12 @@ import android.widget.TextView;
 
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Network.RestRequestHelper;
+<<<<<<< HEAD
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+=======
+>>>>>>> 84933e22fc6fe968b226446fa058f3c3e6a20ee4
 
 public class ControlDialogActivity extends AppCompatActivity {
     Button OpenBtn;
@@ -30,12 +36,26 @@ public class ControlDialogActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_control_dialog);
 
+<<<<<<< HEAD
         //기본적인 설정들을 처리
         init();
+=======
+        requestHelper=RestRequestHelper.newInstance();
+
+        //클릭한 세미나방 이름 가져오기
+        Intent intent=getIntent();
+        RoomName=intent.getExtras().getString("Room");
+
+        //매핑하기
+        OpenBtn=(Button)findViewById(R.id.btn_DoorOpen);
+        CloseBtn=(Button)findViewById(R.id.btn_DoorClose);
+        DoorStatusText=(TextView)findViewById(R.id.text_DoorStatus);
+>>>>>>> 84933e22fc6fe968b226446fa058f3c3e6a20ee4
 
         OpenBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+<<<<<<< HEAD
                 requestHelper.controlDoor("admin", RoomName, true, new Callback<Integer>() {
                     @Override
                     public void success(Integer integer, Response response) {
@@ -48,12 +68,17 @@ public class ControlDialogActivity extends AppCompatActivity {
                         Log.d("Message Error : ",error.toString());
                     }
                 });
+=======
+                requestHelper.controlDoor("admin",RoomName,true);
+                DoorStatusText.setText("Door Status : Open");
+>>>>>>> 84933e22fc6fe968b226446fa058f3c3e6a20ee4
             }
         });
 
         CloseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+<<<<<<< HEAD
                 requestHelper.controlDoor("admin", RoomName, false, new Callback<Integer>() {
                     @Override
                     public void success(Integer integer, Response response) {
@@ -66,11 +91,16 @@ public class ControlDialogActivity extends AppCompatActivity {
                         Log.d("Message Error : ",error.toString());
                     }
                 });
+=======
+                requestHelper.controlDoor("admin",RoomName,false);
+                DoorStatusText.setText("Door Status : Close");
+>>>>>>> 84933e22fc6fe968b226446fa058f3c3e6a20ee4
             }
         });
 
     }
 
+<<<<<<< HEAD
     public void init(){
         requestHelper=RestRequestHelper.newInstance();
 
@@ -84,6 +114,8 @@ public class ControlDialogActivity extends AppCompatActivity {
         DoorStatusText=(TextView)findViewById(R.id.text_DoorStatus);
     }
 
+=======
+>>>>>>> 84933e22fc6fe968b226446fa058f3c3e6a20ee4
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
