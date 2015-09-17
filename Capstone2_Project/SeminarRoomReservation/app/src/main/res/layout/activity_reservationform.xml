@@ -5,6 +5,11 @@
     android:background="#8D7A4F"
     tools:context="kr.ac.kookmin.cs.capstone2.seminarroomreservation.JoinActivity">
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"></FrameLayout>
+
     <LinearLayout
         android:layout_width="350dp"
         android:layout_height="380dp"
@@ -34,7 +39,7 @@
             android:id="@+id/check_out_time"
             android:layout_width="250dp"
             android:layout_height="40dp"
-            android:hint = "퇴실날짜"
+            android:hint = "퇴실시간"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="5dp"
             />
@@ -47,14 +52,51 @@
             android:layout_marginTop="5dp"
             />
 
-        <EditText
-            android:id="@+id/roomNumber"
-            android:layout_width="250dp"
+
+        <!--이용장소-->
+        <LinearLayout
+            android:layout_width="243dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal">
+            <TextView
+                android:layout_width="78dp"
+                android:layout_height="29dp"
+
+                android:layout_marginTop="5dp"
+                android:text="이용장소"
+                android:id="@+id/text_roomNumber" />
+        <Spinner
+            android:id="@+id/spinner_roomList"
+            android:layout_width="163dp"
             android:layout_height="40dp"
-            android:hint = "이용장소"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="5dp"
-            />
+            android:layout_gravity="right"
+            android:clickable="true"
+            android:gravity="center_horizontal" />
+        </LinearLayout>
+
+
+        <!--회의 참여자 -->
+        <LinearLayout
+            android:layout_width="243dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal">
+            <TextView
+                android:layout_width="78dp"
+                android:layout_height="29dp"
+
+                android:layout_marginTop="5dp"
+                android:text="회의 참여자"
+                android:id="@+id/text_memberlist" />
+            <Spinner
+                android:id="@+id/spinner_memberList"
+                android:layout_width="163dp"
+                android:layout_height="40dp"
+                android:layout_gravity="right"
+                android:clickable="true"
+                android:gravity="center_horizontal" />
+        </LinearLayout>
 
         <EditText
             android:id="@+id/reason"
@@ -63,16 +105,9 @@
             android:hint = "이용목적"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="5dp"
-            />
+            android:autoText="true"
+            android:clickable="true" />
 
-        <EditText
-            android:id="@+id/otherMembers"
-            android:layout_width="250dp"
-            android:layout_height="40dp"
-            android:hint = "회의 참여자"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="5dp"
-            />
 
 
     </LinearLayout>
