@@ -7,7 +7,7 @@ import java.security.NoSuchAlgorithmException;
  * Created by ehye on 2015-09-14.
  */
 public class EncryptionClass {
-    public  String testSHA256(String str) {
+    public  static String testSHA256(String str) {
         System.out.println("str : "+str);
         System.out.println("str : "+str.getBytes());
 

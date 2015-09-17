@@ -22,7 +22,8 @@
     <string name="title_section3">Section 3</string>
     <string name="title_activity_control_dialog">Doorlock Control</string>
 
-    <string name="text_door_status">Door Status : Close</string>
+    <string name="text_door_status_close">Door Status : Close</string>
+    <string name="text_door_status_open">Door Status : Open</string>
     <string name="btn_control_dialog_open">Open</string>
     <string name="btn_control_dialog_close">Close</string>
     <string name="btn_control_dialog_cancel">Cancel</string>

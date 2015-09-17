@@ -20,7 +20,7 @@ public class RestRequestHelper {
     private RestAdapter restAdapter;
     private RestRequest restRequest;
 
-    private static final String url = "http://10.30.113.181:8081/smartdoorlock";
+    private static final String url = "http://192.168.1.100:8081/smartdoorlock";
 
 
     public static RestRequestHelper newInstance(){
@@ -51,7 +51,7 @@ public class RestRequestHelper {
         void login(@Field("id") String id,
                    @Field("password") String password,
                    Callback<Integer> loginCallback
-        );
+                   );
 
         @FormUrlEncoded
         @POST("/usingstatus")
@@ -59,23 +59,12 @@ public class RestRequestHelper {
                                 Callback<JSONObject> usingStatusCallback
         );
 
-        @FormUrlEncoded
-        @POST("/roomstatus")
-        void roomStatus(@Field("roomName")String roomName,
-                        Callback<Integer> roomStatusCallback);
 
         @FormUrlEncoded
         @POST("/doorcontrol")
         void controlDoor(@Field("id") String id,
                          @Field("doorName") String doorName,
-                         @Field("status") boolean status,
-                         Callback<Integer> doorControllCallback
-                         );
-
-        @FormUrlEncoded
-        @POST("/room")
-        void roomList(@Field("id") String id,
-                Callback<String> roomListCallback);
+                         @Field("status") boolean status);
 
 
     }
@@ -91,15 +80,8 @@ public class RestRequestHelper {
         restRequest.receiveUsingStatus(date, usingStatusCallback);
     }
 
-    public void roomList(String id,Callback<String> roomListCallback){
-        restRequest.roomList(id, roomListCallback);
-    }
 
-    public void roomStatus(String roomName, Callback<Integer> roomStatusCallback){
-        restRequest.roomStatus(roomName, roomStatusCallback);
-    }
-
-    public void controlDoor(String id, String doorName, boolean status, Callback<Integer> controlDoorCallback ){
-        restRequest.controlDoor(id,doorName,status, controlDoorCallback);
+    public void controlDoor(String id, String doorName, boolean status ){
+        restRequest.controlDoor(id,doorName,status);
     }
 }
