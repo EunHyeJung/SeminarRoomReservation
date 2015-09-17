@@ -1,8 +1,13 @@
-package kr.ac.kookmin.cs.capstone2.seminarroomreservation;
+package kr.ac.kookmin.cs.capstone2.seminarroomreservation.Manager;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Manager.AccessControlFragment;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Manager.AccessHistoryFragment;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation.ReservationStatusFragment;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.User.UsingStatusFragment;
 
 /**
  * Created by ehye on 2015-09-10.
@@ -14,7 +19,8 @@ public class CustomPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-       switch (position){
+
+        switch (position){
             case 0:
                 return "이용현황";
             case 1:
@@ -29,7 +35,9 @@ public class CustomPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-       Fragment currentFragment = null;
+
+        Fragment currentFragment = null;
+
         switch (position){
             case 0:
                 currentFragment =  new UsingStatusFragment();

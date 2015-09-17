@@ -1,4 +1,4 @@
-package kr.ac.kookmin.cs.capstone2.seminarroomreservation;
+package kr.ac.kookmin.cs.capstone2.seminarroomreservation.Manager;
 
 
 import android.os.Bundle;
@@ -6,8 +6,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Network.RestRequestHelper;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
 
 
 /**
@@ -16,6 +18,7 @@ import android.widget.ListView;
 public class AccessControlFragment extends Fragment {
     ListView SeminarList;
     ListViewAdapter listAdapter;
+    RestRequestHelper requestHelper;
 
     public AccessControlFragment() {
         // Required empty public constructor
@@ -32,7 +35,7 @@ public class AccessControlFragment extends Fragment {
 
         SeminarList.setAdapter(listAdapter);
 
-        //Add the item to listview
+        //방 목록을 서버로 부터 받아 온다.
         listAdapter.add("Seminar Room A");
         listAdapter.add("Seminar Room B");
         listAdapter.add("Seminar Room C");
@@ -41,9 +44,12 @@ public class AccessControlFragment extends Fragment {
         listAdapter.add("Seminar Room F");
         listAdapter.add("Seminar Room G");
 
-        // Inflate the layout for this fragment
+        //뷰를 돌려준다.
         return view;
     }
 
+    public void addSeminarList(){
 
+
+    }
 }

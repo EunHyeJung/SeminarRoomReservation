@@ -1,9 +1,11 @@
-package kr.ac.kookmin.cs.capstone2.seminarroomreservation;
+package kr.ac.kookmin.cs.capstone2.seminarroomreservation.User;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
 
 
 public class UserActivity extends ActionBarActivity {

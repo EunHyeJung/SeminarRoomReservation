@@ -1,5 +1,4 @@
-
-package kr.ac.kookmin.cs.capstone2.seminarroomreservation;
+package kr.ac.kookmin.cs.capstone2.seminarroomreservation.Manager;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,7 +12,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import kr.ac.kookmin.cs.capstone2.seminarroomreservation.ControlDialogActivity;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
 
 /**
  * Created by song on 2015-09-09.

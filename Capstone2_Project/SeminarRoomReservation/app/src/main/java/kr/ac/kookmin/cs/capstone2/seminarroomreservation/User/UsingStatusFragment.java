@@ -1,21 +1,22 @@
-package kr.ac.kookmin.cs.capstone2.seminarroomreservation;
+package kr.ac.kookmin.cs.capstone2.seminarroomreservation.User;
 
 
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
+
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ReservationStatusFragment extends Fragment {
+public class UsingStatusFragment extends Fragment {
 
 
-    public ReservationStatusFragment() {
+    public UsingStatusFragment() {
         // Required empty public constructor
     }
 
@@ -24,13 +25,8 @@ public class ReservationStatusFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView =inflater.inflate(R.layout.fragment_reservation_status, container, false);
-
+        View rootView = inflater.inflate(R.layout.fragment_using_status, container, false);
         return rootView;
-    }
-
-    public void initUsingStatus(){
-
     }
 
 
