@@ -39,7 +39,7 @@ public class ControlDialogActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //문을 컨트롤하기 위한 함수를 부른다.
-                requestHelper.controlDoor("admin", RoomName, true, new Callback<Integer>() {
+                requestHelper.controlDoor(RoomName, true, new Callback<Integer>() {
                     @Override
                     public void success(Integer integer, Response response) {
                         switch (integer) {
@@ -66,7 +66,7 @@ public class ControlDialogActivity extends AppCompatActivity {
         CloseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                requestHelper.controlDoor("admin", RoomName, false, new Callback<Integer>() {
+                requestHelper.controlDoor(RoomName, false, new Callback<Integer>() {
                     @Override
                     public void success(Integer integer, Response response) {
                         switch (integer){
@@ -91,7 +91,7 @@ public class ControlDialogActivity extends AppCompatActivity {
 
     }
 
-    //초기화 하기 위한 화면
+    //초기화 하기 위한 함수
     public void init(){
         requestHelper=RestRequestHelper.newInstance();
 
@@ -109,9 +109,11 @@ public class ControlDialogActivity extends AppCompatActivity {
             @Override
             public void success(Integer integer, Response response) {
                 switch (integer){
+                    //닫힘
                     case 0 :
                         DoorStatusText.setText("Door Status : Close");
                         break;
+                    //열림
                     case 1:
                         DoorStatusText.setText("Door Status : Open");
                         break;

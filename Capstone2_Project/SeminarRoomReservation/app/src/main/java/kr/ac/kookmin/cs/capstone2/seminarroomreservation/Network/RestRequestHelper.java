@@ -66,8 +66,7 @@ public class RestRequestHelper {
 
         @FormUrlEncoded
         @POST("/doorcontrol")
-        void controlDoor(@Field("id") String id,
-                         @Field("doorName") String doorName,
+        void controlDoor(@Field("doorName") String doorName,
                          @Field("status") boolean status,
                          Callback<Integer> doorControllCallback
                          );
@@ -99,7 +98,7 @@ public class RestRequestHelper {
         restRequest.roomStatus(roomName, roomStatusCallback);
     }
 
-    public void controlDoor(String id, String doorName, boolean status, Callback<Integer> controlDoorCallback ){
-        restRequest.controlDoor(id,doorName,status, controlDoorCallback);
+    public void controlDoor(String doorName, boolean status, Callback<Integer> controlDoorCallback ){
+        restRequest.controlDoor(doorName,status, controlDoorCallback);
     }
 }

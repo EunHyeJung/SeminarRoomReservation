@@ -49,12 +49,8 @@ public class ListViewAdapter extends BaseAdapter {
             LayoutInflater inflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView=inflater.inflate(R.layout.custom_item,parent,false);
 
-            //textview에 현재 position의 문자열 추가
-            TextView SeminarRoomName=(TextView)convertView.findViewById(R.id.SeminarListText);
-            SeminarRoomName.setText(SeminarArrayList.get(position));
-
-            //버튼 매핑
-            BtnSeminarControl=(Button)convertView.findViewById(R.id.btn_SeminarControl);
+            //초기 설정 부분
+            init(convertView, position);
         }
         //제어 버튼 이벤트
         BtnSeminarControl.setOnClickListener(new View.OnClickListener() {
@@ -68,6 +64,15 @@ public class ListViewAdapter extends BaseAdapter {
             }
         });
         return convertView;
+    }
+
+    public void init(View convertView, final int position){
+        //textview에 현재 position의 문자열 추가
+        TextView SeminarRoomName=(TextView)convertView.findViewById(R.id.SeminarListText);
+        SeminarRoomName.setText(SeminarArrayList.get(position));
+
+        //버튼 매핑
+        BtnSeminarControl=(Button)convertView.findViewById(R.id.btn_SeminarControl);
     }
 
     public void add(String item){

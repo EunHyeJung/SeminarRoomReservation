@@ -29,7 +29,6 @@ public class AccessHistoryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_access_history, container, false);
 
         LogViewAdapter=new ArrayAdapter<String>(view.getContext(),android.R.layout.simple_list_item_1);
@@ -40,6 +39,7 @@ public class AccessHistoryFragment extends Fragment {
         LogViewAdapter.add("Admin, Room 609, 03:00 AM");
         LogViewAdapter.add("Admin, Room 611, 05:00 AM");
 
+        //뷰화면 리턴하기
         return view;
     }
 
