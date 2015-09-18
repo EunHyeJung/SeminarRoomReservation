@@ -29,5 +29,6 @@
     <string name="btn_control_dialog_cancel">Cancel</string>
     <string name="text_seminar_log">Seminar Room Log</string>
     <string name="title_activity_calendar">CalendarActivity</string>
+    <string name="title_activity_select_room_dialog">SelectRoomDialogActivity</string>
 
 </resources>

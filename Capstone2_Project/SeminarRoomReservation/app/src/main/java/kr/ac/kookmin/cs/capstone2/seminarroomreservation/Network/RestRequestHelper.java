@@ -76,6 +76,18 @@ public class RestRequestHelper {
         void roomList(@Field("id") String id,
                 Callback<String> roomListCallback);
 
+        @FormUrlEncoded
+        @POST("/daywatch")
+        void dayWatch(@Field("date") Date date,
+                      Callback<JSONObject> dayWatchCallback
+                      );
+
+        @FormUrlEncoded
+        @POST("/roomwatch")
+        void roomWatch(@Field("roomName") String roomNmae,
+                       Callback<JSONObject> roomWatchCallback
+                       );
+
 
     }
     public void signUp(String id, String password, String name, String phone, Callback<Integer> signUpCallback){
@@ -100,5 +112,13 @@ public class RestRequestHelper {
 
     public void controlDoor(String doorName, boolean status, Callback<Integer> controlDoorCallback ){
         restRequest.controlDoor(doorName,status, controlDoorCallback);
+    }
+
+    public void dayWatch(Date date, Callback<JSONObject> dayWatchCallback){
+        restRequest.dayWatch(date, dayWatchCallback);
+    }
+
+    public void roomWatch(String roomName, Callback<JSONObject> roomWatchCallback){
+        restRequest.roomWatch(roomName, roomWatchCallback);
     }
 }
