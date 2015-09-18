@@ -37,6 +37,11 @@
             android:name=".CalendarActivity"
             android:label="@string/title_activity_calendar" >
         </activity>
+        <activity
+            android:name=".Manager.SelectRoomDialogActivity"
+            android:label="@string/title_activity_select_room_dialog"
+            android:theme="@style/Animation.AppCompat.Dialog">
+        </activity>
     </application>
 
 </manifest>
