@@ -1,4 +1,4 @@
-package kookmin.cs.capstone2.reservation;
+package kookmin.cs.capstone2.booking;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,9 +13,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 import kookmin.cs.capstone2.var.StaticVariables;
 
-public class ReservationRequest extends HttpServlet {
+public class BookingRequest extends HttpServlet {
 	
 	/*
 	 * request : 세미나실 id, 신청자 id, 날짜(yyyy-MM-dd), 시작시간, 끝시간, 예약 목적

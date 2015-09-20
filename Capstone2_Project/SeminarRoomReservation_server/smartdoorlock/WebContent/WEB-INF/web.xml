@@ -51,21 +51,39 @@
 	</servlet-mapping>
 	
 	<servlet>
-		<servlet-name>kookmin.cs.capstone2.reservation.UsingStatus</servlet-name>
-		<servlet-class>kookmin.cs.capstone2.reservation.UsingStatus</servlet-class>
+		<servlet-name>kookmin.cs.capstone2.booking.UsingStatus</servlet-name>
+		<servlet-class>kookmin.cs.capstone2.booking.UsingStatus</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>kookmin.cs.capstone2.reservation.UsingStatus</servlet-name>
+		<servlet-name>kookmin.cs.capstone2.booking.UsingStatus</servlet-name>
 		<url-pattern>/usingstatus</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>
-		<servlet-name>kookmin.cs.capstone2.reservation.ReservationRequest</servlet-name>
-		<servlet-class>kookmin.cs.capstone2.reservation.ReservationRequest</servlet-class>
+		<servlet-name>kookmin.cs.capstone2.booking.BookingRequest</servlet-name>
+		<servlet-class>kookmin.cs.capstone2.booking.BookingRequest</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>kookmin.cs.capstone2.reservation.ReservationRequest</servlet-name>
-		<url-pattern>/bookrequest</url-pattern>
+		<servlet-name>kookmin.cs.capstone2.booking.BookingRequest</servlet-name>
+		<url-pattern>/bookingrequest</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>kookmin.cs.capstone2.room.RoomStatus</servlet-name>
+		<servlet-class>kookmin.cs.capstone2.room.RoomStatus</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>kookmin.cs.capstone2.room.RoomStatus</servlet-name>
+		<url-pattern>/roomstatus</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>kookmin.cs.capstone2.room.DoorControl</servlet-name>
+		<servlet-class>kookmin.cs.capstone2.room.DoorControl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>kookmin.cs.capstone2.room.DoorControl</servlet-name>
+		<url-pattern>/doorcontrol</url-pattern>
 	</servlet-mapping>
 	
 </web-app>
