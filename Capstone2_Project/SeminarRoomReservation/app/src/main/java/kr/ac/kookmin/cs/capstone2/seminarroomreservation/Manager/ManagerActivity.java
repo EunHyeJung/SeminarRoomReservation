@@ -1,5 +1,7 @@
 package kr.ac.kookmin.cs.capstone2.seminarroomreservation.Manager;
 
+import android.content.DialogInterface;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,23 +13,22 @@ import com.astuetz.PagerSlidingTabStrip;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
 
 
-public class ManagerActivity extends AppCompatActivity {
+public class ManagerActivity extends AppCompatActivity implements DialogInterface.OnDismissListener {
 
-
-
+    ViewPager viewPager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manager);
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager  = (ViewPager) findViewById(R.id.pager);
         viewPager.setAdapter(new CustomPagerAdapter(getSupportFragmentManager()));
         PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         tabs.setViewPager(viewPager);
+        tabs.setUnderlineColor(17170452);
+
 
     }
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -48,5 +49,16 @@ public class ManagerActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {         // 다이얼로그가 dismiss될때 호출
+
+        Fragment fragment = ((CustomPagerAdapter) viewPager.getAdapter()).getFragment(0);
+        if (fragment != null) {
+            fragment.onResume();
+        }
     }
 }

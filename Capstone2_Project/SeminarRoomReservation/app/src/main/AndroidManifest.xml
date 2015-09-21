@@ -33,6 +33,15 @@
             android:label="@string/title_activity_control_dialog"
             android:theme="@style/Theme.AppCompat.Dialog" >
         </activity>
+        <activity
+            android:name=".Manager.SelectRoomDialogActivity"
+            android:label="@string/title_activity_select_room_dialog"
+            android:theme="@style/Animation.AppCompat.Dialog" >
+        </activity>
+        <activity
+            android:name=".Reservation.CalendarDialog"
+            android:label="@string/title_activity_calendar_dialog" >
+        </activity>
     </application>
 
 </manifest>

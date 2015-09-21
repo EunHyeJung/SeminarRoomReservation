@@ -24,12 +24,12 @@
 
     <string name="text_door_status_close">Door Status : Close</string>
     <string name="text_door_status_open">Door Status : Open</string>
-    <string name="text_ok">OK</string>
     <string name="btn_control_dialog_open">Open</string>
     <string name="btn_control_dialog_close">Close</string>
     <string name="btn_control_dialog_cancel">Cancel</string>
     <string name="text_seminar_log">Seminar Room Log</string>
     <string name="title_activity_calendar">CalendarActivity</string>
     <string name="title_activity_select_room_dialog">SelectRoomDialogActivity</string>
+    <string name="title_activity_calendar_dialog">CalendarDialog</string>
 
 </resources>

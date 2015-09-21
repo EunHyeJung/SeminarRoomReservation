@@ -1,12 +1,15 @@
 package kr.ac.kookmin.cs.capstone2.seminarroomreservation.Join;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Authentication.MainActivity;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.EncryptionClass;
@@ -92,8 +95,6 @@ public class JoinActivity extends Activity {
             }
         });
 
-        System.out.println("password in Sign up  : " + password);
-        System.out.println("tt_join:" + (editTextPassword.getText().toString()).length());
 
     }
 }

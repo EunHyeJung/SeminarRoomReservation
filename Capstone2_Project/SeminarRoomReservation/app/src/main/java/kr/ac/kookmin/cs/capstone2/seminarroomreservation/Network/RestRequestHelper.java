@@ -20,7 +20,7 @@ public class RestRequestHelper {
     private RestAdapter restAdapter;
     private RestRequest restRequest;
 
-    private static final String url = "http://10.30.113.181:8081/smartdoorlock";
+    private static final String url = "http://192.168.23.135:8081/smartdoorlock";
 
 
     public static RestRequestHelper newInstance(){
@@ -55,7 +55,7 @@ public class RestRequestHelper {
 
         @FormUrlEncoded
         @POST("/usingstatus")
-        void receiveUsingStatus(@Field("date")Date date,
+        void receiveUsingStatus(@Field("date")String date,
                                 Callback<JSONObject> usingStatusCallback
         );
 
@@ -98,7 +98,7 @@ public class RestRequestHelper {
         restRequest.login(id, password, loginCallback);
     }
 
-    public void receiveUsingStatue(Date date, Callback<JSONObject> usingStatusCallback){
+    public void receiveUsingStatue(String date, Callback<JSONObject> usingStatusCallback){
         restRequest.receiveUsingStatus(date, usingStatusCallback);
     }
 

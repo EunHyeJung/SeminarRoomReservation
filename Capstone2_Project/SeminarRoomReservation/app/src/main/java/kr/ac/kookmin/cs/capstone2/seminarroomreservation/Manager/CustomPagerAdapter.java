@@ -3,18 +3,27 @@ package kr.ac.kookmin.cs.capstone2.seminarroomreservation.Manager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.view.ViewGroup;
 
-import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Manager.AccessControlFragment;
-import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Manager.AccessHistoryFragment;
+import java.util.HashMap;
+import java.util.Map;
+
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation.ReservationStatusFragment;
-import kr.ac.kookmin.cs.capstone2.seminarroomreservation.User.UsingStatusFragment;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation.UsingStatusFragment;
 
 /**
  * Created by ehye on 2015-09-10.
  */
 public class CustomPagerAdapter extends FragmentPagerAdapter {
+
+    private FragmentManager fragmentManager;
+    private Map<Integer, String> fragmentTags;
+
     public CustomPagerAdapter(FragmentManager fm) {
         super(fm);
+
+        fragmentManager = fm;
+        fragmentTags = new HashMap<Integer, String>();
     }
 
     @Override
@@ -57,5 +66,24 @@ public class CustomPagerAdapter extends FragmentPagerAdapter {
     @Override
     public int getCount() {
         return 4;
+    }
+
+
+    @Override
+    public Object instantiateItem(ViewGroup container, int position){
+        Object obj = super.instantiateItem(container, position);
+        // fragment tag를 여기 기록
+        Fragment f = (Fragment) obj;
+        String tag = f.getTag();
+        fragmentTags.put(position, tag);
+        return obj;
+    }
+
+    public Fragment getFragment(int position){
+        String tag = fragmentTags.get(position);
+
+        if(tag == null)
+            return null;
+        return fragmentManager.findFragmentByTag(tag);
     }
 }
