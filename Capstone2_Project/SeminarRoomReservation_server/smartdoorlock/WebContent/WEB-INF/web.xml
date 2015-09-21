@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	id="WebApp_ID" version="3.0">
+	<display-name>smartdoorlock</display-name>
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+		<welcome-file>index.htm</welcome-file>
+		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>default.html</welcome-file>
+		<welcome-file>default.htm</welcome-file>
+		<welcome-file>default.jsp</welcome-file>
+	</welcome-file-list>
+	
+	<context-param>
+	    <param-name>jdbc</param-name>
+	    <param-value>com.mysql.jdbc.Driver</param-value>
+	</context-param>
+
+	<servlet>
+	    <servlet-name>kookmin.cs.capstone2.dbcp.jdbcloader</servlet-name>
+	    <servlet-class>kookmin.cs.capstone2.dbcp.JOCLLoader</servlet-class>
+	    <load-on-startup>1</load-on-startup> <!-- JOCLLoader파일을 사용자 요청 없이 실행시키라는 명령 -->
+	</servlet>
+	<servlet>
+		<servlet-name>kookmin.cs.capstone2.user.SignUp</servlet-name>
+		<servlet-class>kookmin.cs.capstone2.user.SignUp</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>kookmin.cs.capstone2.user.SignUp</servlet-name>
+		<url-pattern>/signup</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>kookmin.cs.capstone2.user.Login</servlet-name>
+		<servlet-class>kookmin.cs.capstone2.user.Login</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>kookmin.cs.capstone2.user.Login</servlet-name>
+		<url-pattern>/login</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>kookmin.cs.capstone2.room.Room</servlet-name>
+		<servlet-class>kookmin.cs.capstone2.room.Room</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>kookmin.cs.capstone2.room.Room</servlet-name>
+		<url-pattern>/room</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>kookmin.cs.capstone2.reservation.UsingStatus</servlet-name>
+		<servlet-class>kookmin.cs.capstone2.reservation.UsingStatus</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>kookmin.cs.capstone2.reservation.UsingStatus</servlet-name>
+		<url-pattern>/usingstatus</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>kookmin.cs.capstone2.reservation.ReservationRequest</servlet-name>
+		<servlet-class>kookmin.cs.capstone2.reservation.ReservationRequest</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>kookmin.cs.capstone2.reservation.ReservationRequest</servlet-name>
+		<url-pattern>/bookrequest</url-pattern>
+	</servlet-mapping>
+	
+</web-app>

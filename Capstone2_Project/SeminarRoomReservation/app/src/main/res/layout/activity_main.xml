@@ -1,0 +1,57 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_gravity="center_horizontal"
+    android:background="@drawable/background_login"
+    tools:context=".MainActivity">
+
+
+    <EditText
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:id="@+id/editText_loginId"
+        android:hint = "Input ID"
+        android:layout_gravity="center"
+        android:layout_marginTop="330dp"
+        />
+
+    <EditText
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:id="@+id/editText_loginPassword"
+        android:inputType="textPassword"
+        android:hint = "Input Password"
+        android:layout_gravity="center"
+        android:layout_marginTop="2dp"
+        />
+
+
+    <Button
+        android:id="@+id/button_login"
+        android:layout_width="200dp"
+        android:layout_height="30dp"
+        android:text="LOGIN"
+        android:textSize="12dp"
+        android:textColor="#ff333333"
+        android:background="#50FFFFFF"
+        android:layout_gravity="center"
+        android:layout_marginTop="23dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:id="@+id/button_join"
+        android:layout_width="200dp"
+        android:layout_height="30dp"
+        android:text="JOIN"
+        android:textSize="12dp"
+        android:textColor="#ff333333"
+        android:background="#50FFFFFF"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"
+        />
+
+
+</LinearLayout>

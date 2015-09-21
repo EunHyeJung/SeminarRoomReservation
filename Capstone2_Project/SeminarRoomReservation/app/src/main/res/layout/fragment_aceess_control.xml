@@ -1,0 +1,54 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ff253c6c"
+    tools:context="kr.ac.kookmin.cs.capstone2.seminarroomreservation.Manager.AccessControlFragment">
+
+    <LinearLayout
+        android:padding="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="15dp"
+            android:background="#50FFFFFF">
+
+            <Button
+                android:id="@+id/BuildingPrevious"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:background="#50FFFFFF"
+                android:gravity="center_horizontal" />
+
+            <TextView
+                android:id="@+id/textRoom"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center_horizontal"
+                android:text="7호관"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/BuildingNext"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="#50FFFFFF"
+                android:gravity="center_horizontal" />
+        </RelativeLayout>
+
+        <ListView
+            android:id="@+id/SeminarList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="15dp">
+        </ListView>
+
+    </LinearLayout>
+</FrameLayout>
