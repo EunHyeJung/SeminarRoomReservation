@@ -51,42 +51,20 @@ public class RestRequestHelper {
         void login(@Field("id") String id,
                    @Field("password") String password,
                    Callback<Integer> loginCallback
-        );
+                   );
 
         @FormUrlEncoded
         @POST("/usingstatus")
-        void receiveUsingStatus(@Field("date")String date,
+        void receiveUsingStatus(@Field("date")Date date,
                                 Callback<JSONObject> usingStatusCallback
         );
 
-        @FormUrlEncoded
-        @POST("/roomstatus")
-        void roomStatus(@Field("roomName")String roomName,
-                        Callback<Integer> roomStatusCallback);
 
         @FormUrlEncoded
         @POST("/doorcontrol")
-        void controlDoor(@Field("doorName") String doorName,
-                         @Field("status") boolean status,
-                         Callback<Integer> doorControllCallback
-                         );
-
-        @FormUrlEncoded
-        @POST("/room")
-        void roomList(@Field("id") String id,
-                Callback<String> roomListCallback);
-
-        @FormUrlEncoded
-        @POST("/daywatch")
-        void dayWatch(@Field("date") Date date,
-                      Callback<JSONObject> dayWatchCallback
-                      );
-
-        @FormUrlEncoded
-        @POST("/roomwatch")
-        void roomWatch(@Field("roomName") String roomNmae,
-                       Callback<JSONObject> roomWatchCallback
-                       );
+        void controlDoor(@Field("id") String id,
+                         @Field("doorName") String doorName,
+                         @Field("status") boolean status);
 
 
     }
@@ -98,27 +76,12 @@ public class RestRequestHelper {
         restRequest.login(id, password, loginCallback);
     }
 
-    public void receiveUsingStatue(String date, Callback<JSONObject> usingStatusCallback){
+    public void receiveUsingStatue(Date date, Callback<JSONObject> usingStatusCallback){
         restRequest.receiveUsingStatus(date, usingStatusCallback);
     }
 
-    public void roomList(String id,Callback<String> roomListCallback){
-        restRequest.roomList(id, roomListCallback);
-    }
 
-    public void roomStatus(String roomName, Callback<Integer> roomStatusCallback){
-        restRequest.roomStatus(roomName, roomStatusCallback);
-    }
-
-    public void controlDoor(String doorName, boolean status, Callback<Integer> controlDoorCallback ){
-        restRequest.controlDoor(doorName,status, controlDoorCallback);
-    }
-
-    public void dayWatch(Date date, Callback<JSONObject> dayWatchCallback){
-        restRequest.dayWatch(date, dayWatchCallback);
-    }
-
-    public void roomWatch(String roomName, Callback<JSONObject> roomWatchCallback){
-        restRequest.roomWatch(roomName, roomWatchCallback);
+    public void controlDoor(String id, String doorName, boolean status ){
+        restRequest.controlDoor(id,doorName,status);
     }
 }

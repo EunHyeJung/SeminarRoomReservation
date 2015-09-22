@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import org.json.JSONObject;
+
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Authentication.MainActivity;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.EncryptionClass;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
@@ -16,7 +18,6 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 
 import retrofit.client.Response;
-
 
 public class JoinActivity extends Activity {
 
@@ -37,7 +38,6 @@ public class JoinActivity extends Activity {
         editTextPhone = (EditText) findViewById(R.id.editText_joinPhone);
         buttonJoin = (Button) findViewById(R.id.button_joinRequest);
 
-        System.out.println("eunji babo");
         buttonJoin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,6 +78,14 @@ public class JoinActivity extends Activity {
         String password = EncryptionClass.testSHA256(editTextPassword.getText().toString());
         String name = editTextName.getText().toString();
         String phone = editTextPhone.getText().toString();
+
+        String jsonData = "{ id:"+id+", password:"+password+", name:"+name+", phone }";
+
+
+/*
+        String jsonData = "{a:1, b:2 ....}";
+        JSONObject jsonObject = JSONObject.fromObject(JSONSerializer.toJSON(jsonData));
+*/
 
         RestRequestHelper requestHelper = RestRequestHelper.newInstance();
         requestHelper.signUp(id, password, name, phone, new Callback<Integer>() {

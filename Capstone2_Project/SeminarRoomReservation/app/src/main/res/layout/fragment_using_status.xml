@@ -4,13 +4,13 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal"
     android:background="#ffffc477"
-    tools:context="kr.ac.kookmin.cs.capstone2.seminarroomreservation.User.UsingStatusFragment">
+    tools:context="kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation.UsingStatusFragment">
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#ff253c6c"
+        android:background="@drawable/background1"
         android:orientation="vertical"
         android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -26,7 +26,7 @@
                 android:id="@+id/button_date"
                 android:layout_width="100dp"
                 android:layout_height="30dp"
-                android:background="#ff23585e"
+                android:background="#90124F54"
                 android:text="날짜 선택" />
 
             <TextView
@@ -40,7 +40,7 @@
             <Button
                 android:layout_width="100dp"
                 android:layout_height="30dp"
-                android:background="#ff23585e"
+                android:background="#90124F54"
                 android:text="7호관" />
 
         </LinearLayout>
@@ -53,114 +53,118 @@
             >
 
             <ListView
-            android:id="@+id/listView_time"
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:background="#ff972730"
-            android:layout_marginTop="35dp"
-            ></ListView>
+                android:id="@+id/listView_time"
+                android:layout_width="80dp"
+                android:layout_height="450dp"
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+                android:verticalSpacing="1dp"
+                android:layout_marginTop="35dp"
+                ></ListView>
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:layout_marginTop="10dp"
-               android:orientation="horizontal">
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/TestView_empty"
-                    android:layout_width="43dp"
-                    android:layout_height="25dp"
-                    android:layout_marginRight="1dp"
-                    android:layout_weight="1"
-                    android:background="#ff333333"
-                    android:gravity="center"
-                    android:text=""
-                    android:textSize="14dp"
-                    android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/TestView_room1"
+                        android:layout_width="43dp"
+                        android:layout_height="25dp"
+                        android:layout_marginRight="1dp"
+                        android:layout_weight="1"
+                        android:background="#ff333333"
+                        android:gravity="center"
+                        android:text="601"
+                        android:textSize="14dp"
+                        android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/TestView_room1"
-                    android:layout_width="43dp"
-                    android:layout_height="25dp"
-                    android:layout_marginRight="1dp"
-                    android:layout_weight="1"
-                    android:background="#ff333333"
-                    android:gravity="center"
-                    android:text="601"
-                    android:textSize="14dp"
-                    android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/TestView_room2"
+                        android:layout_width="43dp"
+                        android:layout_height="25dp"
+                        android:layout_marginRight="1dp"
+                        android:layout_weight="1"
+                        android:background="#ff333333"
+                        android:gravity="center"
+                        android:text="602"
+                        android:textSize="14dp"
+                        android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/TestView_room2"
-                    android:layout_width="43dp"
-                    android:layout_height="25dp"
-                    android:layout_marginRight="1dp"
-                    android:layout_weight="1"
-                    android:background="#ff333333"
-                    android:gravity="center"
-                    android:text="602"
-                    android:textSize="14dp"
-                    android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/TestView_room3"
+                        android:layout_width="43dp"
+                        android:layout_height="25dp"
+                        android:layout_marginRight="1dp"
+                        android:layout_weight="1"
+                        android:background="#ff333333"
+                        android:gravity="center"
+                        android:text="603"
+                        android:textSize="14dp"
+                        android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/TestView_room3"
-                    android:layout_width="43dp"
-                    android:layout_height="25dp"
-                    android:layout_marginRight="1dp"
-                    android:layout_weight="1"
-                    android:background="#ff333333"
-                    android:gravity="center"
-                    android:text="603"
-                    android:textSize="14dp"
-                    android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/TestView_room4"
+                        android:layout_width="43dp"
+                        android:layout_height="25dp"
+                        android:layout_marginRight="1dp"
+                        android:layout_weight="1"
+                        android:background="#ff333333"
+                        android:gravity="center"
+                        android:text="604"
+                        android:textSize="14dp"
+                        android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/TestView_room4"
-                    android:layout_width="43dp"
-                    android:layout_height="25dp"
-                    android:layout_marginRight="1dp"
-                    android:layout_weight="1"
-                    android:background="#ff333333"
-                    android:gravity="center"
-                    android:text="604"
-                    android:textSize="14dp"
-                    android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/TestView_room5"
+                        android:layout_width="43dp"
+                        android:layout_height="25dp"
+                        android:layout_marginRight="1dp"
+                        android:layout_weight="1"
+                        android:background="#ff333333"
+                        android:gravity="center"
+                        android:text="605"
+                        android:textSize="14dp"
+                        android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/TestView_room5"
-                    android:layout_width="43dp"
-                    android:layout_height="25dp"
-                    android:layout_marginRight="1dp"
-                    android:layout_weight="1"
-                    android:background="#ff333333"
-                    android:gravity="center"
-                    android:text="605"
-                    android:textSize="14dp"
-                    android:textStyle="bold" />
+
+                </LinearLayout>
+
+
+
+                <GridView
+                    android:id="@+id/girdView_usingStatus"
+                    android:layout_width="220dp"
+                    android:layout_height="470dp"
+                    android:horizontalSpacing="1dp"
+                    android:numColumns="5"
+                    android:stretchMode="columnWidth"
+                    android:verticalSpacing="1dp"
+                    android:layout_marginTop="1dp"
+                    android:background="#10000000"
+                    />
+
+
             </LinearLayout>
 
 
 
-            <GridView
-                android:id="@+id/girdView_usingStatus"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#ca459de6"
-                android:horizontalSpacing="1dp"
-                android:numColumns="5"
-                android:stretchMode="columnWidth"
-                android:verticalSpacing="1dp" />
+            <Button
+                android:id="@+id/button_next"
+                android:layout_width="60dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center_vertical"
+                android:background="#ca3a83bf"
+                android:layout_marginLeft="10dp"
+                />
 
         </LinearLayout>
-
-
-    </LinearLayout>
 
     </LinearLayout>
 
