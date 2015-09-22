@@ -1,6 +1,7 @@
 package kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.text.Layout;
 import android.view.LayoutInflater;
@@ -8,7 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.util.ArrayList;
+
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Join.JoinActivity;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
 
 /**
@@ -18,17 +23,17 @@ public class CustomGridAdapter extends BaseAdapter {
 
     private Context mContext;
     private LayoutInflater mLayoutInflater;
-    private final String[] inputValues;
+    private ArrayList<String> inputValues;
 
-    public CustomGridAdapter(Context mContext, String[] inputValues){
-       this. mContext = mContext;
+    public CustomGridAdapter(Context mContext, ArrayList<String> inputValues){
+        this. mContext = mContext;
         this.mLayoutInflater = LayoutInflater.from(mContext);
         this.inputValues = inputValues;
     }
 
     @Override
     public int getCount() {
-        return inputValues.length;
+        return 120;
     }
 
     @Override
@@ -42,22 +47,35 @@ public class CustomGridAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
 
         if(convertView == null) {
             convertView = mLayoutInflater.inflate(R.layout.item_gridview, parent, false);
             TextView textViewGridItem = (TextView) convertView.findViewById(R.id.textView_gridItem);
             //textViewGridItem.setText("p : "+position);
-            if(position%6==0 ){
-                textViewGridItem.setText(inputValues[position]);
-                textViewGridItem.setTextSize(15);
-                textViewGridItem.setWidth(200);
-                textViewGridItem.setBackgroundColor(Color.parseColor("#7fa2d5"));
 
-            }
-            if(inputValues[position].equals("booked")){
+            if(position == 7 || position== 12)
+                textViewGridItem.setBackgroundColor(Color.parseColor("#90C84646"));
+            if(position == 51 || position == 56 || position == 61)
+                textViewGridItem.setBackgroundColor(Color.parseColor("#90C84646"));
+
+            if(position == 38 || position ==43 || position == 48)
+                textViewGridItem.setBackgroundColor(Color.parseColor("#90E86E59"));
+
+
+            if(inputValues.get(position).equals("book")){
                 textViewGridItem.setBackgroundColor(Color.parseColor("#ffffff"));
             }
+
+            textViewGridItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, JoinActivity.class);
+                    mContext.startActivity(intent);             // 여기에 신청 폼
+                }
+            });
+
+
         }
         return convertView;
     }

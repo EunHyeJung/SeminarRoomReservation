@@ -30,7 +30,7 @@ public class CalendarDialog extends Dialog implements DialogInterface.OnClickLis
                 new DatePicker.OnDateChangedListener() {
                     @Override
                     public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        UsingStatusFragment.date = year+" / "+(monthOfYear+1)+" / "+dayOfMonth;
+                        UsingStatusFragment.date = year+"-"+(monthOfYear+1)+"-"+dayOfMonth;
                         dismiss();
                     }
                 });

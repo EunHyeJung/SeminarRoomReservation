@@ -1,6 +1,7 @@
 package kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation;
 
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -43,6 +44,14 @@ public class UsingStatusFragment extends Fragment {
     static String date;
     int year, month, day;
 
+    Button buttonNext;
+
+    AccidentListener mCallback;
+
+    public interface AccidentListener{
+        void deliverData(ArrayList<String> data);
+    }
+
     public UsingStatusFragment() {
         // Required empty public constructor
     }
@@ -58,15 +67,22 @@ public class UsingStatusFragment extends Fragment {
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH);
         day = calendar.get(Calendar.DAY_OF_MONTH);
-        date = year + " / " + (month + 1) + " / " + day;
+        date = year + "-" + (month + 1) + "-" + day;
         textViewDate = (TextView) rootView.findViewById(R.id.textView_date);
 
         listView = (ListView) rootView.findViewById(R.id.listView_time);
-
         gridView = (GridView) rootView.findViewById(R.id.girdView_usingStatus);
 
+        buttonNext = (Button) rootView.findViewById(R.id.button_next);
+        buttonNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         init(date);
+
 
         buttonDate = (Button) rootView.findViewById(R.id.button_date);
         buttonDate.setOnClickListener(new View.OnClickListener() {
@@ -83,7 +99,7 @@ public class UsingStatusFragment extends Fragment {
 
     public void init(String date) {
 
-        String[] inputTimeValues = {"09:00 - 09:30", "09:30 - 10:00", "10:00 - 10:30", "10:30 - 11:00", "11:00 - 11:30", "11:30 - 12:00",
+            String[] inputTimeValues = {"09:00 - 09:30", "09:30 - 10:00", "10:00 - 10:30", "10:30 - 11:00", "11:00 - 11:30", "11:30 - 12:00",
                 "12:00 - 12:30", "12:30 - 13:00", "13:00 - 14:30", "14:30 - 15:00", "15:00 - 16:30", "16:30 - 17:00",
                 "17:00 - 17:30", "17:30 - 18:00", "18:00 - 18:30", "18:30 - 19:00", "19:00 - 19:30", "19:30 - 20:00",
                 "20:00 - 20:30", "20:30 - 21:00"
@@ -101,17 +117,22 @@ public class UsingStatusFragment extends Fragment {
         CustomListAdapter customListAdapter = new CustomListAdapter(getActivity(), inputTimeValues);
         listView.setAdapter(customListAdapter);
 
+
+        // 서버로부터 데이터를 받아옴
         RestRequestHelper requestHelper = RestRequestHelper.newInstance();
         requestHelper.receiveUsingStatue(date, new Callback<JSONObject>() {
             @Override
             public void success(JSONObject signUpCallback, Response response) {
-                System.out.println("receivewUsingStatus"+response);
+                System.out.println("receivewUsingStatus"+signUpCallback);
+                System.out.println("receive : "+signUpCallback.toString());
             }
             @Override
             public void failure(RetrofitError error) {
                 error.printStackTrace();
             }
         });
+
+
     }
 
     public void showCaldendarDialog() {
@@ -124,5 +145,16 @@ public class UsingStatusFragment extends Fragment {
     public void onResume() {
         super.onResume();
         init(date);
+    }
+
+    @Override
+    public void onAttach(Activity activity){
+        super.onAttach(activity);
+        try{
+            mCallback = (AccidentListener) activity;
+        }catch(ClassCastException e){
+
+        }
+
     }
 }
