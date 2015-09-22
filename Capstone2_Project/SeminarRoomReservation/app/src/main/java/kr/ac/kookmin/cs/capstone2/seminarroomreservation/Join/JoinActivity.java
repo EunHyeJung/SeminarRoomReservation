@@ -37,7 +37,7 @@ public class JoinActivity extends Activity {
         editTextPhone = (EditText) findViewById(R.id.editText_joinPhone);
         buttonJoin = (Button) findViewById(R.id.button_joinRequest);
 
-        System.out.println("dd");
+        System.out.println("eunji babo");
         buttonJoin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
