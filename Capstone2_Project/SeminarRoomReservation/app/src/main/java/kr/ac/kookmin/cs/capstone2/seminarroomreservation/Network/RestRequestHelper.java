@@ -20,7 +20,7 @@ public class RestRequestHelper {
     private RestAdapter restAdapter;
     private RestRequest restRequest;
 
-    private static final String url = "http://10.30.113.181:8081/smartdoorlock";
+    private static final String url = "http://192.168.23.117:8081/smartdoorlock";
 
 
     public static RestRequestHelper newInstance(){
@@ -46,6 +46,17 @@ public class RestRequestHelper {
                     @Field("phone") String phone,
                     Callback<Integer> signUpCallback);
 
+        //jh
+        @FormUrlEncoded
+        @POST("/bookingrequest")
+        void makeReservation(@Field("date") String date,
+                             @Field("start_time") String start_time,
+                             @Field("end_time") String end_time,
+                             @Field("room_id") String room_id,
+                             Callback<Integer> makeReservationCallback);
+
+
+
         @FormUrlEncoded
         @POST("/login")
         void login(@Field("id") String id,
@@ -69,17 +80,22 @@ public class RestRequestHelper {
         void controlDoor(@Field("doorName") String doorName,
                          @Field("status") boolean status,
                          Callback<Integer> doorControllCallback
-                         );
+        );
 
         @FormUrlEncoded
         @POST("/room")
         void roomList(@Field("id") String id,
-                Callback<String> roomListCallback);
+                      Callback<String> roomListCallback);
 
 
     }
     public void signUp(String id, String password, String name, String phone, Callback<Integer> signUpCallback){
         restRequest.signUp(id, password, name, phone, signUpCallback);
+    }
+
+    //jh
+    public void makeReservation(String date, String start_time, String end_time ,String room_id, Callback<Integer> makeReservationCallback){
+        restRequest.makeReservation(date, start_time, end_time, room_id,   makeReservationCallback);
     }
 
     public void login(String id, String password,  Callback<Integer> loginCallback){
