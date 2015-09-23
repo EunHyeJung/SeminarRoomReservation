@@ -2,8 +2,10 @@ package kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.internal.widget.AdapterViewCompat;
@@ -16,6 +18,8 @@ import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.gson.JsonObject;
+
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -24,6 +28,7 @@ import java.util.List;
 
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Network.RestRequestHelper;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.SharedPreferenceClass;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -49,7 +54,7 @@ public class UsingStatusFragment extends Fragment {
     AccidentListener mCallback;
 
     public interface AccidentListener{
-        void deliverData(ArrayList<String> data);
+        void deliverData();
     }
 
     public UsingStatusFragment() {
@@ -70,6 +75,17 @@ public class UsingStatusFragment extends Fragment {
         date = year + "-" + (month + 1) + "-" + day;
         textViewDate = (TextView) rootView.findViewById(R.id.textView_date);
 
+
+        SharedPreferenceClass  pref = new SharedPreferenceClass(getActivity());
+
+        System.out.println("Shared : "+pref.getValue("id",""));
+        System.out.println("Shared : "+pref.getValue("password",""));
+        System.out.println("Shared : "+pref.getValue("name",""));
+        System.out.println("Shared : "+pref.getValue("phone",""));
+
+        /*SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
+        pref.getString("hi", "");*/
+
         listView = (ListView) rootView.findViewById(R.id.listView_time);
         gridView = (GridView) rootView.findViewById(R.id.girdView_usingStatus);
 
@@ -77,7 +93,7 @@ public class UsingStatusFragment extends Fragment {
         buttonNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                mCallback.deliverData();
             }
         });
 
@@ -120,12 +136,11 @@ public class UsingStatusFragment extends Fragment {
 
         // 서버로부터 데이터를 받아옴
         RestRequestHelper requestHelper = RestRequestHelper.newInstance();
-        requestHelper.receiveUsingStatue(date, new Callback<JSONObject>() {
+        requestHelper.receiveUsingStatue(date, new Callback<JsonObject>() {
             @Override
-            public void success(JSONObject signUpCallback, Response response) {
+            public void success(JsonObject signUpCallback, Response response) {
                 System.out.println("receivewUsingStatus"+signUpCallback);
-                System.out.println("receive : "+signUpCallback.toString());
-            }
+       }
             @Override
             public void failure(RetrofitError error) {
                 error.printStackTrace();

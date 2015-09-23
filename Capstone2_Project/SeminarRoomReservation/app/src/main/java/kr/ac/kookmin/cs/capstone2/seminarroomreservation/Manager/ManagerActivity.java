@@ -57,7 +57,6 @@ public class ManagerActivity extends AppCompatActivity implements DialogInterfac
 
     @Override
     public void onDismiss(DialogInterface dialog) {
-
         Fragment fragment = ((CustomPagerAdapter) viewPager.getAdapter()).getFragment(0);
         if (fragment != null) {
             fragment.onResume();
@@ -65,7 +64,11 @@ public class ManagerActivity extends AppCompatActivity implements DialogInterfac
     }
 
     @Override
-    public void deliverData(ArrayList<String> data) {
-        System.out.println(data);
+    public void deliverData() {
+        Fragment fragment = ((CustomPagerAdapter) viewPager.getAdapter()).getFragment(0);
+        if (fragment != null) {
+            fragment.onResume();
+            System.out.println("deliverData check");
+        }
     }
 }

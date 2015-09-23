@@ -1,5 +1,7 @@
 package kr.ac.kookmin.cs.capstone2.seminarroomreservation.Network;
 
+import com.google.gson.JsonObject;
+
 import org.json.JSONObject;
 
 import java.util.Date;
@@ -20,7 +22,7 @@ public class RestRequestHelper {
     private RestAdapter restAdapter;
     private RestRequest restRequest;
 
-    private static final String url = "http://192.168.1.100:8081/smartdoorlock";
+    private static final String url = "http://10.30.100.214:8081/smartdoorlock";
 
 
     public static RestRequestHelper newInstance(){
@@ -50,13 +52,13 @@ public class RestRequestHelper {
         @POST("/login")
         void login(@Field("id") String id,
                    @Field("password") String password,
-                   Callback<Integer> loginCallback
+                   Callback<JsonObject> loginCallback
         );
 
         @FormUrlEncoded
         @POST("/usingstatus")
         void receiveUsingStatus(@Field("date")String date,
-                                Callback<JSONObject> usingStatusCallback
+                                Callback<JsonObject> usingStatusCallback
         );
 
         @FormUrlEncoded
@@ -94,11 +96,11 @@ public class RestRequestHelper {
         restRequest.signUp(id, password, name, phone, signUpCallback);
     }
 
-    public void login(String id, String password,  Callback<Integer> loginCallback){
+    public void login(String id, String password,  Callback<JsonObject> loginCallback){
         restRequest.login(id, password, loginCallback);
     }
 
-    public void receiveUsingStatue(String date, Callback<JSONObject> usingStatusCallback){
+    public void receiveUsingStatue(String date, Callback<JsonObject > usingStatusCallback){
         restRequest.receiveUsingStatus(date, usingStatusCallback);
     }
 

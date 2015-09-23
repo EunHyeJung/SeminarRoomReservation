@@ -14,6 +14,7 @@ import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Authentication.MainActi
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.EncryptionClass;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Network.RestRequestHelper;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.SharedPreferenceClass;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 
@@ -26,6 +27,9 @@ public class JoinActivity extends Activity {
     private EditText editTextName;
     private EditText editTextPhone;
     private Button buttonJoin;
+
+    SharedPreferenceClass sharedPreference = new SharedPreferenceClass(this);
+
 
 
     @Override
@@ -72,20 +76,11 @@ public class JoinActivity extends Activity {
 
     public void signup() {
 
-        System.out.println("pas" + editTextPassword.getText().toString());
+        final String id = editTextId.getText().toString();
+        final String password = EncryptionClass.testSHA256(editTextPassword.getText().toString());
+        final String name = editTextName.getText().toString();
+        final String phone = editTextPhone.getText().toString();
 
-        String id = editTextId.getText().toString();
-        String password = EncryptionClass.testSHA256(editTextPassword.getText().toString());
-        String name = editTextName.getText().toString();
-        String phone = editTextPhone.getText().toString();
-
-        String jsonData = "{ id:"+id+", password:"+password+", name:"+name+", phone }";
-
-
-/*
-        String jsonData = "{a:1, b:2 ....}";
-        JSONObject jsonObject = JSONObject.fromObject(JSONSerializer.toJSON(jsonData));
-*/
 
         RestRequestHelper requestHelper = RestRequestHelper.newInstance();
         requestHelper.signUp(id, password, name, phone, new Callback<Integer>() {
@@ -101,9 +96,7 @@ public class JoinActivity extends Activity {
             }
         });
 
-        System.out.println("password in Sign up  : " + password);
-        System.out.println("tt_join:" + (editTextPassword.getText().toString()).length());
-
     }
+
 }
 
