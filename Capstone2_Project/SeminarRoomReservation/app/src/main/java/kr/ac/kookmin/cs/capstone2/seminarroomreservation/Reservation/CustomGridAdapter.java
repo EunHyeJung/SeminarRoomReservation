@@ -70,8 +70,8 @@ public class CustomGridAdapter extends BaseAdapter {
             textViewGridItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(mContext, JoinActivity.class);
-                    mContext.startActivity(intent);             // 여기에 신청 폼
+                    Intent intent = new Intent(mContext, ReservationFormActivity.class);        //  
+                    mContext.startActivity(intent);
                 }
             });
 

@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import org.json.JSONObject;
@@ -59,17 +60,24 @@ public class MainActivity extends AppCompatActivity {
                 final String id = editTextId.getText().toString();
                 final String password = EncryptionClass.testSHA256(editTextPassword.getText().toString());
 
+
+                // 임시 선언 삭제할것.
+         /*       Intent intent = new Intent(getApplicationContext(), ManagerActivity.class);
+                startActivity(intent);
+
+*/
                 loginProcess();
                 RestRequestHelper requestHelper = RestRequestHelper.newInstance();
                 requestHelper.login(id, password, new Callback<JsonObject>() {
                     @Override
                     public void success(JsonObject loginCallback, Response response) {
-                        saveUserInfo(id, password);
-                        loginProcess();
+                        saveUserInfo(id, password);             // SharedPreference에 사용자 정보 저장
+                      //  loginProcess(loginCallback);
                     }
 
                     @Override
                     public void failure(RetrofitError error) {
+
                         error.printStackTrace();
                     }
                 });
@@ -78,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /* End Of onCreateView */
+
     public void saveUserInfo(String id, String password){
         SharedPreferenceClass sharedPreference = new SharedPreferenceClass(this);
         sharedPreference.put("id",id);
@@ -86,6 +95,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void loginProcess(){
+
+        /*
+        {"id":1, "result":2, "room":[{"roomName":"601}, {"roomName":"602"}, {"roomName":"603"}]}
+        */
+    //    String tempString = loginCallback.toString();
+
+
+
         Intent intent = new Intent(getApplicationContext(), ManagerActivity.class);
         startActivity(intent);
 
