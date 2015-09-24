@@ -1,7 +1,8 @@
 package kr.ac.kookmin.cs.capstone2.seminarroomreservation.Manager;
 
 
-import android.content.Intent;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -13,7 +14,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import org.json.JSONObject;
 
@@ -30,16 +30,18 @@ import retrofit.client.Response;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AccessHistoryFragment extends Fragment {
+public class AccessHistoryFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
     ListView SeminarLogView;
     ArrayAdapter<String> LogViewAdapter;
     RestRequestHelper restRequest;//네트워크 변수
+    Date date;
 
     Button dayBtn;//날짜별 보기
     Spinner roomSpinner;//방 별 보기
     ArrayAdapter<String> spinnerAdapter;
     ArrayList<String> entry;
+    AlertDialog.Builder alert;
 
     public AccessHistoryFragment() {
         // Required empty public constructor
@@ -53,8 +55,13 @@ public class AccessHistoryFragment extends Fragment {
         //초기 설정
         init(view);
 
-        //기본으로는 날짜별로 보여준다.
-        getDayHistory();
+        alert = new AlertDialog.Builder(getContext());
+        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
 
         dayBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,32 +70,7 @@ public class AccessHistoryFragment extends Fragment {
             }
         });
 
-        roomSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("item select", parent.getAdapter().getItem(position).toString());
-                restRequest.roomWatch(parent.getAdapter().getItem(position).toString(), new Callback<JSONObject>() {
-                    @Override
-                    public void success(JSONObject jsonObject, Response response) {
-                        Log.d("JSON Object : ", jsonObject.toString());
-                        LogViewAdapter.add("로그 찍힘");
-                        LogViewAdapter.notifyDataSetChanged();//화면 갱신
-                    }
-
-                    @Override
-                    public void failure(RetrofitError error) {
-                        LogViewAdapter.add("네트워크 상황이 안좋아 보여드릴 수 없습니다. (방 별 보기)");
-                        Log.e("Retrofit Error : ", error.toString());
-                        LogViewAdapter.notifyDataSetChanged();//화면 갱신
-                    }
-                });
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
+        roomSpinner.setOnItemSelectedListener(this);
 
         //뷰화면 리턴하기
         return view;
@@ -96,6 +78,8 @@ public class AccessHistoryFragment extends Fragment {
 
     //초기 설정 부분
     public void init(View view){
+        date = new Date();
+        
         //네트워크와 연결
         restRequest=RestRequestHelper.newInstance();
 
@@ -105,8 +89,10 @@ public class AccessHistoryFragment extends Fragment {
         SeminarLogView=(ListView)view.findViewById(R.id.SeminarLog);
         SeminarLogView.setAdapter(LogViewAdapter);
 
+        //스피너 매핑 부분
         roomSpinner=(Spinner)view.findViewById(R.id.spinner_room_watch);
         entry=new ArrayList<String>();
+        entry.add("ALL");
         spinnerAdapter=new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_list_item_1,entry);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         roomSpinner.setAdapter(spinnerAdapter);
@@ -124,17 +110,16 @@ public class AccessHistoryFragment extends Fragment {
 
             @Override
             public void failure(RetrofitError error) {
-                spinnerAdapter.add("0");
-                spinnerAdapter.add("1");
-                spinnerAdapter.notifyDataSetChanged();
+                alert.setMessage("서버 문제로 내용을 가져올 수 없습니다.");
+                alert.show();
             }
         });
     }
 
-    //날짜별 로그 가져오기
+    //날짜별 기록 가져오기
     public void getDayHistory(){
-        Date date=new Date();
-        restRequest.dayWatch(date, new Callback<JSONObject>() {
+        LogViewAdapter.clear();//내용을 비운다.
+        restRequest.dayHistory(date, new Callback<JSONObject>() {
             @Override
             public void success(JSONObject jsonObject, Response response) {
                 Log.d("JSON Object : ", jsonObject.toString());
@@ -149,5 +134,35 @@ public class AccessHistoryFragment extends Fragment {
                 LogViewAdapter.notifyDataSetChanged();//화면 갱신
             }
         });
+    }
+
+    //방 별 기록 가져오기
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        LogViewAdapter.clear();
+        if (!parent.getAdapter().getItem(position).toString().equals("ALL")) {
+            restRequest.roomHistory(date, parent.getAdapter().getItem(position).toString(), new Callback<JSONObject>() {
+                @Override
+                public void success(JSONObject jsonObject, Response response) {
+                    Log.d("JSON Object : ", jsonObject.toString());
+                    LogViewAdapter.add("로그 찍힘");
+                    LogViewAdapter.notifyDataSetChanged();//화면 갱신
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    LogViewAdapter.add("네트워크 상황이 안좋아 보여드릴 수 없습니다. (방 별 보기)");
+                    Log.e("Retrofit Error : ", error.toString());
+                    LogViewAdapter.notifyDataSetChanged();//화면 갱신
+                }
+            });
+        } else {
+            getDayHistory();
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }
