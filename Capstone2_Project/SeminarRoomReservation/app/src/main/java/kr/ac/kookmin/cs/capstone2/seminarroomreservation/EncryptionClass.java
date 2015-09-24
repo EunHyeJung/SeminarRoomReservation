@@ -8,8 +8,7 @@ import java.security.NoSuchAlgorithmException;
  */
 public class EncryptionClass {
     public  static String testSHA256(String str) {
-        System.out.println("str : "+str);
-        System.out.println("str : "+str.getBytes());
+
 
         String SHA = "";
 

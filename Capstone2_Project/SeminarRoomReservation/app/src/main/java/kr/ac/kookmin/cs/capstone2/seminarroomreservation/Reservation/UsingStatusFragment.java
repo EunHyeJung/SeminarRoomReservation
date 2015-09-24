@@ -28,7 +28,9 @@ import java.util.List;
 
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Network.RestRequestHelper;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.RoomInfoClass;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.SharedPreferenceClass;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.User.UserInformation;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -53,6 +55,13 @@ public class UsingStatusFragment extends Fragment {
 
     AccidentListener mCallback;
 
+    TextView textViewRoom1;
+    TextView textViewRoom2;
+    TextView textViewRoom3;
+    TextView textViewRoom4;
+    TextView textViewRoom5;
+
+
     public interface AccidentListener{
         void deliverData();
     }
@@ -76,15 +85,6 @@ public class UsingStatusFragment extends Fragment {
         textViewDate = (TextView) rootView.findViewById(R.id.textView_date);
 
 
-        SharedPreferenceClass  pref = new SharedPreferenceClass(getActivity());
-
-        System.out.println("Shared : "+pref.getValue("id",""));
-        System.out.println("Shared : "+pref.getValue("password",""));
-        System.out.println("Shared : "+pref.getValue("name",""));
-        System.out.println("Shared : "+pref.getValue("phone",""));
-
-        /*SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
-        pref.getString("hi", "");*/
 
         listView = (ListView) rootView.findViewById(R.id.listView_time);
         gridView = (GridView) rootView.findViewById(R.id.girdView_usingStatus);
@@ -109,12 +109,38 @@ public class UsingStatusFragment extends Fragment {
         });
 
 
+        textViewRoom1 = (TextView) rootView.findViewById(R.id.textView_room1);
+        textViewRoom2 = (TextView) rootView.findViewById(R.id.testView_room2);
+        textViewRoom3 = (TextView) rootView.findViewById(R.id.textView_room3);
+        textViewRoom4 = (TextView) rootView.findViewById(R.id.textView_room4);
+        textViewRoom5 = (TextView) rootView.findViewById(R.id.textView_room5);
+
+
         return rootView;
     }
 
 
     public void init(String date) {
 
+
+
+// 여기 부분 오류 -----------------------------------------------------------------------------
+        Thread thread = new Thread(new Runnable(){
+            @Override
+            public void run() {
+                String[] data;
+                data = RoomInfoClass.getRoomNames();
+/*
+                textViewRoom1.setText(data[0]);
+                textViewRoom2.setText(data[1]);
+                textViewRoom3.setText(data[2]);
+                textViewRoom4.setText(data[4]);
+                textViewRoom5.setText(data[5]);*/
+            }
+        });
+        thread.start();
+
+// 여기 부분 오류 -----------------------------------------------------------------------------
             String[] inputTimeValues = {"09:00 - 09:30", "09:30 - 10:00", "10:00 - 10:30", "10:30 - 11:00", "11:00 - 11:30", "11:30 - 12:00",
                 "12:00 - 12:30", "12:30 - 13:00", "13:00 - 14:30", "14:30 - 15:00", "15:00 - 16:30", "16:30 - 17:00",
                 "17:00 - 17:30", "17:30 - 18:00", "18:00 - 18:30", "18:30 - 19:00", "19:00 - 19:30", "19:30 - 20:00",
