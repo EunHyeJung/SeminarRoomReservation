@@ -78,6 +78,7 @@ public class AccessHistoryFragment extends Fragment implements AdapterView.OnIte
                     @Override
                     public void onDismiss(DialogInterface dialog) {
                         calendarDialog.dismiss();
+                        dayBtn.setText(date);
                         getDayHistory();
                     }
                 });
