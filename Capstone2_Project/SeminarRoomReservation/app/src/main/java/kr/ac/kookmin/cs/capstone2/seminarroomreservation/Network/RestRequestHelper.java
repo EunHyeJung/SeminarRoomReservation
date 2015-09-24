@@ -22,13 +22,7 @@ public class RestRequestHelper {
     private RestAdapter restAdapter;
     private RestRequest restRequest;
 
-<<<<<<< HEAD
-
     private static final String url = "http://10.30.100.214:8081/smartdoorlock";
-=======
-    private static final String url = "http://10.30.117.53:8081/smartdoorlock";
->>>>>>> sm
-
 
     public static RestRequestHelper newInstance(){
         if(instance == null){
@@ -95,14 +89,14 @@ public class RestRequestHelper {
                       Callback<String> roomListCallback);
 
         @FormUrlEncoded
-        @POST("/daywatch")
-        void dayWatch(@Field("date") Date date,
+        @POST("/dayhistory")
+        void dayWatch(@Field("date") String date,
                       Callback<JSONObject> dayWatchCallback
                       );
 
         @FormUrlEncoded
-        @POST("/roomwatch")
-        void roomWatch(@Field("date") Date date,
+        @POST("/roomhistory")
+        void roomWatch(@Field("date") String date,
                        @Field("roomName") String roomNmae,
                        Callback<JSONObject> roomWatchCallback
                        );
@@ -138,11 +132,11 @@ public class RestRequestHelper {
         restRequest.controlDoor(doorName,status, controlDoorCallback);
     }
 
-    public void dayHistory(Date date, Callback<JSONObject> dayWatchCallback){
+    public void dayHistory(String date, Callback<JSONObject> dayWatchCallback){
         restRequest.dayWatch(date, dayWatchCallback);
     }
 
-    public void roomHistory(Date date,String roomName, Callback<JSONObject> roomWatchCallback){
+    public void roomHistory(String date,String roomName, Callback<JSONObject> roomWatchCallback){
         restRequest.roomWatch(date, roomName, roomWatchCallback);
     }
 }

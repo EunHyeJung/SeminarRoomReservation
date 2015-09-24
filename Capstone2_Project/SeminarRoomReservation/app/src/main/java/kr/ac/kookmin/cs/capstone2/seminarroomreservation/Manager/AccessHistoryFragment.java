@@ -15,13 +15,16 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Network.RestRequestHelper;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation.CalendarDialog;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -35,13 +38,16 @@ public class AccessHistoryFragment extends Fragment implements AdapterView.OnIte
     ListView SeminarLogView;
     ArrayAdapter<String> LogViewAdapter;
     RestRequestHelper restRequest;//네트워크 변수
-    Date date;
+    public static String date;
 
     Button dayBtn;//날짜별 보기
     Spinner roomSpinner;//방 별 보기
     ArrayAdapter<String> spinnerAdapter;
+
     ArrayList<String> entry;
     AlertDialog.Builder alert;
+
+    CalendarDialog calendarDialog;
 
     public AccessHistoryFragment() {
         // Required empty public constructor
@@ -62,11 +68,19 @@ public class AccessHistoryFragment extends Fragment implements AdapterView.OnIte
                 dialog.dismiss();
             }
         });
+        calendarDialog = new CalendarDialog(getContext());
 
         dayBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getDayHistory();
+                calendarDialog.show();
+                calendarDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        calendarDialog.dismiss();
+                        getDayHistory();
+                    }
+                });
             }
         });
 
@@ -78,8 +92,11 @@ public class AccessHistoryFragment extends Fragment implements AdapterView.OnIte
 
     //초기 설정 부분
     public void init(View view){
-        date = new Date();
-        
+        //날짜 설정
+        Calendar calendar = Calendar.getInstance();
+        int month=calendar.get(Calendar.MONTH);
+        date = calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DATE);
+
         //네트워크와 연결
         restRequest=RestRequestHelper.newInstance();
 
@@ -93,7 +110,7 @@ public class AccessHistoryFragment extends Fragment implements AdapterView.OnIte
         roomSpinner=(Spinner)view.findViewById(R.id.spinner_room_watch);
         entry=new ArrayList<String>();
         entry.add("ALL");
-        spinnerAdapter=new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_list_item_1,entry);
+         spinnerAdapter=new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_list_item_1,entry);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         roomSpinner.setAdapter(spinnerAdapter);
 
@@ -123,7 +140,17 @@ public class AccessHistoryFragment extends Fragment implements AdapterView.OnIte
             @Override
             public void success(JSONObject jsonObject, Response response) {
                 Log.d("JSON Object : ", jsonObject.toString());
-                LogViewAdapter.add("로그 찍힘");
+                try {
+                    JSONArray dayHistory = jsonObject.getJSONArray("result");
+
+                    for(int i=0; i< dayHistory.length(); i++)
+                    {
+                     LogViewAdapter.add(dayHistory.getJSONObject(i).getString("time")+" "+dayHistory.getJSONObject(i).getString("roomName")+" "
+                                        +dayHistory.getJSONObject(i).getString("id")+" "+dayHistory.getJSONObject(i).getString("order"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 LogViewAdapter.notifyDataSetChanged();//화면 갱신
             }
 
@@ -145,7 +172,18 @@ public class AccessHistoryFragment extends Fragment implements AdapterView.OnIte
                 @Override
                 public void success(JSONObject jsonObject, Response response) {
                     Log.d("JSON Object : ", jsonObject.toString());
-                    LogViewAdapter.add("로그 찍힘");
+                    try {
+                        JSONArray dayHistory = jsonObject.getJSONArray("result");
+
+                        for(int i=0; i< dayHistory.length(); i++)
+                        {
+                            LogViewAdapter.add(dayHistory.getJSONObject(i).getString("time")+" "
+                                    +dayHistory.getJSONObject(i).getString("id")+" "+dayHistory.getJSONObject(i).getString("order"));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
                     LogViewAdapter.notifyDataSetChanged();//화면 갱신
                 }
 
@@ -165,4 +203,5 @@ public class AccessHistoryFragment extends Fragment implements AdapterView.OnIte
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+
 }
