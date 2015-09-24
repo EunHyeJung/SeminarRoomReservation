@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
                 final String id = editTextId.getText().toString();
                 final String password = EncryptionClass.testSHA256(editTextPassword.getText().toString());
 
+                loginProcess();
                 RestRequestHelper requestHelper = RestRequestHelper.newInstance();
                 requestHelper.login(id, password, new Callback<JsonObject>() {
                     @Override
