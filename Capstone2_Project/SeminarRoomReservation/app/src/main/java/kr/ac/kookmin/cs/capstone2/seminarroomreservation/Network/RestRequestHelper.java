@@ -47,6 +47,17 @@ public class RestRequestHelper {
                     @Field("phone") String phone,
                     Callback<Integer> signUpCallback);
 
+        //jh
+        @FormUrlEncoded
+        @POST("/bookingrequest")
+        void makeReservation(@Field("date") String date,
+                             @Field("start_time") String start_time,
+                             @Field("end_time") String end_time,
+                             @Field("room_id") String room_id,
+                             Callback<Integer> makeReservationCallback);
+
+
+
         @FormUrlEncoded
         @POST("/login")
         void login(@Field("id") String id,
@@ -70,12 +81,12 @@ public class RestRequestHelper {
         void controlDoor(@Field("doorName") String doorName,
                          @Field("status") boolean status,
                          Callback<Integer> doorControllCallback
-                         );
+        );
 
         @FormUrlEncoded
         @POST("/room")
         void roomList(@Field("id") String id,
-                Callback<String> roomListCallback);
+                      Callback<String> roomListCallback);
 
         @FormUrlEncoded
         @POST("/dayhistory")
@@ -99,6 +110,11 @@ public class RestRequestHelper {
     public void login(String id, String password,  Callback<JsonObject> loginCallback){
         restRequest.login(id, password, loginCallback);
     }
+
+    public void makeReservation(String date, String start_time, String end_time ,String room_id, Callback<Integer> makeReservationCallback){
+        restRequest.makeReservation(date, start_time, end_time, room_id,   makeReservationCallback);
+    }
+
 
     public void receiveUsingStatue(String date, Callback<JsonObject > usingStatusCallback){
         restRequest.receiveUsingStatus(date, usingStatusCallback);

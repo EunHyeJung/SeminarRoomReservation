@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name ="roomList">
+        <item>601</item>
+        <item>602</item>
+        <item>603</item>
+        <item>604</item>
+    </string-array>
+
+    <string-array name ="memberlist">
+        <item>20113344</item>
+        <item>20113324</item>
+        <item>20113325</item>
+        <item>20124125</item>
+    </string-array>
+</resources>
+
+

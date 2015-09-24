@@ -4,6 +4,7 @@ package kr.ac.kookmin.cs.capstone2.seminarroomreservation;
  * Created by ehye on 2015-09-24.
  */
 public class RoomInfoClass {
+<<<<<<< HEAD
     private static String[] roomNames;
     private static int numOfRooms;
 
@@ -24,4 +25,6 @@ public class RoomInfoClass {
         return numOfRooms;
     }
 
+=======
+>>>>>>> 08cbd2da00285c9b25866b9548f4632d44869e4e
 }

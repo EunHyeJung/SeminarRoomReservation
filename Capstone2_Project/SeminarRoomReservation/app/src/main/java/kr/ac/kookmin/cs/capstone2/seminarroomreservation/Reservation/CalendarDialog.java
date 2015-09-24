@@ -11,6 +11,7 @@ import android.widget.DatePicker;
 
 import java.util.Date;
 
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Manager.AccessHistoryFragment;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
 
 /**
@@ -31,6 +32,7 @@ public class CalendarDialog extends Dialog implements DialogInterface.OnClickLis
                     @Override
                     public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         UsingStatusFragment.date = year+"-"+(monthOfYear+1)+"-"+dayOfMonth;
+                        AccessHistoryFragment.date=UsingStatusFragment.date;
                         dismiss();
                     }
                 });

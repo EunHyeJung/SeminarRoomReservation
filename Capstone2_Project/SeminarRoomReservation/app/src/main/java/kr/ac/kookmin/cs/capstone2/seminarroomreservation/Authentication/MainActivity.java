@@ -12,7 +12,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.gson.JsonArray;
+
 import com.google.gson.JsonElement;
+
 
 import com.google.gson.JsonObject;
 
@@ -64,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
                 final String password = EncryptionClass.testSHA256(editTextPassword.getText().toString());
 
 
-            //    loginProcess();
 
                 RestRequestHelper requestHelper = RestRequestHelper.newInstance();
                 requestHelper.login(id, password, new Callback<JsonObject>() {
@@ -72,15 +73,13 @@ public class MainActivity extends AppCompatActivity {
                     public void success(JsonObject loginCallback, Response response) {
 
                         saveUserInfo(id, password);
-                        loginProcess();
-
-                        saveUserInfo(id, password);             // SharedPreference에 사용자 정보 저장
                         loginProcess(loginCallback);
 
                     }
 
                     @Override
                     public void failure(RetrofitError error) {
+
                         error.printStackTrace();
                     }
                 });
@@ -89,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /* End Of onCreateView */
+
     public void saveUserInfo(String id, String password){
         SharedPreferenceClass sharedPreference = new SharedPreferenceClass(this);
         sharedPreference.put("id",id);
@@ -108,15 +108,16 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    public void loginProcess(JsonObject loginCallback){
+
+
         Intent intent = new Intent(getApplicationContext(), ManagerActivity.class);
         startActivity(intent);
 
 
 
-        jsonElement = loginCallback.get("result");
+        /*jsonElement = loginCallback.get("result");
         int result = jsonElement.getAsInt();
-
+*/
         JsonArray jsonArray = loginCallback.getAsJsonArray("room");
         String roomNames[] = new String[jsonArray.size()];
 
@@ -129,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
         RoomInfoClass roomInfo = new RoomInfoClass(jsonArray.size());
         roomInfo.setRoomNames(roomNames);
 
-
+/*
 
         switch (result) {
             case 0:         // 로그인 오류
@@ -142,11 +143,11 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case 2:             // 관리자 로그인
                 Toast.makeText(getApplicationContext(), "Login Success, Admin Mode", Toast.LENGTH_LONG).show();
-/*                saveUserInfo(id, password);
-                System.out.println("login result "+response);*/
+*//*                saveUserInfo(id, password);
+                System.out.println("login result "+response);*//*
                 intent = new Intent(getApplicationContext(), ManagerActivity.class);
                 startActivity(intent);
-                break;
+                break;*/
         }
     }
 
