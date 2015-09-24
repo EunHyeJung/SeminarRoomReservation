@@ -1,0 +1,151 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#8D7A4F"
+    tools:context="kr.ac.kookmin.cs.capstone2.seminarroomreservation.JoinActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"></FrameLayout>
+
+    <LinearLayout
+        android:layout_width="350dp"
+        android:layout_height="380dp"
+        android:orientation="vertical"
+        android:layout_gravity="center_horizontal"
+        android:background="#90000000"
+        android:layout_marginTop="60dp"
+        >
+
+        <!--입실날짜-->
+        <LinearLayout
+            android:layout_width="243dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal">
+            <TextView
+                android:layout_width="78dp"
+                android:layout_height="29dp"
+                android:layout_marginTop="5dp"
+                android:text="입실날짜"
+                android:id="@+id/check_in_date" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="date"
+                android:ems="10"
+                android:id="@+id/txtCheckInDate"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <!--입실날짜-->
+        <LinearLayout
+            android:layout_width="243dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal">
+            <TextView
+                android:layout_width="78dp"
+                android:layout_height="29dp"
+                android:layout_marginTop="5dp"
+                android:text="입실시간"
+                android:id="@+id/check_in_time" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="time"
+                android:ems="10"
+                android:id="@+id/txtCheckInTime"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <!--입실날짜-->
+        <LinearLayout
+            android:layout_width="243dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal">
+            <TextView
+                android:layout_width="78dp"
+                android:layout_height="29dp"
+                android:layout_marginTop="5dp"
+                android:text="퇴실시간"
+                android:id="@+id/check_out_time" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="time"
+                android:ems="10"
+                android:id="@+id/txtCheckOutTime"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <!--이용장소-->
+        <LinearLayout
+            android:layout_width="243dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal">
+            <TextView
+                android:layout_width="78dp"
+                android:layout_height="29dp"
+
+                android:layout_marginTop="13dp"
+                android:text="이용장소"
+                android:id="@+id/text_roomNumber" />
+            <Spinner
+                android:id="@+id/spinner_roomList"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_width="163dp"
+                android:layout_height="40dp"
+                android:layout_gravity="right"
+                android:clickable="true"
+                android:gravity="center_horizontal" />
+        </LinearLayout>
+
+
+        <!--회의 참여자 -->
+        <LinearLayout
+            android:layout_width="243dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal">
+            <TextView
+                android:layout_width="78dp"
+                android:layout_height="29dp"
+
+                android:layout_marginTop="13dp"
+                android:text="회의 참여자"
+                android:id="@+id/text_memberlist" />
+            <Spinner
+                android:id="@+id/spinner_memberList"
+                android:layout_width="163dp"
+                android:layout_height="40dp"
+                android:layout_gravity="right"
+                android:clickable="true"
+                android:gravity="center_horizontal" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/button_makereservation"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:text="예약하기"
+        android:textColor="#FFFFFF"
+        android:background="#1D4A4F"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="35dp"
+        android:onClick="onClickedMakeReservation"
+        />
+
+</LinearLayout>
+
