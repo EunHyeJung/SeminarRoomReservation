@@ -31,13 +31,13 @@ public class CustomPagerAdapter extends FragmentPagerAdapter {
 
         switch (position){
             case 0:
-                return "이용현황";
+                return "?댁슜?꾪솴";
             case 1:
-                return "예약내역";
+                return "?덉빟?꾪솴";
             case 2:
-                return "스마트키";
+                return "?ㅻ쭏?명궎";
             case 3:
-                return "이용기록";
+                return "異쒖엯湲곕줉";
         }
         return null;
     }

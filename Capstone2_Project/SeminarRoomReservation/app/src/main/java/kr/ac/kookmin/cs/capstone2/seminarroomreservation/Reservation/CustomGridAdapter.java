@@ -70,10 +70,8 @@ public class CustomGridAdapter extends BaseAdapter {
             textViewGridItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    Intent intent = new Intent(mContext, ReservationFormActivity.class);
+                    Intent intent = new Intent(mContext, ReservationFormActivity.class);        //  
                     mContext.startActivity(intent);
-
                 }
             });
 

@@ -12,12 +12,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.gson.JsonArray;
-
-import com.google.gson.JsonElement;
-
-
 import com.google.gson.JsonObject;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Set;
@@ -37,7 +35,7 @@ import retrofit.client.Response;
 public class MainActivity extends AppCompatActivity {
     EditText editTextId;
     EditText editTextPassword;
-
+    SharedPreferenceClass sharedPreference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
 
         editTextId = (EditText) findViewById(R.id.editText_loginId);
         editTextPassword = (EditText) findViewById(R.id.editText_loginPassword);
+
+        sharedPreference = new SharedPreferenceClass(this);
 
         Button buttonLogin = (Button) findViewById(R.id.button_login);
         Button buttonJoin = (Button) findViewById(R.id.button_join);
@@ -66,15 +66,33 @@ public class MainActivity extends AppCompatActivity {
                 final String password = EncryptionClass.testSHA256(editTextPassword.getText().toString());
 
 
+                // 임시 선언 삭제할것.
+         /*       Intent intent = new Intent(getApplicationContext(), ManagerActivity.class);
+                startActivity(intent);
 
+*/
+                /*Json Test - 서버 통신 후에 삭제할 것
+                {"responseData":{"id":1,"roomNames":[{"roomName":"601"},{"roomName":"602"},{"roomName":"603"}],"result":2}} */
+                JSONObject tempJson;
+                String tempnJsonData = "{ \"responseData\" : { \"id\" : 1, \"result\" : 2, " +
+                        " \"roomNames\" : [ { \"roomName\" : \"601\" }, { \"roomName\" : \"602\" }, { \"roomName\" : \"603\" }] } }";
+                try {
+                    tempJson = new JSONObject(tempnJsonData);
+                    jsonParsing(tempJson);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                    /// Json Test - 서버 통신 후에 삭제할 것
+
+
+
+                /* -------------------------  Retrofit 통신  -------------------------  */
                 RestRequestHelper requestHelper = RestRequestHelper.newInstance();
                 requestHelper.login(id, password, new Callback<JsonObject>() {
                     @Override
                     public void success(JsonObject loginCallback, Response response) {
-
-                        saveUserInfo(id, password);
-                        loginProcess(loginCallback);
-
+                        sharedPreference.put("id",id);          // 사용자 정보 저장
+                        sharedPreference.put("password",password);
                     }
 
                     @Override
@@ -83,56 +101,33 @@ public class MainActivity extends AppCompatActivity {
                         error.printStackTrace();
                     }
                 });
+                /*End of RequestHelper*/
             }
         });
+         /*End of RequestHelper*/
     }
 
     /* End Of onCreateView */
 
-    public void saveUserInfo(String id, String password){
-        SharedPreferenceClass sharedPreference = new SharedPreferenceClass(this);
-        sharedPreference.put("id",id);
-        sharedPreference.put("password",password);
-    }
-    public void saveUserInfo(int userId){
-        SharedPreferenceClass sharedPreference = new SharedPreferenceClass(this);
-        sharedPreference.put("userId",userId);
-    }
+    public void jsonParsing(JSONObject jsonObject) throws JSONException {
+        JSONObject responseData = jsonObject.getJSONObject("responseData"); //2 레벨 제이슨 객체를 얻음
+        int userId  = responseData.getInt("id");
+        int result = responseData.getInt("result");
 
-    public void loginProcess(JsonObject loginCallback){
-        System.out.println("loginCallback : "+loginCallback);
+        sharedPreference.put("userId", userId);             // 사용자 고유 id 저장
 
-        JsonElement jsonElement = loginCallback.get("id");
-        int userId = jsonElement.getAsInt();
-        saveUserInfo(userId);
-
-
-
-
-
-        Intent intent = new Intent(getApplicationContext(), ManagerActivity.class);
-        startActivity(intent);
-
-
-
-        /*jsonElement = loginCallback.get("result");
-        int result = jsonElement.getAsInt();
-*/
-        JsonArray jsonArray = loginCallback.getAsJsonArray("room");
-        String roomNames[] = new String[jsonArray.size()];
-
-
-        for(int i=0 ; i<jsonArray.size() ; i++){
-            JsonObject temp = jsonArray.get(i).getAsJsonObject();
-            String roomName = temp.get("roomName").toString();
-            roomNames[i] = roomName;
+        JSONArray roomNames = responseData.getJSONArray("roomNames");
+        RoomInfoClass.init(roomNames.length());
+        for(int i=0 ; i<roomNames.length() ; i++){
+            RoomInfoClass.roomNames[i] = roomNames.getJSONObject(i).getString("roomName").toString();
         }
-        RoomInfoClass roomInfo = new RoomInfoClass(jsonArray.size());
-        roomInfo.setRoomNames(roomNames);
 
-/*
+        loginProcess(result);
+    }
 
-        switch (result) {
+
+    public void loginProcess(int result){
+       switch (result) {
             case 0:         // 로그인 오류
                 Toast.makeText(getApplicationContext(), "Invalid ID", Toast.LENGTH_LONG).show();
                 break;
@@ -143,11 +138,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case 2:             // 관리자 로그인
                 Toast.makeText(getApplicationContext(), "Login Success, Admin Mode", Toast.LENGTH_LONG).show();
-*//*                saveUserInfo(id, password);
-                System.out.println("login result "+response);*//*
                 intent = new Intent(getApplicationContext(), ManagerActivity.class);
                 startActivity(intent);
-                break;*/
+                break;
         }
     }
 

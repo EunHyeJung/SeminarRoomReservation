@@ -92,14 +92,14 @@ public class RestRequestHelper {
         @POST("/dayhistory")
         void dayWatch(@Field("date") String date,
                       Callback<JSONObject> dayWatchCallback
-        );
+                      );
 
         @FormUrlEncoded
         @POST("/roomhistory")
         void roomWatch(@Field("date") String date,
                        @Field("roomName") String roomNmae,
                        Callback<JSONObject> roomWatchCallback
-        );
+                       );
 
 
     }
