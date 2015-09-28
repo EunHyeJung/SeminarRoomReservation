@@ -86,4 +86,30 @@
 		<url-pattern>/doorcontrol</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+		<servlet-name>kookmin.cs.capstone2.booking.RequestList</servlet-name>
+		<servlet-class>kookmin.cs.capstone2.booking.RequestList</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>kookmin.cs.capstone2.booking.RequestList</servlet-name>
+		<url-pattern>/requestlist</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>kookmin.cs.capstone2.user.UserList</servlet-name>
+		<servlet-class>kookmin.cs.capstone2.user.UserList</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>kookmin.cs.capstone2.user.UserList</servlet-name>
+		<url-pattern>/userlist</url-pattern>
+	</servlet-mapping>
+	
+		<servlet>
+		<servlet-name>kookmin.cs.capstone2.history.RoomHistory</servlet-name>
+		<servlet-class>kookmin.cs.capstone2.history.RoomHistory</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>kookmin.cs.capstone2.history.RoomHistory</servlet-name>
+		<url-pattern>/roomhistory</url-pattern>
+	</servlet-mapping>
 </web-app>
