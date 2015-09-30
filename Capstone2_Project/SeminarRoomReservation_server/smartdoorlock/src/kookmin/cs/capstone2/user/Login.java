@@ -43,6 +43,7 @@ public class Login extends HttpServlet {
 
 		//for Json
 		JSONObject jsonObject = new JSONObject(); //최종 완성될 JSONObject 선언
+		JSONObject secondObject = new JSONObject();
 		JSONArray roomArray = new JSONArray(); //방 정보를 담을 jsonArray
 		JSONObject roomInfo = new JSONObject(); //방 정보 한 개의 정보가 들어갈 JSONObject
 		
@@ -58,14 +59,14 @@ public class Login extends HttpServlet {
 			
 			//id와 password가 일치하는 user가 있을 경우 b_admin column을 확인하여 관리자 여부를 가린다
 			if (rs.next()) {
-				jsonObject.put("id", rs.getInt("id"));
+				secondObject.put("id", rs.getInt("id"));
 				Boolean bAdmin = rs.getBoolean("b_admin");
 				if (bAdmin)
-					jsonObject.put("result", StaticVariables.ADMIN);//관리자 
+					secondObject.put("result", StaticVariables.ADMIN);//관리자 
 				else 
-					jsonObject.put("result", StaticVariables.SUCCESS);//일반 사용자
+					secondObject.put("result", StaticVariables.SUCCESS);//일반 사용자
 			} else
-				jsonObject.put("result", StaticVariables.FAIL);////로그인 실패
+				secondObject.put("result", StaticVariables.FAIL);////로그인 실패
 
 			sql = "select room_id from room;";
 			rs=stmt.executeQuery(sql);
@@ -77,7 +78,8 @@ public class Login extends HttpServlet {
 				roomInfo = new JSONObject();
 			}
 			
-			jsonObject.put("room", roomArray);
+			secondObject.put("room", roomArray);
+			jsonObject.put("responseDate", secondObject);
 			System.out.println(jsonObject);
 			pw.println(jsonObject);
 		} catch (SQLException e) {
