@@ -22,7 +22,7 @@ public class RestRequestHelper {
     private RestAdapter restAdapter;
     private RestRequest restRequest;
 
-    private static final String url = "http://10.30.100.214:8081/smartdoorlock";
+    private static final String url = "http://192.168.23.51:8081/smartdoorlock";
 
     public static RestRequestHelper newInstance(){
         if(instance == null){
@@ -74,14 +74,14 @@ public class RestRequestHelper {
         @FormUrlEncoded
         @POST("/roomstatus")
         void roomStatus(@Field("roomName")String roomName,
-                        Callback<Integer> roomStatusCallback);
+                        Callback<JsonObject> roomStatusCallback);
 
         @FormUrlEncoded
         @POST("/doorcontrol")
         void controlDoor(@Field("id") int id,
-                         @Field("doorName") String doorName,
-                         @Field("status") boolean status,
-                         Callback<Integer> doorControllCallback
+                         @Field("roomName") String roomName,
+                         @Field("command") boolean status,
+                         Callback<JsonObject> doorControllCallback
         );
 
         @FormUrlEncoded
@@ -90,17 +90,22 @@ public class RestRequestHelper {
                       Callback<String> roomListCallback);
 
         @FormUrlEncoded
-        @POST("/dayhistory")
+        @POST("/roomhistory")
         void dayWatch(@Field("date") String date,
-                      Callback<JSONObject> dayWatchCallback
+                      @Field("room") String roomName,
+                      Callback<JsonObject> dayWatchCallback
                       );
 
         @FormUrlEncoded
-        @POST("/roomhistory")
-        void roomWatch(@Field("date") String date,
-                       @Field("roomName") String roomNmae,
-                       Callback<JSONObject> roomWatchCallback
-                       );
+        @POST("/requestlist")
+        void requestList(@Field("date") String date ,
+                         Callback<JsonObject> requestListCallback);
+
+        @FormUrlEncoded
+        @POST("/bookingfilter")
+        void bookingFilter(@Field("id") int id,
+                           @Field("command") int command,
+                           Callback<JsonObject> bookingFilterCallback);
 
 
     }
@@ -125,19 +130,23 @@ public class RestRequestHelper {
         restRequest.roomList(id, roomListCallback);
     }
 
-    public void roomStatus(String roomName, Callback<Integer> roomStatusCallback){
+    public void roomStatus(String roomName, Callback<JsonObject> roomStatusCallback){
         restRequest.roomStatus(roomName, roomStatusCallback);
     }
 
-    public void controlDoor(int id, String doorName, boolean status, Callback<Integer> controlDoorCallback ){
-        restRequest.controlDoor(id, doorName,status, controlDoorCallback);
+    public void controlDoor(int id, String doorName, boolean status, Callback<JsonObject> controlDoorCallback ){
+        restRequest.controlDoor(id, doorName, status, controlDoorCallback);
     }
 
-    public void dayHistory(String date, Callback<JSONObject> dayWatchCallback){
-        restRequest.dayWatch(date, dayWatchCallback);
+    public void getHistory(String date, String roomName, Callback<JsonObject> dayWatchCallback){
+        restRequest.dayWatch(date, roomName, dayWatchCallback);
     }
 
-    public void roomHistory(String date,String roomName, Callback<JSONObject> roomWatchCallback){
-        restRequest.roomWatch(date, roomName, roomWatchCallback);
+    public void requestList(String date, Callback<JsonObject> requestCallback){
+        restRequest.requestList(date, requestCallback);
+    }
+
+    public void bookingFilter(int id, int command, Callback<JsonObject> bookingFilterCallback){
+        restRequest.bookingFilter(id, command, bookingFilterCallback);
     }
 }

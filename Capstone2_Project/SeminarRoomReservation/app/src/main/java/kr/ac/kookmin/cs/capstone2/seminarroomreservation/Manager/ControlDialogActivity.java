@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.JsonObject;
+
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Network.RestRequestHelper;
 import retrofit.Callback;
@@ -39,10 +41,12 @@ public class ControlDialogActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //문을 컨트롤하기 위한 함수를 부른다.
-                requestHelper.controlDoor(0,RoomName, true, new Callback<Integer>() {
+                requestHelper.controlDoor(1,RoomName, true, new Callback<JsonObject>() {
                     @Override
-                    public void success(Integer integer, Response response) {
-                        switch (integer) {
+                    public void success(JsonObject jsonObject, Response response) {
+                        int result = jsonObject.get("result").getAsInt();
+
+                        switch (result) {
                             //문 관리 실패
                             case 0:
                                 Toast.makeText(getApplicationContext(),"네트워크 사정으로 문을 열 수 없습니다.",Toast.LENGTH_SHORT).show();
@@ -66,10 +70,11 @@ public class ControlDialogActivity extends AppCompatActivity {
         CloseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                requestHelper.controlDoor(0,RoomName, false, new Callback<Integer>() {
+                requestHelper.controlDoor(1,RoomName, false, new Callback<JsonObject>() {
                     @Override
-                    public void success(Integer integer, Response response) {
-                        switch (integer){
+                    public void success(JsonObject jsonObject, Response response) {
+                        int result = jsonObject.get("result").getAsInt();
+                        switch (result){
                             //문 닫기 실패
                             case 0 :
                                 Toast.makeText(getApplicationContext(),"네트워크 사정으로 문을 닫을 수 없습니다.",Toast.LENGTH_SHORT).show();
@@ -105,10 +110,11 @@ public class ControlDialogActivity extends AppCompatActivity {
         DoorStatusText=(TextView)findViewById(R.id.text_DoorStatus);
 
         //방 상태를 받아오는 함수를 실행
-        requestHelper.roomStatus(RoomName, new Callback<Integer>() {
+        requestHelper.roomStatus(RoomName, new Callback<JsonObject>() {
             @Override
-            public void success(Integer integer, Response response) {
-                switch (integer){
+            public void success(JsonObject jsonObject, Response response) {
+                int status = jsonObject.get("status").getAsInt();
+                switch (status){
                     //닫힘
                     case 0 :
                         DoorStatusText.setText("Door Status : Close");

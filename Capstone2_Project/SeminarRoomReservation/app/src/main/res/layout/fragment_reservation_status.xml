@@ -9,7 +9,35 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="20dp">
+        android:padding="20dp"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="15dp"
+            android:background="#ff253c6c">
+
+            <Button
+                android:id="@+id/btn_reservation_showall"
+                android:layout_width="130dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:background="#50FFFFFF"
+                android:gravity="center_horizontal"
+                android:text = "ALL"
+                android:paddingTop="10dp"/>
+
+            <Button
+                android:id = "@+id/btn_reservation_date"
+                android:layout_width="130dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="#50FFFFFF"
+                android:gravity="center_horizontal"
+                android:paddingTop="10dp"
+                android:text = "날짜별 보기" />
+        </RelativeLayout>
 
         <ListView
             android:id="@+id/listview_reservation"
