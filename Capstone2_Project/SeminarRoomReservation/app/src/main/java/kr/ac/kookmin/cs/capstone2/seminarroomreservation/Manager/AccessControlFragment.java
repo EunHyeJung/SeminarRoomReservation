@@ -21,7 +21,7 @@ import retrofit.client.Response;
  */
 public class AccessControlFragment extends Fragment {
     ListView SeminarList;
-    ListViewAdapter listAdapter;
+    CustomControlLVAdapter listAdapter;
     RestRequestHelper requestHelper;
 
     public AccessControlFragment() {
@@ -35,7 +35,7 @@ public class AccessControlFragment extends Fragment {
         View view=inflater.inflate(R.layout.fragment_aceess_control, container, false);
         requestHelper=RestRequestHelper.newInstance();
         SeminarList = (ListView)view.findViewById(R.id.SeminarList);
-        listAdapter=new ListViewAdapter();
+        listAdapter=new CustomControlLVAdapter();
 
         SeminarList.setAdapter(listAdapter);
 

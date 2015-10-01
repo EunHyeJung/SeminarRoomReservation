@@ -78,7 +78,8 @@ public class RestRequestHelper {
 
         @FormUrlEncoded
         @POST("/doorcontrol")
-        void controlDoor(@Field("doorName") String doorName,
+        void controlDoor(@Field("id") int id,
+                         @Field("doorName") String doorName,
                          @Field("status") boolean status,
                          Callback<Integer> doorControllCallback
         );
@@ -112,7 +113,7 @@ public class RestRequestHelper {
     }
 
     public void makeReservation(String date, String start_time, String end_time ,String room_id, Callback<Integer> makeReservationCallback){
-        restRequest.makeReservation(date, start_time, end_time, room_id,   makeReservationCallback);
+        restRequest.makeReservation(date, start_time, end_time, room_id, makeReservationCallback);
     }
 
 
@@ -128,8 +129,8 @@ public class RestRequestHelper {
         restRequest.roomStatus(roomName, roomStatusCallback);
     }
 
-    public void controlDoor(String doorName, boolean status, Callback<Integer> controlDoorCallback ){
-        restRequest.controlDoor(doorName,status, controlDoorCallback);
+    public void controlDoor(int id, String doorName, boolean status, Callback<Integer> controlDoorCallback ){
+        restRequest.controlDoor(id, doorName,status, controlDoorCallback);
     }
 
     public void dayHistory(String date, Callback<JSONObject> dayWatchCallback){
