@@ -24,7 +24,6 @@ import java.util.Calendar;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Network.RestRequestHelper;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation.CalendarDialog;
-import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation.UsingStatusFragment;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -36,7 +35,8 @@ import retrofit.client.Response;
 public class AccessHistoryFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
     ListView SeminarLogView;
-    ArrayAdapter<String> LogViewAdapter;
+    //ArrayAdapter<String> LogViewAdapter;
+    CustomHistoryLVAdapter LogViewAdapter;
     RestRequestHelper restRequest;//네트워크 변수
     public static String date;
     String roomName;//기본은 ALL
@@ -65,14 +65,6 @@ public class AccessHistoryFragment extends Fragment implements AdapterView.OnIte
         //초기 설정
         init(view);
 
-        //경고 다이얼로그
-        alert = new AlertDialog.Builder(getContext());
-        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
         calendarDialog = new CalendarDialog(getContext());
 
         //날짜별 보기를 클릭했을 때
@@ -111,7 +103,8 @@ public class AccessHistoryFragment extends Fragment implements AdapterView.OnIte
         dayBtn=(Button)view.findViewById(R.id.btn_dayWatch);
         dayBtn.setText(date);
 
-        LogViewAdapter=new ArrayAdapter<String>(view.getContext(),android.R.layout.simple_list_item_1);
+        //LogViewAdapter=new ArrayAdapter<String>(view.getContext(),android.R.layout.simple_list_item_1);
+        LogViewAdapter = new CustomHistoryLVAdapter();
         SeminarLogView=(ListView)view.findViewById(R.id.SeminarLog);
         SeminarLogView.setAdapter(LogViewAdapter);
 
@@ -119,10 +112,10 @@ public class AccessHistoryFragment extends Fragment implements AdapterView.OnIte
         roomSpinner=(Spinner)view.findViewById(R.id.spinner_room_watch);
         entry=new ArrayList<String>();
         entry.add("ALL");
-         spinnerAdapter=new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_list_item_1,entry);
+
+        spinnerAdapter=new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_list_item_1,entry);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         roomSpinner.setAdapter(spinnerAdapter);
-
 
         restRequest.roomList("admin", new Callback<String>() {
             @Override
@@ -136,13 +129,12 @@ public class AccessHistoryFragment extends Fragment implements AdapterView.OnIte
 
             @Override
             public void failure(RetrofitError error) {
-                alert.setMessage("서버 문제로 내용을 가져올 수 없습니다.");
-                alert.show();
+                Log.d("RetorFit error", error.toString());
             }
         });
     }
 
-    //날짜별 기록 가져오기
+    //기록 가져오기
     public void getHistory(){
         LogViewAdapter.clear();//내용을 비운다.
         restRequest.getHistory(date, roomName, new Callback<JsonObject>() {
@@ -154,25 +146,29 @@ public class AccessHistoryFragment extends Fragment implements AdapterView.OnIte
                     JsonArray history = responseData.getAsJsonArray("history");//2레벨 추출
 
                     //Array 내용을 추출해서 담는다.
-                    for (int i = 0; i < history.size(); i++) {
+                    for(int i = 0; i < history.size(); i++){
+                        LogViewAdapter.addRoomId(history.get(i).getAsJsonObject().getAsJsonPrimitive("roomId").getAsString());
+                        LogViewAdapter.addUser(history.get(i).getAsJsonObject().getAsJsonPrimitive("textId").getAsString());
+                        LogViewAdapter.addDate(history.get(i).getAsJsonObject().getAsJsonPrimitive("timeStamp").getAsString());
+                        LogViewAdapter.addCommand(history.get(i).getAsJsonObject().getAsJsonPrimitive("command").getAsString());
+                    }
+
+                    LogViewAdapter.notifyDataSetChanged();
+                    /*for (int i = 0; i < history.size(); i++) {
                         LogViewAdapter.add(history.get(i).getAsJsonObject().getAsJsonPrimitive("roomId") + " " +
                                 history.get(i).getAsJsonObject().getAsJsonPrimitive("textId") + " " +
                                 history.get(i).getAsJsonObject().getAsJsonPrimitive("command") + " " +
                                 history.get(i).getAsJsonObject().getAsJsonPrimitive("timeStamp"));
-                    }
-                    LogViewAdapter.notifyDataSetChanged();
+                    }*/
 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                LogViewAdapter.notifyDataSetChanged();//화면 갱신
             }
 
             @Override
             public void failure(RetrofitError error) {
-                LogViewAdapter.add("네트워크 상황이 안좋아 보여드릴 수 없습니다. ㅜ");
                 Log.e("Retrofit Error : ", error.toString());
-                LogViewAdapter.notifyDataSetChanged();//화면 갱신
             }
         });
     }
@@ -181,8 +177,8 @@ public class AccessHistoryFragment extends Fragment implements AdapterView.OnIte
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         LogViewAdapter.clear();
-        roomName = parent.getAdapter().getItem(position).toString();
-        getHistory();
+        roomName = parent.getAdapter().getItem(position).toString();//방 이름 갱신
+        getHistory();//화면을 다시 뿌려준다.
     }
 
     @Override
