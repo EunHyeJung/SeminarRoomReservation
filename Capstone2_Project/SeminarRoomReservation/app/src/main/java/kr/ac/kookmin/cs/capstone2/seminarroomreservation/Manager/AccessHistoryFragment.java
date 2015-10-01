@@ -168,36 +168,32 @@ public class AccessHistoryFragment extends Fragment implements AdapterView.OnIte
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         LogViewAdapter.clear();
-        if (!parent.getAdapter().getItem(position).toString().equals("ALL")) {
-            restRequest.roomHistory(date, parent.getAdapter().getItem(position).toString(), new Callback<JSONObject>() {
-                @Override
-                public void success(JSONObject jsonObject, Response response) {
-                    Log.d("JSON Object : ", jsonObject.toString());
-                    try {
-                        JSONArray dayHistory = jsonObject.getJSONArray("result");
+        restRequest.roomHistory(date, parent.getAdapter().getItem(position).toString(), new Callback<JSONObject>() {
+            @Override
+            public void success(JSONObject jsonObject, Response response) {
+                Log.d("JSON Object : ", jsonObject.toString());
+                try {
+                    JSONArray dayHistory = jsonObject.getJSONArray("result");
 
-                        for(int i=0; i< dayHistory.length(); i++)
-                        {
-                            LogViewAdapter.add(dayHistory.getJSONObject(i).getString("time")+" "
-                                    +dayHistory.getJSONObject(i).getString("id")+" "+dayHistory.getJSONObject(i).getString("order"));
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                    for(int i=0; i< dayHistory.length(); i++)
+                    {
+                        LogViewAdapter.add(dayHistory.getJSONObject(i).getString("time")+" "
+                                +dayHistory.getJSONObject(i).getString("id")+" "+dayHistory.getJSONObject(i).getString("order"));
                     }
-
-                    LogViewAdapter.notifyDataSetChanged();//화면 갱신
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
 
-                @Override
-                public void failure(RetrofitError error) {
-                    LogViewAdapter.add("네트워크 상황이 안좋아 보여드릴 수 없습니다. (방 별 보기)");
-                    Log.e("Retrofit Error : ", error.toString());
-                    LogViewAdapter.notifyDataSetChanged();//화면 갱신
-                }
-            });
-        } else {
-            getDayHistory();
-        }
+                LogViewAdapter.notifyDataSetChanged();//화면 갱신
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                LogViewAdapter.add("네트워크 상황이 안좋아 보여드릴 수 없습니다. (방 별 보기)");
+                Log.e("Retrofit Error : ", error.toString());
+                LogViewAdapter.notifyDataSetChanged();//화면 갱신
+            }
+        });
     }
 
     @Override

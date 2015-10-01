@@ -39,7 +39,7 @@ public class ControlDialogActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //문을 컨트롤하기 위한 함수를 부른다.
-                requestHelper.controlDoor(RoomName, true, new Callback<Integer>() {
+                requestHelper.controlDoor(0,RoomName, true, new Callback<Integer>() {
                     @Override
                     public void success(Integer integer, Response response) {
                         switch (integer) {
@@ -66,7 +66,7 @@ public class ControlDialogActivity extends AppCompatActivity {
         CloseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                requestHelper.controlDoor(RoomName, false, new Callback<Integer>() {
+                requestHelper.controlDoor(0,RoomName, false, new Callback<Integer>() {
                     @Override
                     public void success(Integer integer, Response response) {
                         switch (integer){

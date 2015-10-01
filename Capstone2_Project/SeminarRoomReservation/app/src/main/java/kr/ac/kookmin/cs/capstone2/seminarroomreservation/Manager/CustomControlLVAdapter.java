@@ -17,12 +17,12 @@ import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
 /**
  * Created by song on 2015-09-09.
  */
-public class ListViewAdapter extends BaseAdapter {
+public class CustomControlLVAdapter extends BaseAdapter {
     //리스트뷰에 표시할 정보를 담는 배열
     ArrayList<String> SeminarArrayList;
     Button BtnSeminarControl=null;//다이얼로그 띄우는 버튼
 
-    public ListViewAdapter(){
+    public CustomControlLVAdapter(){
         SeminarArrayList=new ArrayList<String>();
     }
     @Override
@@ -47,7 +47,7 @@ public class ListViewAdapter extends BaseAdapter {
         if(convertView==null){
             //view가 null 일 경우 커스텀 레이아웃을 얻어 옴
             LayoutInflater inflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView=inflater.inflate(R.layout.custom_item,parent,false);
+            convertView=inflater.inflate(R.layout.custom_listview_item,parent,false);
 
             //초기 설정 부분
             init(convertView, position);
