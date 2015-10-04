@@ -13,6 +13,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import kookmin.cs.capstone2.var.StaticVariables;
 
 public class Login extends HttpServlet {
@@ -38,24 +41,46 @@ public class Login extends HttpServlet {
 		PrintWriter pw = response.getWriter();
 		ResultSet rs = null; //SQL Query 결과를 담을 테이블 형식의 객체
 
+		//for Json
+		JSONObject jsonObject = new JSONObject(); //최종 완성될 JSONObject 선언
+		JSONObject secondObject = new JSONObject();
+		JSONArray roomArray = new JSONArray(); //방 정보를 담을 jsonArray
+		JSONObject roomInfo = new JSONObject(); //방 정보 한 개의 정보가 들어갈 JSONObject
+		
 		try {
 			
 			conn = DriverManager.getConnection(jocl); //커넥션 풀에서 대기 상태인 커넥션을 얻는다
 			stmt = conn.createStatement(); //DB에 SQL문을 보내기 위한 Statement를 생성
-			String sql = "select * from user where text_id='" 
-					+ text_id + "' && password='" + password + "'"; //request로 들어온 id와 password가 일치하는 회원을 찾는 질의문
+			
+			//request로 들어온 id와 password가 일치하는 회원을 찾는 질의문
+			String sql = "select * from user where text_id='" + text_id + "' && password='" + password + "'"; 
+			
 			rs = stmt.executeQuery(sql); //SQL Query Result
 			
 			//id와 password가 일치하는 user가 있을 경우 b_admin column을 확인하여 관리자 여부를 가린다
 			if (rs.next()) {
+				secondObject.put("id", rs.getInt("id"));
 				Boolean bAdmin = rs.getBoolean("b_admin");
-				if (bAdmin == true)
-					pw.println(StaticVariables.ADMIN); //관리자 
-				else
-					pw.println(StaticVariables.SUCCESS); //일반 사용자
+				if (bAdmin)
+					secondObject.put("result", StaticVariables.ADMIN);//관리자 
+				else 
+					secondObject.put("result", StaticVariables.SUCCESS);//일반 사용자
 			} else
-				pw.println(StaticVariables.FAIL); //로그인 실패
+				secondObject.put("result", StaticVariables.FAIL);////로그인 실패
 
+			sql = "select room_id from room;";
+			rs=stmt.executeQuery(sql);
+			while(rs.next()) {
+				String roomName = rs.getString("room_id");
+				roomInfo.put("roomName", roomName);
+				roomArray.add(roomInfo);
+				roomInfo = new JSONObject();
+			}
+			
+			secondObject.put("room", roomArray);
+			jsonObject.put("responseData", secondObject);
+			System.out.println(jsonObject);
+			pw.println(jsonObject);
 		} catch (SQLException e) {
 			System.err.print("SQLException: ");
 			System.err.println(e.getMessage());

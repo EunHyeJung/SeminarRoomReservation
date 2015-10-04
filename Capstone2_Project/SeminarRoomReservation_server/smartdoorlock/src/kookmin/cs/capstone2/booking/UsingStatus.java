@@ -1,4 +1,4 @@
-package kookmin.cs.capstone2.reservation;
+package kookmin.cs.capstone2.booking;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,10 +13,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 public class UsingStatus extends HttpServlet {
 	/*
-	 * request : date(yyyy-MM-dd) response : 예약 고유 id(id), 세미나실 id(room_id), 예약
-	 * 시작 시간(start_time), 예약 끝 시간(end_time)
+	 * request : date(yyyy-MM-dd) 
+	 * response : 예약 고유 id(id), 세미나실 id(room_id), 예약시작 시간(start_time), 예약 끝 시간(end_time)
 	 */
 	@Override
 	protected void service(HttpServletRequest request,
@@ -36,19 +39,34 @@ public class UsingStatus extends HttpServlet {
 		PrintWriter pw = response.getWriter();
 		ResultSet rs = null; //SQL Query 결과를 담을 테이블 형식의 객체
 
+		//for Json
+		JSONObject jsonObject = new JSONObject(); //최종 완성될 JSONObject 선언
+		JSONObject arrayObject = new JSONObject(); //배열을 담을 JSONObject
+		JSONArray statusArray = new JSONArray(); //예약 내역의 정보를 담을 Array
+		JSONObject statusInfo = new JSONObject(); //예약 내역 한 개의 정보가 들어갈 JSONObject
+		
 		try {
 			conn = DriverManager.getConnection(jocl); //커넥션 풀에서 대기 상태인 커넥션을 얻는다
 			stmt = conn.createStatement(); //DB에 SQL문을 보내기 위한 Statement를 생성
-			String sql = "select * from reservationinfo where date='" + date + "';";
+			  
+			//status!=0, 즉 거절상태가 아닌 예약 내역 정보를 가져온다
+			String sql = "select reservationinfo.id, room.room_id, reservationinfo.start_time, reservationinfo.end_time, reservationinfo.status from reservationinfo, room where (reservationinfo.room_id=room.id) and date='" + date + "' and reservationinfo.status != 0;";
+			
 			rs = stmt.executeQuery(sql);
 			while (rs.next()) {
-				int id = rs.getInt("id");
-				int room_id = rs.getInt("room_id");
-				String start_time = rs.getString("start_time");
-				String end_time = rs.getString("end_time");
-				pw.println("id=" + id + "&room_id=" + room_id + "&start_time=" + start_time
-						+ "&end_time=" + end_time);
+				statusInfo = new JSONObject();
+				statusInfo.put("reservationId", rs.getInt("id"));
+				statusInfo.put("roomId", rs.getInt("room_id"));
+				statusInfo.put("startTime", rs.getString("start_time"));
+				statusInfo.put("endTime", rs.getString("end_time"));
+				statusInfo.put("reservationStatus", rs.getString("status"));
+				
+				statusArray.add(statusInfo); //Array에 Object 추가
 			}
+			arrayObject.put("reservation", statusArray);
+			//전체의 JSONObejct에 status란 이름으로 JSON정보로 구성된 Array value 입력
+			jsonObject.put("responseData", arrayObject); 
+			pw.println(jsonObject);
 		} catch (SQLException e) {
 			System.err.print("SQLException: ");
 			System.err.println(e.getMessage());
@@ -59,6 +77,8 @@ public class UsingStatus extends HttpServlet {
 					stmt.close();
 				if (rs != null)
 					rs.close();
+				if (conn != null)
+					conn.close();
 			} catch (SQLException se) {
 				System.out.println(se.getMessage());
 			}

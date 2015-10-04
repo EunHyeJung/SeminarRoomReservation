@@ -12,16 +12,16 @@
 		<welcome-file>default.htm</welcome-file>
 		<welcome-file>default.jsp</welcome-file>
 	</welcome-file-list>
-	
+
 	<context-param>
-	    <param-name>jdbc</param-name>
-	    <param-value>com.mysql.jdbc.Driver</param-value>
+		<param-name>jdbc</param-name>
+		<param-value>com.mysql.jdbc.Driver</param-value>
 	</context-param>
 
 	<servlet>
-	    <servlet-name>kookmin.cs.capstone2.dbcp.jdbcloader</servlet-name>
-	    <servlet-class>kookmin.cs.capstone2.dbcp.JOCLLoader</servlet-class>
-	    <load-on-startup>1</load-on-startup> <!-- JOCLLoader파일을 사용자 요청 없이 실행시키라는 명령 -->
+		<servlet-name>kookmin.cs.capstone2.dbcp.jdbcloader</servlet-name>
+		<servlet-class>kookmin.cs.capstone2.dbcp.JOCLLoader</servlet-class>
+		<load-on-startup>1</load-on-startup> <!-- JOCLLoader파일을 사용자 요청 없이 실행시키라는 명령 -->
 	</servlet>
 	<servlet>
 		<servlet-name>kookmin.cs.capstone2.user.SignUp</servlet-name>
@@ -31,7 +31,7 @@
 		<servlet-name>kookmin.cs.capstone2.user.SignUp</servlet-name>
 		<url-pattern>/signup</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>kookmin.cs.capstone2.user.Login</servlet-name>
 		<servlet-class>kookmin.cs.capstone2.user.Login</servlet-class>
@@ -40,7 +40,7 @@
 		<servlet-name>kookmin.cs.capstone2.user.Login</servlet-name>
 		<url-pattern>/login</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>kookmin.cs.capstone2.room.Room</servlet-name>
 		<servlet-class>kookmin.cs.capstone2.room.Room</servlet-class>
@@ -49,23 +49,76 @@
 		<servlet-name>kookmin.cs.capstone2.room.Room</servlet-name>
 		<url-pattern>/room</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
-		<servlet-name>kookmin.cs.capstone2.reservation.UsingStatus</servlet-name>
-		<servlet-class>kookmin.cs.capstone2.reservation.UsingStatus</servlet-class>
+		<servlet-name>kookmin.cs.capstone2.booking.UsingStatus</servlet-name>
+		<servlet-class>kookmin.cs.capstone2.booking.UsingStatus</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>kookmin.cs.capstone2.reservation.UsingStatus</servlet-name>
+		<servlet-name>kookmin.cs.capstone2.booking.UsingStatus</servlet-name>
 		<url-pattern>/usingstatus</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
-		<servlet-name>kookmin.cs.capstone2.reservation.ReservationRequest</servlet-name>
-		<servlet-class>kookmin.cs.capstone2.reservation.ReservationRequest</servlet-class>
+		<servlet-name>kookmin.cs.capstone2.booking.BookingRequest</servlet-name>
+		<servlet-class>kookmin.cs.capstone2.booking.BookingRequest</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>kookmin.cs.capstone2.reservation.ReservationRequest</servlet-name>
-		<url-pattern>/bookrequest</url-pattern>
+		<servlet-name>kookmin.cs.capstone2.booking.BookingRequest</servlet-name>
+		<url-pattern>/bookingrequest</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>kookmin.cs.capstone2.room.RoomStatus</servlet-name>
+		<servlet-class>kookmin.cs.capstone2.room.RoomStatus</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>kookmin.cs.capstone2.room.RoomStatus</servlet-name>
+		<url-pattern>/roomstatus</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>kookmin.cs.capstone2.room.DoorControl</servlet-name>
+		<servlet-class>kookmin.cs.capstone2.room.DoorControl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>kookmin.cs.capstone2.room.DoorControl</servlet-name>
+		<url-pattern>/doorcontrol</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>kookmin.cs.capstone2.booking.RequestList</servlet-name>
+		<servlet-class>kookmin.cs.capstone2.booking.RequestList</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>kookmin.cs.capstone2.booking.RequestList</servlet-name>
+		<url-pattern>/requestlist</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>kookmin.cs.capstone2.user.UserList</servlet-name>
+		<servlet-class>kookmin.cs.capstone2.user.UserList</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>kookmin.cs.capstone2.user.UserList</servlet-name>
+		<url-pattern>/userlist</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>kookmin.cs.capstone2.history.RoomHistory</servlet-name>
+		<servlet-class>kookmin.cs.capstone2.history.RoomHistory</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>kookmin.cs.capstone2.history.RoomHistory</servlet-name>
+		<url-pattern>/roomhistory</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+		<servlet-name>kookmin.cs.capstone2.booking.BookingFilter</servlet-name>
+		<servlet-class>kookmin.cs.capstone2.booking.BookingFilter</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>kookmin.cs.capstone2.booking.BookingFilter</servlet-name>
+		<url-pattern>/bookingfilter</url-pattern>
+	</servlet-mapping>
 </web-app>
