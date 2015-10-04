@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.simple.JSONObject;
 
-import kookmin.cs.capstone2.var.StaticVariables;
+import kookmin.cs.capstone2.common.StaticVariables;
 
 //관리자가 예약 내역을 승인 또는 거절 할 때 DB 업데이트 해준다
 

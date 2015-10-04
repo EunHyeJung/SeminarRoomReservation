@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.simple.JSONObject;
 
-import kookmin.cs.capstone2.var.StaticVariables;
+import kookmin.cs.capstone2.common.StaticVariables;
 
 /*
  * filename : DoorControl.java
@@ -69,14 +69,14 @@ public class DoorControl extends HttpServlet { //1. httpservlet 상속 2. driver
 			//오토커밋을 false로 지정하여 트랜잭션 조건을 맞춘다
 			conn.setAutoCommit(false);
 			
-			//sql문 update 결과 확인을 위한 변수
-			int updateResult1, updateResult2;
+			//sql문 결과 확인을 위한 변수
+			int updateResult, insertResult;
 			
 			//라즈베리파이에 먼저 요청을 보내서 response가 온 후에! DB를 변경해 주어야 한다
 			
 			//방 잠금 장치 상태 변경 명령
 			String sql = "update room set status=" + command + " where room_id='" + roomName +"';";// + orderFlag + " where id=" + roomId + ";";
-			updateResult1 = stmt.executeUpdate(sql);// return the row count for SQL DML statements
+			updateResult = stmt.executeUpdate(sql);// return the row count for SQL DML statements
 			
 			//방 이름으로 방 아이디 얻기
 			ResultSet roomRs = stmt.executeQuery("select id from room where room_id='" + roomName + "';");
@@ -86,9 +86,9 @@ public class DoorControl extends HttpServlet { //1. httpservlet 상속 2. driver
 			
 				//룸 히스토리 추가
 				sql = "insert into roomhistory (room_id, user_id, command) values (" + roomId + ", " + id + ", " +  command + ");";
-				updateResult2 = stmt.executeUpdate(sql);
+				insertResult = stmt.executeUpdate(sql);
 				
-				if (updateResult1 == 1 && updateResult2 == 1){
+				if (updateResult == 1 && insertResult == 1){
 					conn.commit();
 					jsonObject.put("result", StaticVariables.SUCCESS);
 				} else {

@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import kookmin.cs.capstone2.var.StaticVariables;
+import kookmin.cs.capstone2.common.StaticVariables;
 public class SignUp extends HttpServlet {
 	
 	/*
