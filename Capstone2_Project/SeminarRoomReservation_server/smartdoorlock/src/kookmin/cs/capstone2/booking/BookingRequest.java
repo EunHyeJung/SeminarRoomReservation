@@ -23,7 +23,7 @@ import kookmin.cs.capstone2.var.StaticVariables;
 public class BookingRequest extends HttpServlet {
 	
 	/*
-	 * request : 세미나실 id, 신청자 id, 날짜(yyyy-MM-dd), 시작시간, 끝시간, 예약 목적
+	 * request : 세미나실 id, 신청자 id, 날짜(yyyy-MM-dd), 시작시간, 끝시간, 예약 목적, 세미나 참석자 id
 	 * response : 회원 등록 성공 여부
 	 */
 	
@@ -47,13 +47,12 @@ public class BookingRequest extends HttpServlet {
 		Connection conn = null; //DB 연결을 위한 Connection 객체
 		Statement stmt = null; //ready for DB Query result
 		PrintWriter pw = response.getWriter();
-		ResultSet rs = null; //SQL Query 결과를 담을 테이블 형식의 객체
-
+ 
 		try {
 			
 			conn = DriverManager.getConnection(jocl); //커넥션 풀에서 대기 상태인 커넥션을 얻는다
 			stmt = conn.createStatement(); //DB에 SQL문을 보내기 위한 Statement를 생성
-			String sql = "insert into reservationinfo(room_id, user_id, date, start_time, end_time, context) values ("+ room_id + ", " + user_id + ", '" + date + "', '" + startTime + "', '" + endTime + "', '" + context + "');";
+			String sql = "insert into reservationinfo(room_id, user_id, date, start_time, end_time) values ("+ room_id + "," + user_id + ", '" + date + "', '" + startTime + "', '" + endTime + "', '" + context + "');";
 			int n = stmt.executeUpdate(sql);// return the row count for SQL DML statements 
 			
 			//response to client

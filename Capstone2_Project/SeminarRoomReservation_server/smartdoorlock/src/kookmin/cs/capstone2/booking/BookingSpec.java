@@ -56,6 +56,7 @@ public class BookingSpec extends HttpServlet {
 				String start = rs.getString("start_time");
 				String end = rs.getString("end_time");
 				String context = rs.getString("context");
+				//모임 참석자 정보도 제공해야 함
 				
 				pw.println("room_id=" + room + "&user_id=" + user + "&date=" + date + "&start_time=" + start
 						 + "&end_time=" + end +"&context=" + context);

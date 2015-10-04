@@ -41,6 +41,7 @@ public class UsingStatus extends HttpServlet {
 
 		//for Json
 		JSONObject jsonObject = new JSONObject(); //최종 완성될 JSONObject 선언
+		JSONObject arrayObject = new JSONObject(); //배열을 담을 JSONObject
 		JSONArray statusArray = new JSONArray(); //예약 내역의 정보를 담을 Array
 		JSONObject statusInfo = new JSONObject(); //예약 내역 한 개의 정보가 들어갈 JSONObject
 		
@@ -54,17 +55,17 @@ public class UsingStatus extends HttpServlet {
 			rs = stmt.executeQuery(sql);
 			while (rs.next()) {
 				statusInfo = new JSONObject();
-				statusInfo.put("id", rs.getInt("id"));
-				statusInfo.put("room_id", rs.getInt("room_id"));
-				statusInfo.put("start_time", rs.getString("start_time"));
-				statusInfo.put("end_time", rs.getString("end_time"));
-				statusInfo.put("status", rs.getString("status"));
+				statusInfo.put("reservationId", rs.getInt("id"));
+				statusInfo.put("roomId", rs.getInt("room_id"));
+				statusInfo.put("startTime", rs.getString("start_time"));
+				statusInfo.put("endTime", rs.getString("end_time"));
+				statusInfo.put("reservationStatus", rs.getString("status"));
 				
 				statusArray.add(statusInfo); //Array에 Object 추가
 			}
-			
+			arrayObject.put("reservation", statusArray);
 			//전체의 JSONObejct에 status란 이름으로 JSON정보로 구성된 Array value 입력
-			jsonObject.put("status", statusArray); 
+			jsonObject.put("responseData", arrayObject); 
 			pw.println(jsonObject);
 		} catch (SQLException e) {
 			System.err.print("SQLException: ");

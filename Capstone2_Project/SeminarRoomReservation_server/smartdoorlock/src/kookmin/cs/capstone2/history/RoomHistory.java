@@ -35,11 +35,14 @@ public class RoomHistory extends HttpServlet {
 		request.setCharacterEncoding("utf-8");
 		response.setContentType("text/html;charset=utf-8");
 
-		// request 파라미터로 전송된 값 얻기
-		String date = request.getParameter("date");
-		String room = request.getParameter("room");
+		String date = "";
+		String room = "";
 		
-		System.out.println(date);
+		// request 파라미터로 전송된 값 얻기
+		date = request.getParameter("date");
+		room = request.getParameter("room");
+		
+		System.out.println(date + " " + room);
 
 		String jocl = "jdbc:apache:commons:dbcp:/pool1"; // 커넥션 풀을 위한 DBCP 설정 파일
 		Connection conn = null; // DB 연결을 위한 Connection 객체
@@ -49,6 +52,7 @@ public class RoomHistory extends HttpServlet {
 
 		// for Json
 		JSONObject jsonObject = new JSONObject(); // 최종 완성될 JSONObject 선언
+		JSONObject arrayObject = new JSONObject(); //array 담을 JSONObject
 		JSONArray historyArray = new JSONArray(); // 예약 내역의 정보를 담을 Array
 		JSONObject historyInfo = new JSONObject(); // 예약 내역 한 개의 정보가 들어갈 JSONObject
 		
@@ -59,17 +63,20 @@ public class RoomHistory extends HttpServlet {
 			String sql = "";
 			
 			//string room이 ALL일때는 방과 관계없이 해당 날짜 기록을 모두 보여준다
-			if(room=="ALL")
+			if(room.equals("ALL")){
 				sql = "select room.room_id, user.text_id, roomhistory.time_stamp, roomhistory.command from roomhistory, room, user where (roomhistory.room_id=room.id) and (roomhistory.user_id=user.id) and date(time_stamp)='" + date + "';";
-			else
+				System.out.println("ALL : " + sql);
+			}
+			else{
 				sql = "select room.room_id, user.text_id, roomhistory.time_stamp, roomhistory.command from roomhistory, room, user where (roomhistory.room_id=room.id) and (roomhistory.user_id=user.id) and date(time_stamp)='" + date + "' and room.room_id='" + room + "';";
-			
+				System.out.println(room + " : " + sql);
+			}
 			rs = stmt.executeQuery(sql);
 			while (rs.next()) {
 				historyInfo = new JSONObject();
-				historyInfo.put("room_id", rs.getInt("room_id"));
-				historyInfo.put("text_id", rs.getString("text_id"));
-				historyInfo.put("time_stamp", rs.getString("time_stamp"));
+				historyInfo.put("roomId", rs.getInt("room_id"));
+				historyInfo.put("textId", rs.getString("text_id"));
+				historyInfo.put("timeStamp", rs.getString("time_stamp"));
 				
 				if(rs.getBoolean("command"))
 					historyInfo.put("command", "open");
@@ -78,10 +85,11 @@ public class RoomHistory extends HttpServlet {
 				
 				historyArray.add(historyInfo); //Array에 Object 추가
 			}
-			
+			arrayObject.put("history", historyArray);
 			//전체의 JSONObejct에 history란 이름으로 JSON정보로 구성된 Array value 입력
-			jsonObject.put("history", historyArray); 
+			jsonObject.put("responseData", arrayObject); 
 			pw.println(jsonObject);
+			System.out.println(jsonObject);
 		} catch (SQLException e) {
 			System.err.print("SQLException: ");
 			System.err.println(e.getMessage());

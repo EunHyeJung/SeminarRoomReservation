@@ -74,12 +74,11 @@ public class Login extends HttpServlet {
 				String roomName = rs.getString("room_id");
 				roomInfo.put("roomName", roomName);
 				roomArray.add(roomInfo);
-				System.out.println(roomInfo.get("roomName"));
 				roomInfo = new JSONObject();
 			}
 			
 			secondObject.put("room", roomArray);
-			jsonObject.put("responseDate", secondObject);
+			jsonObject.put("responseData", secondObject);
 			System.out.println(jsonObject);
 			pw.println(jsonObject);
 		} catch (SQLException e) {

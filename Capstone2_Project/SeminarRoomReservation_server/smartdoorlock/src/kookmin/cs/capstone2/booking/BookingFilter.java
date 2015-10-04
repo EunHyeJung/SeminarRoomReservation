@@ -1,4 +1,4 @@
-package kookmin.cs.capstone2.room;
+package kookmin.cs.capstone2.booking;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,15 +13,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.simple.JSONObject;
+
 import kookmin.cs.capstone2.var.StaticVariables;
 
-/*
- * filename : Room.java
- * 기능 : 
- * 	세미나실 방 리스트를 제공한다.
- */
-public class Room extends HttpServlet {
+//관리자가 예약 내역을 승인 또는 거절 할 때 DB 업데이트 해준다
 
+public class BookingFilter extends HttpServlet {
+	
+	/*
+	 * request : reservationId(id), command
+	 * response : DB update 성공 여부
+	 */
+	
 	@Override
 	protected void service(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
@@ -29,42 +33,45 @@ public class Room extends HttpServlet {
 		// request, response 인코딩 방식 지정
 		request.setCharacterEncoding("utf-8");
 		response.setContentType("text/html;charset=utf-8");
-
+		
+		// request 파라미터로 전송된 값 얻기
+		String reservationId = request.getParameter("id");
+		String command = request.getParameter("command");
+		
 		String jocl = "jdbc:apache:commons:dbcp:/pool1"; //커넥션 풀을 위한 DBCP 설정 파일
 		Connection conn = null; //DB 연결을 위한 Connection 객체
 		Statement stmt = null; //ready for DB Query result
 		PrintWriter pw = response.getWriter();
-		ResultSet rs = null; //SQL Query 결과를 담을 테이블 형식의 객체
 
+		JSONObject jsonObject = new JSONObject();
+		
 		try {
 			
 			conn = DriverManager.getConnection(jocl); //커넥션 풀에서 대기 상태인 커넥션을 얻는다
 			stmt = conn.createStatement(); //DB에 SQL문을 보내기 위한 Statement를 생성
-			String sql = "select * from room;"; //room 테이블 모든 ' '가져오기
-			rs = stmt.executeQuery(sql);
-			String rooms = "";
-			while (rs.next()) {
-				String room = rs.getString("room_id");
-				rooms = rooms + room +"&";
-			}
-			pw.println(rooms); //response room id
-		} catch (SQLException e) {
+			
+			String sql = "update reservationinfo set status=" + command + " where id=" + reservationId +";";
+			int result = stmt.executeUpdate(sql);// return the row count for SQL DML statements
+			if(result != 0)
+				jsonObject.put("result", StaticVariables.SUCCESS);
+			else
+				jsonObject.put("result", StaticVariables.FAIL);
+		}catch (SQLException e) {
 			System.err.print("SQLException: ");
 			System.err.println(e.getMessage());
 			e.printStackTrace();
-			pw.println(StaticVariables.ERROR_MYSQL);
+			jsonObject.put("result", StaticVariables.ERROR_MYSQL);
 		} finally {
 			try {
 				if (stmt != null) 
 					stmt.close();
-				if (rs != null)
-					rs.close();
 				if (conn != null)
 					conn.close();
 			} catch (SQLException se) {
 				System.out.println(se.getMessage());
-				pw.println(StaticVariables.ERROR_MYSQL);
+				jsonObject.put("result", StaticVariables.ERROR_MYSQL);
 			}
+			pw.println(jsonObject);
 		}
 	}
 }
