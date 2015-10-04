@@ -42,8 +42,9 @@ public class UserList extends HttpServlet {
 
 		// for Json
 		JSONObject jsonObject = new JSONObject(); // 최종 완성될 JSONObject 선언
-		JSONArray statusArray = new JSONArray(); // 아이디가 들어갈 배열
-		JSONObject statusInfo = new JSONObject(); // 배열 정보 한 개가 들어갈 JSONObject
+		JSONObject arrayObject = new JSONObject(); // 
+		JSONArray userArray = new JSONArray(); // 아이디가 들어갈 배열
+		JSONObject userInfo = new JSONObject(); // 배열 정보 한 개가 들어갈 JSONObject
 		
 		
 		try {
@@ -54,13 +55,17 @@ public class UserList extends HttpServlet {
 
 			// 가입된 회원들의 아이디를 jsonArray에 담는다
 			while (rs.next()) {
-				statusInfo = new JSONObject();
-				statusInfo.put("textId", rs.getString("text_id"));
-				statusArray.add(statusInfo); // Array에 Object 추가
+				userInfo = new JSONObject();
+				userInfo.put("userId", rs.getString("text_id"));
+				userArray.add(userInfo); // Array에 Object 추가
 			}
 
-			// 전체의 JSONObejct에 status란 이름으로 JSON정보로 구성된 Array value 입력
-			jsonObject.put("status", statusArray);
+			// JSONObject에 userId element로 구성된 JSONArray를 넣는다
+			arrayObject.put("userList", userArray);
+			
+			// 최종 JSONObject 구성
+			jsonObject.put("responseData", arrayObject);
+			
 			pw.println(jsonObject.toString());
 		} catch (SQLException e) {
 			System.err.print("SQLException: ");
@@ -72,6 +77,8 @@ public class UserList extends HttpServlet {
 					stmt.close();
 				if (rs != null)
 					rs.close();
+				if (conn != null)
+					conn.close();
 			} catch (SQLException se) {
 				System.out.println(se.getMessage());
 			}
