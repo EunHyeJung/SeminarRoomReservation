@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.simple.JSONObject;
 
-import kookmin.cs.capstone2.var.StaticVariables;
+import kookmin.cs.capstone2.common.StaticVariables;
 
 /*
  * filename : RoomStatus.java
@@ -52,14 +52,13 @@ public class RoomStatus extends HttpServlet {
 			if (rs.next()) {
 				String status = rs.getString("status");
 				jsonObject.put("status", status);
-				pw.println(jsonObject); //response room status
 			}
 			
 		} catch (SQLException e) {
 			System.err.print("SQLException: ");
 			System.err.println(e.getMessage());
 			e.printStackTrace();
-			pw.println(StaticVariables.ERROR_MYSQL);
+			jsonObject.put("status", StaticVariables.ERROR_MYSQL);
 		} finally {
 			try {
 				if (stmt != null) 
@@ -70,8 +69,12 @@ public class RoomStatus extends HttpServlet {
 					conn.close();
 			} catch (SQLException se) {
 				System.out.println(se.getMessage());
-				pw.println(StaticVariables.ERROR_MYSQL);
+				jsonObject.put("status", StaticVariables.ERROR_MYSQL);
 			}
+			
+			//response room status
+			pw.println(jsonObject);
+			pw.close();
 		}
 	}
 }

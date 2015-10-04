@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import kookmin.cs.capstone2.var.StaticVariables;
+import kookmin.cs.capstone2.common.StaticVariables;
 
 /*
  * 등록된 회원의 아이디를 전송한다
@@ -45,7 +45,6 @@ public class UserList extends HttpServlet {
 		JSONObject arrayObject = new JSONObject(); // 
 		JSONArray userArray = new JSONArray(); // 아이디가 들어갈 배열
 		JSONObject userInfo = new JSONObject(); // 배열 정보 한 개가 들어갈 JSONObject
-		
 		
 		try {
 			conn = DriverManager.getConnection(jocl); // 커넥션 풀에서 대기 상태인 커넥션을 얻는다

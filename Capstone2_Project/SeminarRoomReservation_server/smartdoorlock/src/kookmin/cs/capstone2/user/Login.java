@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import kookmin.cs.capstone2.var.StaticVariables;
+import kookmin.cs.capstone2.common.StaticVariables;
 
 public class Login extends HttpServlet {
 	/*
@@ -62,7 +62,7 @@ public class Login extends HttpServlet {
 				secondObject.put("id", rs.getInt("id"));
 				Boolean bAdmin = rs.getBoolean("b_admin");
 				if (bAdmin)
-					secondObject.put("result", StaticVariables.ADMIN);//관리자 
+					secondObject.put("result", StaticVariables.ADMIN_SUCCESS);//관리자 
 				else 
 					secondObject.put("result", StaticVariables.SUCCESS);//일반 사용자
 			} else
