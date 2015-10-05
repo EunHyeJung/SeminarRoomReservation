@@ -11,6 +11,7 @@ import android.widget.ListView;
 
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Network.RestRequestHelper;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.RoomInfo;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -39,29 +40,21 @@ public class AccessControlFragment extends Fragment {
 
         SeminarList.setAdapter(listAdapter);
 
-        addSeminarList();
+        addSeminarList(); // 리스트에 방 내용 추가
 
         //뷰를 돌려준다.
         return view;
     }
 
+    //리스트에 방 내용 추가
     public void addSeminarList(){
-        requestHelper.roomList("admin",new Callback<String>() {
+        String[] roomList = RoomInfo.getRoomNames();
 
-            @Override
-            public void success(String s, Response response) {
-                String tmp[]=s.split("&");
-                for(int i=0;i<tmp.length;i++) {
-                    Log.d("tmp" + i, tmp[i]);
-                    listAdapter.add(tmp[i]);
-                }
-                listAdapter.notifyDataSetChanged();// 들어온 데이터들을 갱신
+        if(roomList.length > 0){
+            for(int i =0 ; i < roomList.length ; i++){
+                listAdapter.add(roomList[i]);
             }
-
-            @Override
-            public void failure(RetrofitError error) {
-                Log.d("Room Error", error.toString());
-            }
-        });
+            listAdapter.notifyDataSetChanged();//리스트 갱신
+        }
     }
 }

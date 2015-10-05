@@ -22,7 +22,7 @@ public class RestRequestHelper {
     private RestAdapter restAdapter;
     private RestRequest restRequest;
 
-    private static final String url = "http://192.168.23.51:8081/smartdoorlock";
+    private static final String url = "http://192.168.23.218:8081/smartdoorlock";
 
     public static RestRequestHelper newInstance(){
         if(instance == null){

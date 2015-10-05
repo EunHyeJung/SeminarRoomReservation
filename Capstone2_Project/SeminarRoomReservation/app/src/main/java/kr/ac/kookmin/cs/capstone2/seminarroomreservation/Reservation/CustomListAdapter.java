@@ -45,11 +45,14 @@ public class CustomListAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         if(convertView == null){
             convertView = mLayoutInflater.inflate(R.layout.item_listview, parent, false);
-
+            setContent(convertView, position);
         }
-        TextView listItem =  (TextView) convertView.findViewById(R.id.textView_listItem);
-          listItem.setText(inputValues[position]);
 
         return convertView;
+    }
+
+    public void setContent(View convertView, final int position){
+        TextView listItem =  (TextView) convertView.findViewById(R.id.textView_listItem);
+        listItem.setText(inputValues[position]);
     }
 }

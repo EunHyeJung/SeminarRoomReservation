@@ -1,4 +1,4 @@
-package kr.ac.kookmin.cs.capstone2.seminarroomreservation;
+package kr.ac.kookmin.cs.capstone2.seminarroomreservation.Encryption;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

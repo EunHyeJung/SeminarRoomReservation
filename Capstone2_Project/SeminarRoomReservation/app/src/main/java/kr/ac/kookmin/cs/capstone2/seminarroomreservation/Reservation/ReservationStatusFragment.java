@@ -54,8 +54,9 @@ public class ReservationStatusFragment extends Fragment {
 
         restRequestHelper = RestRequestHelper.newInstance(); // 네트워크 객체 생성
 
-        getReservationData();
+        getReservationData(); // 예약 데이터 가져오기
 
+        //전체 보기 버튼을 눌렀을 때
         btnAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,6 +64,7 @@ public class ReservationStatusFragment extends Fragment {
             }
         });
 
+        //날짜별 보기 버튼을 눌렀을 때
         btnDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,7 +82,6 @@ public class ReservationStatusFragment extends Fragment {
         });
 
 
-
         //뷰를 리턴한다.
         return view;
     }
@@ -92,8 +93,6 @@ public class ReservationStatusFragment extends Fragment {
 
         //레이아웃 매핑
         reservationListView = (ListView)view.findViewById(R.id.listview_reservation);
-        reservationLVAdapter = new CustomReservationLVAdapter();
-        reservationListView.setAdapter(reservationLVAdapter);
 
         btnDate = (Button)view.findViewById(R.id.btn_reservation_date);
         btnAll = (Button)view.findViewById(R.id.btn_reservation_showall);
@@ -103,25 +102,30 @@ public class ReservationStatusFragment extends Fragment {
     }
 
     public void getReservationData(){
-        reservationLVAdapter.clear();
-        reservationLVAdapter.notifyDataSetChanged();
+        reservationLVAdapter = new CustomReservationLVAdapter();// 함수 내 선언으로 바꾸기
+        reservationListView.setAdapter(reservationLVAdapter);
+
+        //reservationLVAdapter.clear();
+        //reservationLVAdapter.notifyDataSetChanged();
+
         restRequestHelper.requestList(date, new Callback<JsonObject>() {
             @Override
             public void success(JsonObject jsonObject, Response response) {
                 try {
-                    Log.d("success", "retrofit");
                     JsonObject responseData = jsonObject.getAsJsonObject("responseData");
                     JsonArray requestList = responseData.getAsJsonArray("requestList");
 
-                    Log.d("requestList", requestList.toString());
-                    Log.d("request size", requestList.size()+"");
                     for (int i = 0; i < requestList.size(); i++) {
-                        reservationLVAdapter.addNum(requestList.get(i).getAsJsonObject().getAsJsonPrimitive("reservationId").getAsInt());
-                        reservationLVAdapter.addUser(requestList.get(i).getAsJsonObject().getAsJsonPrimitive("userId").getAsString());
-                        reservationLVAdapter.addRoom(requestList.get(i).getAsJsonObject().getAsJsonPrimitive("roomId").getAsString());
-                        reservationLVAdapter.addStartTime(requestList.get(i).getAsJsonObject().getAsJsonPrimitive("startTime").getAsString());
-                        reservationLVAdapter.addEndTime(requestList.get(i).getAsJsonObject().getAsJsonPrimitive("endTime").getAsString());
-                        reservationLVAdapter.addDate(requestList.get(i).getAsJsonObject().getAsJsonPrimitive("date").getAsString());
+                        //requestList.get(i).getAsJsonObject() 변수로 빼서 사용
+                        JsonObject tmpObject = requestList.get(i).getAsJsonObject();
+
+                        //add 작업
+                        reservationLVAdapter.addNum(tmpObject.getAsJsonPrimitive("reservationId").getAsInt());
+                        reservationLVAdapter.addUser(tmpObject.getAsJsonPrimitive("userId").getAsString());
+                        reservationLVAdapter.addRoom(tmpObject.getAsJsonPrimitive("roomId").getAsString());
+                        reservationLVAdapter.addStartTime(tmpObject.getAsJsonPrimitive("startTime").getAsString());
+                        reservationLVAdapter.addEndTime(tmpObject.getAsJsonPrimitive("endTime").getAsString());
+                        reservationLVAdapter.addDate(tmpObject.getAsJsonPrimitive("date").getAsString());
                     }
 
                 } catch (Exception e) {

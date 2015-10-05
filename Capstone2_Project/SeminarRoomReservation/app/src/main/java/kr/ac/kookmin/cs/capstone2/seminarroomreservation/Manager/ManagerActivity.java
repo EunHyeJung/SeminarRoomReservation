@@ -10,8 +10,7 @@ import android.view.MenuItem;
 
 import com.astuetz.PagerSlidingTabStrip;
 
-import java.util.ArrayList;
-
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.CustomPagerAdapter;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation.UsingStatusFragment;
 
@@ -19,6 +18,7 @@ import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation.UsingStatus
 public class ManagerActivity extends AppCompatActivity implements DialogInterface.OnDismissListener, UsingStatusFragment.AccidentListener {
 
     ViewPager viewPager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,11 +64,11 @@ public class ManagerActivity extends AppCompatActivity implements DialogInterfac
     }
 
     @Override
-    public void deliverData() {
+    public void refershFragment(int page) {
         Fragment fragment = ((CustomPagerAdapter) viewPager.getAdapter()).getFragment(0);
         if (fragment != null) {
             fragment.onResume();
-            System.out.println("deliverData check");
+
         }
     }
 }

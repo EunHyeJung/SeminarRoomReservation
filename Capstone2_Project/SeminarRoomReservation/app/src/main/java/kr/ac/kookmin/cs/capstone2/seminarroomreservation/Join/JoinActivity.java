@@ -1,6 +1,7 @@
 package kr.ac.kookmin.cs.capstone2.seminarroomreservation.Join;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -8,10 +9,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import org.json.JSONObject;
-
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Authentication.MainActivity;
-import kr.ac.kookmin.cs.capstone2.seminarroomreservation.EncryptionClass;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Encryption.EncryptionClass;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Network.RestRequestHelper;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.SharedPreferenceClass;
@@ -87,7 +86,8 @@ public class JoinActivity extends Activity {
 
             @Override
             public void success(Integer signUpCallback, Response response) {
-                System.out.println("signup success" + signUpCallback);
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
             }
 
             @Override

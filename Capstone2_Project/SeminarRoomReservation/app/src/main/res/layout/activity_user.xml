@@ -5,19 +5,19 @@
     android:background="#FFFFFF"
     tools:context="kr.ac.kookmin.cs.capstone2.seminarroomreservation.User.UserActivity">
 
-    <Button
-    android:id="@+id/button_reservation_status"
-    android:layout_width="350dp"
-    android:layout_height="50dp"
-    android:layout_gravity="center_horizontal"
-    android:text="예약 현황"
-    />
-
-    <Button
-        android:id="@+id/button_management"
-        android:layout_width="350dp"
-        android:layout_height="50dp"
-        android:layout_gravity="center_horizontal"
-        android:text="마이페이지"
+    <com.astuetz.PagerSlidingTabStrip
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="60dip"
+        android:textColor="#FFFFFF"
+        android:background="#50000000"
+        />
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tabs"
+        tools:context=".MainActivity"
+        android:background="#FFFFFF"
         />
 </LinearLayout>

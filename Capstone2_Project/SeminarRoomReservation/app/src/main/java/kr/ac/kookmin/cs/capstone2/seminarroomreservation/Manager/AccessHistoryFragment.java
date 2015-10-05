@@ -1,7 +1,6 @@
 package kr.ac.kookmin.cs.capstone2.seminarroomreservation.Manager;
 
 
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -24,6 +23,7 @@ import java.util.Calendar;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Network.RestRequestHelper;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation.CalendarDialog;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.RoomInfo;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -35,8 +35,7 @@ import retrofit.client.Response;
 public class AccessHistoryFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
     ListView SeminarLogView;
-    //ArrayAdapter<String> LogViewAdapter;
-    CustomHistoryLVAdapter LogViewAdapter;
+   CustomHistoryLVAdapter LogViewAdapter;
     RestRequestHelper restRequest;//네트워크 변수
     public static String date;
     String roomName;//기본은 ALL
@@ -46,8 +45,6 @@ public class AccessHistoryFragment extends Fragment implements AdapterView.OnIte
     ArrayAdapter<String> spinnerAdapter;
 
     ArrayList<String> entry;
-    AlertDialog.Builder alert;
-
     CalendarDialog calendarDialog;
 
     public AccessHistoryFragment() {
@@ -95,7 +92,6 @@ public class AccessHistoryFragment extends Fragment implements AdapterView.OnIte
 
         //날짜 설정
         Calendar calendar = Calendar.getInstance();
-        int month=calendar.get(Calendar.MONTH);
         date = calendar.get(Calendar.YEAR)+"-"+String.format("%02d", (calendar.get(Calendar.MONTH) + 1))
                 +"-"+String.format("%02d", calendar.get(Calendar.DATE));
 
@@ -103,40 +99,17 @@ public class AccessHistoryFragment extends Fragment implements AdapterView.OnIte
         dayBtn=(Button)view.findViewById(R.id.btn_dayWatch);
         dayBtn.setText(date);
 
-        //LogViewAdapter=new ArrayAdapter<String>(view.getContext(),android.R.layout.simple_list_item_1);
-        LogViewAdapter = new CustomHistoryLVAdapter();
         SeminarLogView=(ListView)view.findViewById(R.id.SeminarLog);
-        SeminarLogView.setAdapter(LogViewAdapter);
 
-        //스피너 매핑 부분
-        roomSpinner=(Spinner)view.findViewById(R.id.spinner_room_watch);
-        entry=new ArrayList<String>();
-        entry.add("ALL");
-
-        spinnerAdapter=new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_list_item_1,entry);
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-        roomSpinner.setAdapter(spinnerAdapter);
-
-        restRequest.roomList("admin", new Callback<String>() {
-            @Override
-            public void success(String s, Response response) {
-                String tmp[]=s.split("&");
-                for(int i=0;i<tmp.length;i++){
-                    spinnerAdapter.add(tmp[i]);
-                }
-                spinnerAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                Log.d("RetorFit error", error.toString());
-            }
-        });
+        initSpinnerList(view);
     }
 
     //기록 가져오기
     public void getHistory(){
-        LogViewAdapter.clear();//내용을 비운다.
+       // LogViewAdapter.clear();//내용을 비운다.
+        LogViewAdapter = new CustomHistoryLVAdapter();
+        SeminarLogView.setAdapter(LogViewAdapter);
+
         restRequest.getHistory(date, roomName, new Callback<JsonObject>() {
             @Override
             public void success(JsonObject jsonObject, Response response) {
@@ -147,20 +120,15 @@ public class AccessHistoryFragment extends Fragment implements AdapterView.OnIte
 
                     //Array 내용을 추출해서 담는다.
                     for(int i = 0; i < history.size(); i++){
-                        LogViewAdapter.addRoomId(history.get(i).getAsJsonObject().getAsJsonPrimitive("roomId").getAsString());
-                        LogViewAdapter.addUser(history.get(i).getAsJsonObject().getAsJsonPrimitive("textId").getAsString());
-                        LogViewAdapter.addDate(history.get(i).getAsJsonObject().getAsJsonPrimitive("timeStamp").getAsString());
-                        LogViewAdapter.addCommand(history.get(i).getAsJsonObject().getAsJsonPrimitive("command").getAsString());
+                        JsonObject tmpObject = history.get(i).getAsJsonObject();
+
+                        LogViewAdapter.addRoomId(tmpObject.getAsJsonPrimitive("roomId").getAsString());
+                        LogViewAdapter.addUser(tmpObject.getAsJsonPrimitive("textId").getAsString());
+                        LogViewAdapter.addDate(tmpObject.getAsJsonPrimitive("timeStamp").getAsString());
+                        LogViewAdapter.addCommand(tmpObject.getAsJsonPrimitive("command").getAsString());
                     }
 
                     LogViewAdapter.notifyDataSetChanged();
-                    /*for (int i = 0; i < history.size(); i++) {
-                        LogViewAdapter.add(history.get(i).getAsJsonObject().getAsJsonPrimitive("roomId") + " " +
-                                history.get(i).getAsJsonObject().getAsJsonPrimitive("textId") + " " +
-                                history.get(i).getAsJsonObject().getAsJsonPrimitive("command") + " " +
-                                history.get(i).getAsJsonObject().getAsJsonPrimitive("timeStamp"));
-                    }*/
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -176,12 +144,32 @@ public class AccessHistoryFragment extends Fragment implements AdapterView.OnIte
     //새로운 방을 눌렀을 때 방 이름을 갱신하고 화면을 다시 보여준다.
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        LogViewAdapter.clear();
         roomName = parent.getAdapter().getItem(position).toString();//방 이름 갱신
         getHistory();//화면을 다시 뿌려준다.
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {   }
+
+    //스피너 데이터 초기화
+    public void initSpinnerList(View view){
+        //스피너 매핑 부분
+        roomSpinner=(Spinner)view.findViewById(R.id.spinner_room_watch);
+        entry=new ArrayList<String>();
+        entry.add("ALL");
+
+        spinnerAdapter = new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_list_item_1,entry);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        roomSpinner.setAdapter(spinnerAdapter);
+        String[] roomList = RoomInfo.getRoomNames();
+
+        if(roomList.length >0 ){
+            for(int i=0 ; i < roomList.length ; i++){
+                spinnerAdapter.add(roomList[i]);
+            }
+
+            spinnerAdapter.notifyDataSetChanged();// 스피너 갱신
+        }
+    }
 
 }
