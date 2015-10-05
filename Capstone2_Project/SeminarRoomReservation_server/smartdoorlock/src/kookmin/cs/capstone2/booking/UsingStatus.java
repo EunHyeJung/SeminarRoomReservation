@@ -19,7 +19,7 @@ import org.json.simple.JSONObject;
 public class UsingStatus extends HttpServlet {
 	/*
 	 * request : date(yyyy-MM-dd) 
-	 * response : 예약 고유 id(id), 세미나실 id(room_id), 예약시작 시간(start_time), 예약 끝 시간(end_time)
+	 * response : 예약 고유 id(id), 세미나실 id(roomId), 예약시작 시간(startTime), 예약 끝 시간(endTime), 예약 상태(status)
 	 */
 	@Override
 	protected void service(HttpServletRequest request,
@@ -50,7 +50,9 @@ public class UsingStatus extends HttpServlet {
 			stmt = conn.createStatement(); //DB에 SQL문을 보내기 위한 Statement를 생성
 			  
 			//status!=0, 즉 거절상태가 아닌 예약 내역 정보를 가져온다
-			String sql = "select reservationinfo.id, room.room_id, reservationinfo.start_time, reservationinfo.end_time, reservationinfo.status from reservationinfo, room where (reservationinfo.room_id=room.id) and date='" + date + "' and reservationinfo.status != 0;";
+			String sql = "select reservationinfo.id, room.room_id, reservationinfo.start_time, reservationinfo.end_time, reservationinfo.status "
+					+ "from reservationinfo, room where (reservationinfo.room_id=room.id) and date='" + date + "' and reservationinfo.status != 0 "
+							+ "Order by room.room_id asc;";
 			
 			rs = stmt.executeQuery(sql);
 			while (rs.next()) {

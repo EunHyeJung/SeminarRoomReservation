@@ -68,21 +68,6 @@ public class SignUp extends HttpServlet {
 			} catch (SQLException se) {
 				System.out.println(se.getMessage());
 			}
-		
 		}
-
-		/*
-		 * try{ String sql = "insert into bb values(" + id + "," + name + ")";
-		 * stmt = con.createStatement(); int n = stmt.executeUpdate(sql);
-		 * if(stmt.executeQuery(sql).next()) pw.println(SUCCESS); else
-		 * pw.println(FAIL);
-		 * 
-		 * pstmt = con.prepareStatement(sql); pstmt.setString(1, id);
-		 * pstmt.setString(2, password); pstmt.setString(3, name);
-		 * pstmt.setString(4, phone); }catch(SQLException se){
-		 * System.out.println(se.getMessage()); }finally{ try{ if(stmt != null)
-		 * stmt.close(); if(con != null) con.close(); }catch(SQLException se){
-		 * System.out.println(se.getMessage()); } }
-		 */
 	}
 }

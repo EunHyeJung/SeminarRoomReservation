@@ -68,11 +68,11 @@ public class Login extends HttpServlet {
 			} else
 				secondObject.put("result", StaticVariables.FAIL);////로그인 실패
 
-			sql = "select room_id from room;";
+			sql = "select id, room_id from room;";
 			rs=stmt.executeQuery(sql);
 			while(rs.next()) {
-				String roomName = rs.getString("room_id");
-				roomInfo.put("roomName", roomName);
+				roomInfo.put("roomId", rs.getString("id"));
+				roomInfo.put("roomName", rs.getString("room_id"));
 				roomArray.add(roomInfo);
 				roomInfo = new JSONObject();
 			}

@@ -61,16 +61,15 @@ public class RoomHistory extends HttpServlet {
 			stmt = conn.createStatement(); //DB에 SQL문을 보내기 위한 Statement를 생성
 			
 			String sql = "";
+			sql = "select room.room_id, user.text_id, roomhistory.time_stamp, roomhistory.command "
+					+ "from roomhistory, room, user where (roomhistory.room_id=room.id) and (roomhistory.user_id=user.id) and date(time_stamp)='" + date + "'";
 			
 			//string room이 ALL일때는 방과 관계없이 해당 날짜 기록을 모두 보여준다
-			if(room.equals("ALL")){
-				sql = "select room.room_id, user.text_id, roomhistory.time_stamp, roomhistory.command from roomhistory, room, user where (roomhistory.room_id=room.id) and (roomhistory.user_id=user.id) and date(time_stamp)='" + date + "';";
-				System.out.println("ALL : " + sql);
+			if(!room.equals("ALL")){
+				sql += "and room.room_id='" + room + "'";
 			}
-			else{
-				sql = "select room.room_id, user.text_id, roomhistory.time_stamp, roomhistory.command from roomhistory, room, user where (roomhistory.room_id=room.id) and (roomhistory.user_id=user.id) and date(time_stamp)='" + date + "' and room.room_id='" + room + "';";
-				System.out.println(room + " : " + sql);
-			}
+			sql += ";";
+			
 			rs = stmt.executeQuery(sql);
 			while (rs.next()) {
 				historyInfo = new JSONObject();
