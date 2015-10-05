@@ -3,13 +3,17 @@ package kr.ac.kookmin.cs.capstone2.seminarroomreservation;
 /**
  * Created by ehye on 2015-09-24.
  */
-public class RoomInfoClass {
+public class RoomInfo {
     public static String roomNames[];
 
-    public static void init(int numOfRooms){
+    public static void setRoomNames(int numOfRooms){
         roomNames = new String[numOfRooms];
     }
 
+
+    public static String[] getRoomNames(){
+        return roomNames;
+    }
 
     // 서버와의 통신  확인후 삭제 할것
     public static void printRoomNames(){

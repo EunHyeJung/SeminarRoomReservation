@@ -2,33 +2,28 @@ package kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation;
 
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.internal.widget.AdapterViewCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import org.json.JSONObject;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Network.RestRequestHelper;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
-import kr.ac.kookmin.cs.capstone2.seminarroomreservation.SharedPreferenceClass;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.RoomInfo;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -42,8 +37,15 @@ public class UsingStatusFragment extends Fragment {
     ListView listView;
     GridView gridView;
 
+    TextView textViewRoom1;
+    TextView textViewRoom2;
+    TextView textViewRoom3;
+    TextView textViewRoom4;
+    TextView textViewRoom5;
+
+    CustomGridAdapter customGridAdapter;
+
     TextView textViewDate;
-    TextView textViewEmpty;
     Button buttonDate;
 
     static String date;
@@ -52,9 +54,10 @@ public class UsingStatusFragment extends Fragment {
     Button buttonNext;
 
     AccidentListener mCallback;
+    static int page = 0;
 
-    public interface AccidentListener{
-        void deliverData();
+    public interface AccidentListener {
+        void refershFragment(int page);
     }
 
     public UsingStatusFragment() {
@@ -68,6 +71,7 @@ public class UsingStatusFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_using_status, container, false);
 
+
         final Calendar calendar = Calendar.getInstance();
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH);
@@ -75,6 +79,12 @@ public class UsingStatusFragment extends Fragment {
         date = year + "-" + (month + 1) + "-" + day;
         textViewDate = (TextView) rootView.findViewById(R.id.textView_date);
 
+
+        textViewRoom1 = (TextView) rootView.findViewById(R.id.testView_room1);
+        textViewRoom2 = (TextView) rootView.findViewById(R.id.testView_room2);
+        textViewRoom3 = (TextView) rootView.findViewById(R.id.testView_room3);
+        textViewRoom4 = (TextView) rootView.findViewById(R.id.testView_room4);
+        textViewRoom5 = (TextView) rootView.findViewById(R.id.testView_room5);
 
 
         listView = (ListView) rootView.findViewById(R.id.listView_time);
@@ -84,7 +94,7 @@ public class UsingStatusFragment extends Fragment {
         buttonNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallback.deliverData();
+                mCallback.refershFragment(page++);
             }
         });
 
@@ -106,18 +116,20 @@ public class UsingStatusFragment extends Fragment {
 
     public void init(String date) {
 
-            String[] inputTimeValues = {"09:00 - 09:30", "09:30 - 10:00", "10:00 - 10:30", "10:30 - 11:00", "11:00 - 11:30", "11:30 - 12:00",
-                "12:00 - 12:30", "12:30 - 13:00", "13:00 - 14:30", "14:30 - 15:00", "15:00 - 16:30", "16:30 - 17:00",
-                "17:00 - 17:30", "17:30 - 18:00", "18:00 - 18:30", "18:30 - 19:00", "19:00 - 19:30", "19:30 - 20:00",
-                "20:00 - 20:30", "20:30 - 21:00"
-        };
-        ArrayList<String > inputValues = new ArrayList<String>();
-        for(int i=0 ; i<120 ; i++){
-            inputValues.add("x");
-        }
-        CustomGridAdapter customGridAdapter = new CustomGridAdapter(getActivity(), inputValues);
-        gridView.setAdapter(customGridAdapter);
-        gridView.setVerticalScrollBarEnabled(false);
+        String[] inputTimeValues = {"09:00 - 09:30", "09:30 - 10:00", "10:00 - 10:30", "10:30 - 11:00",
+                "11:00 - 11:30", "11:30 - 12:00", "12:00 - 12:30", "12:30 - 13:00",
+                "13:00 - 13:30", "13:30 - 14:00", "14:00 - 14:30", "14:30 - 15:00",
+                "15:00 - 15:30", "15:30 - 16:00", "16:00 - 16:30", "16:30 - 17:00",
+                "17:00 - 17:30", "17:30 - 18:00", "18:00 - 18:30", "18:30 - 19:00"};
+
+        String[] inputRoomNames = RoomInfo.roomNames;          // 방이름 데이터를 가져옴.
+
+
+        textViewRoom1.setText(inputRoomNames[5 * page + 0]);
+        textViewRoom2.setText(inputRoomNames[5 + page + 1]);
+        textViewRoom3.setText(inputRoomNames[5 * page + 2]);
+        textViewRoom4.setText(inputRoomNames[5 * page + 3]);
+        textViewRoom5.setText(inputRoomNames[5 * page + 4]);
 
 
         textViewDate.setText(date);
@@ -129,9 +141,14 @@ public class UsingStatusFragment extends Fragment {
         RestRequestHelper requestHelper = RestRequestHelper.newInstance();
         requestHelper.receiveUsingStatue(date, new Callback<JsonObject>() {
             @Override
-            public void success(JsonObject signUpCallback, Response response) {
-                System.out.println("receivewUsingStatus"+signUpCallback);
-       }
+            public void success(JsonObject usingStatusCallback, Response response) {
+                try {
+                    jsonParsing(usingStatusCallback);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
             @Override
             public void failure(RetrofitError error) {
                 error.printStackTrace();
@@ -140,6 +157,34 @@ public class UsingStatusFragment extends Fragment {
 
 
     }
+    /*      End of Init         */
+
+
+    public void jsonParsing(JsonObject jsonObject) throws JSONException {
+        JsonObject responseData = jsonObject.getAsJsonObject("responseData");
+        JsonArray reservations = responseData.getAsJsonArray("reservation");
+
+        // 예약 현황 데이터를 받아와서, gridView에 set.
+        for (int i = 0; i < reservations.size(); i++) {
+
+            //reservations.get(i).getAsJsonObject().getAsJsonPrimitive("roomId"));
+        }
+
+        // 추후삭제
+        ArrayList<Integer> inputValues = new ArrayList<Integer>();
+
+        for (int i = 0; i < 120; i++) {
+            inputValues.add(i);
+        }
+        // 추후삭제
+
+        customGridAdapter = new CustomGridAdapter(getActivity(), inputValues);
+        gridView.setAdapter(customGridAdapter);
+        gridView.setVerticalScrollBarEnabled(false);
+
+
+    }
+
 
     public void showCaldendarDialog() {
         CalendarDialog calendarDialog = new CalendarDialog(getActivity());
@@ -154,11 +199,11 @@ public class UsingStatusFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Activity activity){
+    public void onAttach(Activity activity) {
         super.onAttach(activity);
-        try{
+        try {
             mCallback = (AccidentListener) activity;
-        }catch(ClassCastException e){
+        } catch (ClassCastException e) {
 
         }
 

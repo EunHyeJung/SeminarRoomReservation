@@ -1,19 +1,34 @@
 package kr.ac.kookmin.cs.capstone2.seminarroomreservation.User;
 
-import android.support.v7.app.ActionBarActivity;
+import android.support.v4.view.ViewPager;
+
 import android.os.Bundle;
+
+
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.astuetz.PagerSlidingTabStrip;
+
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.CustomPagerAdapter;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
 
 
-public class UserActivity extends ActionBarActivity {
+public class UserActivity extends AppCompatActivity {
+
+    ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
+
+        viewPager  = (ViewPager) findViewById(R.id.pager);
+        viewPager.setAdapter(new CustomPagerAdapter(getSupportFragmentManager()));
+        PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+        tabs.setViewPager(viewPager);
+
     }
 
 

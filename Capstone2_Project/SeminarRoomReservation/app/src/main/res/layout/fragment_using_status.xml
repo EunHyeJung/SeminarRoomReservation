@@ -74,62 +74,61 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/TestView_room1"
+                        android:id="@+id/testView_room1"
                         android:layout_width="43dp"
                         android:layout_height="25dp"
                         android:layout_marginRight="1dp"
                         android:layout_weight="1"
                         android:background="#ff333333"
                         android:gravity="center"
-                        android:text="601"
+
                         android:textSize="14dp"
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/TestView_room2"
+                        android:id="@+id/testView_room2"
                         android:layout_width="43dp"
                         android:layout_height="25dp"
                         android:layout_marginRight="1dp"
                         android:layout_weight="1"
                         android:background="#ff333333"
                         android:gravity="center"
-                        android:text="602"
                         android:textSize="14dp"
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/TestView_room3"
+                        android:id="@+id/testView_room3"
                         android:layout_width="43dp"
                         android:layout_height="25dp"
                         android:layout_marginRight="1dp"
                         android:layout_weight="1"
                         android:background="#ff333333"
                         android:gravity="center"
-                        android:text="603"
+
                         android:textSize="14dp"
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/TestView_room4"
+                        android:id="@+id/testView_room4"
                         android:layout_width="43dp"
                         android:layout_height="25dp"
                         android:layout_marginRight="1dp"
                         android:layout_weight="1"
                         android:background="#ff333333"
                         android:gravity="center"
-                        android:text="604"
+
                         android:textSize="14dp"
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/TestView_room5"
+                        android:id="@+id/testView_room5"
                         android:layout_width="43dp"
                         android:layout_height="25dp"
                         android:layout_marginRight="1dp"
                         android:layout_weight="1"
                         android:background="#ff333333"
                         android:gravity="center"
-                        android:text="605"
+
                         android:textSize="14dp"
                         android:textStyle="bold" />
 
@@ -160,8 +159,8 @@
                 android:layout_width="60dp"
                 android:layout_height="80dp"
                 android:layout_gravity="center_vertical"
-                android:background="#ca3a83bf"
                 android:layout_marginLeft="10dp"
+                android:alpha="0"
                 />
 
         </LinearLayout>

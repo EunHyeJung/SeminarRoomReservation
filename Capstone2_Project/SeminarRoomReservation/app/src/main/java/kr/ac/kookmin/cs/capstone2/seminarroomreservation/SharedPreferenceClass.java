@@ -20,14 +20,14 @@ public class SharedPreferenceClass {
         this.context = context;
     }
 
-    public void put(String key, int value) {
+    public static void put(String key, int value) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(key, value);
         editor.commit();
     }
 
-    public void put(String key, String value) {
+    public static void put(String key, String value) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(key, value);
@@ -35,7 +35,7 @@ public class SharedPreferenceClass {
     }
 
 
-    public int getValue(String key, int defaultValue) {
+    public static int getValue(String key, int defaultValue) {
         SharedPreferences preferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         try {
             return preferences.getInt(key, defaultValue);
@@ -43,7 +43,7 @@ public class SharedPreferenceClass {
             return defaultValue;
         }
     }
-    public String  getValue(String key, String defaultValue) {
+    public static String  getValue(String key, String defaultValue) {
         SharedPreferences preferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         try {
             return preferences.getString(key, defaultValue);
