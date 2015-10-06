@@ -19,7 +19,7 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class ControlDialogActivity extends AppCompatActivity {
+public class    ControlDialogActivity extends AppCompatActivity {
     Button OpenBtn;
     Button CloseBtn;
     TextView DoorStatusText;

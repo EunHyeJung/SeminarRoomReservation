@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.util.HashMap;
+
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
 
 /**
@@ -19,11 +21,11 @@ public class CustomListAdapter extends BaseAdapter {
     private final String[] inputValues;
 
 
-
     public CustomListAdapter(Context mContext, String[] inputValues){
         this. mContext = mContext;
         this.mLayoutInflater = LayoutInflater.from(mContext);
         this.inputValues = inputValues;
+
     }
 
     @Override

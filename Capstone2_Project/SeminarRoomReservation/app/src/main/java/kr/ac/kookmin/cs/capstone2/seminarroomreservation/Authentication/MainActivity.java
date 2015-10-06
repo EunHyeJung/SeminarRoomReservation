@@ -21,6 +21,7 @@ import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.RoomInfo;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.SharedPreferenceClass;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.User.UserActivity;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.User.UserInfo;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -66,8 +67,7 @@ public class MainActivity extends AppCompatActivity {
                 requestHelper.login(id, password, new Callback<JsonObject>() {
                     @Override
                     public void success(JsonObject loginCallback, Response response) {
-                        SharedPreferenceClass.put("id", id);          // 사용자 정보 저장
-                        SharedPreferenceClass.put("password", password);
+                        UserInfo.setUserInfo(id, password);
 
                         jsonParsing(loginCallback);
                     }
@@ -92,16 +92,23 @@ public class MainActivity extends AppCompatActivity {
 
     public void jsonParsing(JsonObject jsonObject) {
         JsonObject responseData = jsonObject.getAsJsonObject("responseData"); //2 레벨 제이슨 객체를 얻음
-
+System.out.println("resoponseData : "+responseData);
         int userId = responseData.getAsJsonPrimitive("id").getAsInt();
         int result = responseData.getAsJsonPrimitive("result").getAsInt();
 
-        SharedPreferenceClass.put("userId", userId);             // 사용자 고유 id 저장
+        UserInfo.setUserInfo(userId);           // 사용자 고유 ID 설정
+       // SharedPreferenceClass.put("userId", userId);             // 사용자 고유 id 저장
 
         JsonArray roomNames = responseData.getAsJsonArray("room");
-        RoomInfo.setRoomNames(roomNames.size());
+
         for (int i = 0; i < roomNames.size(); i++) {
-            RoomInfo.roomNames[i] = roomNames.get(i).getAsJsonObject().getAsJsonPrimitive("roomName").toString();
+            int roomId = roomNames.get(i).getAsJsonObject().getAsJsonPrimitive("roomId").getAsInt();
+           String roomName = roomNames.get(i).getAsJsonObject().getAsJsonPrimitive("roomName").toString();
+           if(i==3 || i==4){
+               System.out.println("roomId : "+roomId+", roomName : "+roomName);
+           }
+            RoomInfo.setRoomInfo(roomId, roomName);
+
         }
 
 
@@ -111,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void loginProcess(int result) {
         switch (result) {
-            case 0:         // 로그인 오류
+            case -1:         // 로그인 오류
                 Toast.makeText(getApplicationContext(), "Invalid ID", Toast.LENGTH_LONG).show();
                 break;
             case 1:             // 일반 사용자

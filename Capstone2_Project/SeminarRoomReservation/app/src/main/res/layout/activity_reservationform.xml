@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#8D7A4F"
+    android:background="@drawable/background2"
     tools:context="kr.ac.kookmin.cs.capstone2.seminarroomreservation.JoinActivity">
 
     <FrameLayout

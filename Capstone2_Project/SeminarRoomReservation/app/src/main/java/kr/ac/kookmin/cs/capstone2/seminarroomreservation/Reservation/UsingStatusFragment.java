@@ -20,6 +20,7 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Network.RestRequestHelper;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
@@ -52,9 +53,14 @@ public class UsingStatusFragment extends Fragment {
     int year, month, day;
 
     Button buttonNext;
+    Button buttonBack;
 
     AccidentListener mCallback;
     static int page = 0;
+
+    HashMap<String, Integer> startTime =  new HashMap<String, Integer>();
+    HashMap<String, Integer> endTime = new HashMap<String, Integer>();
+
 
     public interface AccidentListener {
         void refershFragment(int page);
@@ -98,6 +104,16 @@ public class UsingStatusFragment extends Fragment {
             }
         });
 
+        buttonBack = (Button) rootView.findViewById(R.id.button_back);
+        buttonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mCallback.refershFragment(--page);
+            }
+        });
+
+
+        //date="2015-10-10";
         init(date);
 
 
@@ -122,16 +138,21 @@ public class UsingStatusFragment extends Fragment {
                 "15:00 - 15:30", "15:30 - 16:00", "16:00 - 16:30", "16:30 - 17:00",
                 "17:00 - 17:30", "17:30 - 18:00", "18:00 - 18:30", "18:30 - 19:00"};
 
-        String[] inputRoomNames = RoomInfo.roomNames;          // 방이름 데이터를 가져옴.
+
+        for(int i=0 ; i<inputTimeValues.length ; i++){
+            startTime.put(inputTimeValues[i].substring(0, 5), i);
+            endTime.put(inputTimeValues[i].substring(8, 13), i);
+        }
+
+        date = "2015-10-10";        // 삭제할것
 
 
-        textViewRoom1.setText(inputRoomNames[5 * page + 0]);
-        textViewRoom2.setText(inputRoomNames[5 + page + 1]);
-        textViewRoom3.setText(inputRoomNames[5 * page + 2]);
-        textViewRoom4.setText(inputRoomNames[5 * page + 3]);
-        textViewRoom5.setText(inputRoomNames[5 * page + 4]);
-
-
+        textViewRoom1.setText(RoomInfo.getRoomName(5*page+1).substring(1,3));
+        textViewRoom2.setText(RoomInfo.getRoomName(5 * page+2).substring(1, 3));
+        textViewRoom3.setText(RoomInfo.getRoomName(5 * page+3).substring(1, 3));
+        System.out.println("ㅠㅠ : "+RoomInfo.getRoomName(5*page+3).substring(1, 3));
+        textViewRoom4.setText(RoomInfo.getRoomName(5*page+4).substring(1, 3));
+        textViewRoom5.setText(RoomInfo.getRoomName(5 * page+5).substring(1, 3));
         textViewDate.setText(date);
         CustomListAdapter customListAdapter = new CustomListAdapter(getActivity(), inputTimeValues);
         listView.setAdapter(customListAdapter);
@@ -161,13 +182,22 @@ public class UsingStatusFragment extends Fragment {
 
 
     public void jsonParsing(JsonObject jsonObject) throws JSONException {
+
         JsonObject responseData = jsonObject.getAsJsonObject("responseData");
         JsonArray reservations = responseData.getAsJsonArray("reservation");
 
-        // 예약 현황 데이터를 받아와서, gridView에 set.
+        // 예약 현황 데이터를 받아와서, gridView에 set
         for (int i = 0; i < reservations.size(); i++) {
+            String tempStartTime = (reservations.get(i).getAsJsonObject().getAsJsonPrimitive("startTime").getAsString()).substring(0,5);
+            String tempEndTime = (reservations.get(i).getAsJsonObject().getAsJsonPrimitive("endTime").getAsString()).substring(0,5);
+
+            // 시작시간과 끝시간받아오는 부분까지 - >  리스트뷰의 index와 비교하고
+            // room_ID 값으로 계산하는 클래스 따로 만들어서 girdAdapter로 넘겨줄 것
+            System.out.println("ㅠㅠstartTime : "+startTime.get(tempStartTime));
+            System.out.println("ㅠㅠendTime : "+endTime.get(tempEndTime));
 
             //reservations.get(i).getAsJsonObject().getAsJsonPrimitive("roomId"));
+
         }
 
         // 추후삭제
