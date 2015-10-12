@@ -147,12 +147,14 @@ public class UsingStatusFragment extends Fragment {
         date = "2015-10-10";        // 삭제할것
 
 
-        textViewRoom1.setText(RoomInfo.getRoomName(5*page+1).substring(1,3));
-        textViewRoom2.setText(RoomInfo.getRoomName(5 * page+2).substring(1, 3));
-        textViewRoom3.setText(RoomInfo.getRoomName(5 * page+3).substring(1, 3));
-        System.out.println("ㅠㅠ : "+RoomInfo.getRoomName(5*page+3).substring(1, 3));
-        textViewRoom4.setText(RoomInfo.getRoomName(5*page+4).substring(1, 3));
-        textViewRoom5.setText(RoomInfo.getRoomName(5 * page+5).substring(1, 3));
+        textViewRoom1.setText(RoomInfo.getRoomName(5*page+1).substring(1,4));
+        textViewRoom2.setText(RoomInfo.getRoomName(5*page+2).substring(1, 4));
+        textViewRoom3.setText(RoomInfo.getRoomName(5*page+3).substring(1, 4));
+        textViewRoom4.setText("604");
+        textViewRoom5.setText("605");
+       /* textViewRoom4.setText(RoomInfo.getRoomName(5*page+4).substring(1, 3));
+        textViewRoom5.setText(RoomInfo.getRoomName(5*page+5).substring(1, 3));
+       */
         textViewDate.setText(date);
         CustomListAdapter customListAdapter = new CustomListAdapter(getActivity(), inputTimeValues);
         listView.setAdapter(customListAdapter);

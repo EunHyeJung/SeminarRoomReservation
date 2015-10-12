@@ -2,6 +2,7 @@ package kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Manager.ManagerActivity;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Network.RestRequestHelper;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
 import retrofit.Callback;
@@ -182,8 +184,12 @@ public class ReservationFormActivity extends AppCompatActivity implements Adapte
     //서버로 예약 신청 정보 전송
     public void makereservation(){
 
-        Toast.makeText(ReservationFormActivity.this, "버튼눌림", Toast.LENGTH_SHORT).show(); //확인
+        //
+        Toast.makeText(ReservationFormActivity.this, "예약신청 완료", Toast.LENGTH_SHORT).show(); //확인
+        Intent intent = new Intent(getApplicationContext(), ManagerActivity.class);
+        startActivity(intent);
 
+        //
         String date = TxtCheckInDate.getText().toString();
         String start_time = TxtCheckInTime.getText().toString();
         String end_time = TxtCheckOutTime.getText().toString();

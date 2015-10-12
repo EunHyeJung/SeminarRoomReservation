@@ -56,15 +56,13 @@ public class CustomGridAdapter extends BaseAdapter {
         if(convertView == null) {
             convertView = mLayoutInflater.inflate(R.layout.item_gridview, parent, false);
             textViewGridItem = (TextView) convertView.findViewById(R.id.textView_gridItem);
-            textViewGridItem.setText(""+position);
-/*
+//            textViewGridItem.setText(""+position);
 
             if(position == 7 || position== 12)
                 textViewGridItem.setBackgroundColor(Color.parseColor("#90C84646"));
             if(position == 51 || position == 56 || position == 61)
                 textViewGridItem.setBackgroundColor(Color.parseColor("#90E86E59"));
 
-*/
 
 
 

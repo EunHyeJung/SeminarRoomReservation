@@ -133,4 +133,3 @@ public class    ControlDialogActivity extends AppCompatActivity {
         });
     }
 }
-
