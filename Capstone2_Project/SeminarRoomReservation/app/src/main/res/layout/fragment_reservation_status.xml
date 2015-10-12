@@ -16,7 +16,7 @@
             android:layout_width="fill_parent"
             android:layout_height="40dp"
             android:layout_marginTop="15dp"
-            android:background="#ff253c6c">
+            >
 
             <Button
                 android:id="@+id/btn_reservation_showall"

@@ -109,7 +109,7 @@ System.out.println("resoponseData : "+responseData);
            }
             RoomInfo.setRoomInfo(roomId, roomName);
 
-            RoomInfo.roomNames[i] = roomName;       // 삭제 할 것
+    //        RoomInfo.roomNames[i] = roomName;       // 삭제 할 것
         }
 
 
