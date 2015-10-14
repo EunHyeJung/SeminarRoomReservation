@@ -59,7 +59,7 @@ public class RequestList extends HttpServlet {
 			while (rs.next()) {
 				listInfo = new JSONObject();
 				listInfo.put("reservationId", rs.getInt("id"));
-				listInfo.put("roomId", rs.getInt("room_id"));
+				listInfo.put("roomId", rs.getString("room_id"));
 				listInfo.put("userId", rs.getString("text_id"));
 				listInfo.put("date", rs.getString("date"));
 				listInfo.put("startTime", rs.getString("start_time"));
