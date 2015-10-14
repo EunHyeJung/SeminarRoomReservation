@@ -8,6 +8,8 @@ import com.google.gson.JsonObject;
 
 import java.util.Set;
 
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.User.UserInfo;
+
 /**
  * Created by ehye on 2015-09-23.
  */
@@ -20,14 +22,15 @@ public class SharedPreferenceClass {
         this.context = context;
     }
 
-    public static void put(String key, int value) {
+
+    public static void putValue(String key, int value) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(key, value);
         editor.commit();
     }
 
-    public static void put(String key, String value) {
+    public static void putValue(String key, String value) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(key, value);

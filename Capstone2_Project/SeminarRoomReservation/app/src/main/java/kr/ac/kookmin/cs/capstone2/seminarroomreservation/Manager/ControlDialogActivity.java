@@ -19,12 +19,13 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class ControlDialogActivity extends AppCompatActivity {
+public class    ControlDialogActivity extends AppCompatActivity {
     Button OpenBtn;
     Button CloseBtn;
     TextView DoorStatusText;
 
     String RoomName="";
+    int id = 0;
 
     RestRequestHelper requestHelper;
 
@@ -41,7 +42,7 @@ public class ControlDialogActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //문을 컨트롤하기 위한 함수를 부른다.
-                requestHelper.controlDoor(1,RoomName, true, new Callback<JsonObject>() {
+                requestHelper.controlDoor(id, RoomName, true, new Callback<JsonObject>() {
                     @Override
                     public void success(JsonObject jsonObject, Response response) {
                         int result = jsonObject.get("result").getAsInt();
@@ -70,7 +71,7 @@ public class ControlDialogActivity extends AppCompatActivity {
         CloseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                requestHelper.controlDoor(1,RoomName, false, new Callback<JsonObject>() {
+                requestHelper.controlDoor(id, RoomName, false, new Callback<JsonObject>() {
                     @Override
                     public void success(JsonObject jsonObject, Response response) {
                         int result = jsonObject.get("result").getAsInt();
@@ -100,9 +101,10 @@ public class ControlDialogActivity extends AppCompatActivity {
     public void init(){
         requestHelper=RestRequestHelper.newInstance();
 
-        //클릭한 세미나방 이름 가져오기
+        //클릭한 세미나방 이름, id 가져오기
         Intent intent=getIntent();
         RoomName=intent.getExtras().getString("Room");
+        id = intent.getExtras().getInt("id");
 
         //매핑하기
         OpenBtn=(Button)findViewById(R.id.btn_DoorOpen);
@@ -110,7 +112,7 @@ public class ControlDialogActivity extends AppCompatActivity {
         DoorStatusText=(TextView)findViewById(R.id.text_DoorStatus);
 
         //방 상태를 받아오는 함수를 실행
-        requestHelper.roomStatus(RoomName, new Callback<JsonObject>() {
+        requestHelper.roomStatus(id, RoomName, new Callback<JsonObject>() {
             @Override
             public void success(JsonObject jsonObject, Response response) {
                 int status = jsonObject.get("status").getAsInt();
@@ -133,4 +135,3 @@ public class ControlDialogActivity extends AppCompatActivity {
         });
     }
 }
-

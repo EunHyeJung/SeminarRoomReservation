@@ -1,7 +1,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ff253c6c"
+    android:background="@drawable/background2"
     tools:context="kr.ac.kookmin.cs.capstone2.seminarroomreservation.Manager.AccessControlFragment">
 
     <LinearLayout

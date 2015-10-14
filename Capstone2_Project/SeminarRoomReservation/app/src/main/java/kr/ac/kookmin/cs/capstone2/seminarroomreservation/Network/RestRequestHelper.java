@@ -22,7 +22,7 @@ public class RestRequestHelper {
     private RestAdapter restAdapter;
     private RestRequest restRequest;
 
-    private static final String url = "http://192.168.23.218:8081/smartdoorlock";
+    private static final String url = "http://10.30.115.90:8081/smartdoorlock";
 
     public static RestRequestHelper newInstance(){
         if(instance == null){
@@ -73,7 +73,8 @@ public class RestRequestHelper {
 
         @FormUrlEncoded
         @POST("/roomstatus")
-        void roomStatus(@Field("roomName")String roomName,
+        void roomStatus(@Field("id") int id,
+                        @Field("roomName")String roomName,
                         Callback<JsonObject> roomStatusCallback);
 
         @FormUrlEncoded
@@ -130,8 +131,8 @@ public class RestRequestHelper {
         restRequest.roomList(id, roomListCallback);
     }
 
-    public void roomStatus(String roomName, Callback<JsonObject> roomStatusCallback){
-        restRequest.roomStatus(roomName, roomStatusCallback);
+    public void roomStatus(int id, String roomName, Callback<JsonObject> roomStatusCallback){
+        restRequest.roomStatus(id, roomName, roomStatusCallback);
     }
 
     public void controlDoor(int id, String doorName, boolean status, Callback<JsonObject> controlDoorCallback ){

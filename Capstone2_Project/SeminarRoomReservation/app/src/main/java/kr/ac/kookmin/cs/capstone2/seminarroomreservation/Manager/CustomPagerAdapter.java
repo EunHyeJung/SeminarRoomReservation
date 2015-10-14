@@ -3,6 +3,7 @@ package kr.ac.kookmin.cs.capstone2.seminarroomreservation.Manager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.util.Log;
 import android.view.ViewGroup;
 
 import java.util.HashMap;
@@ -46,7 +47,7 @@ public class CustomPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
 
         Fragment currentFragment = null;
-
+        System.out.println("position : "+position);
         switch (position){
             case 0:
                 currentFragment =  new UsingStatusFragment();

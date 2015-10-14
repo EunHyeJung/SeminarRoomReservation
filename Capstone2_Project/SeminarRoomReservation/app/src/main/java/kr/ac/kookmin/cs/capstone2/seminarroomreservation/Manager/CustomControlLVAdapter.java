@@ -19,20 +19,22 @@ import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
  */
 public class CustomControlLVAdapter extends BaseAdapter {
     //리스트뷰에 표시할 정보를 담는 배열
-    ArrayList<String> SeminarArrayList;
+    ArrayList<String> seminarRoomNameList;
+    ArrayList<Integer> seminarRoomIdList;
     Button BtnSeminarControl=null;//다이얼로그 띄우는 버튼
 
     public CustomControlLVAdapter(){
-        SeminarArrayList=new ArrayList<String>();
+        seminarRoomNameList = new ArrayList<String>();
+        seminarRoomIdList = new ArrayList<Integer>();
     }
     @Override
     public int getCount() {
-        return SeminarArrayList.size();
+        return seminarRoomNameList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return SeminarArrayList.get(position);
+        return seminarRoomNameList.get(position);
     }
 
     @Override
@@ -58,8 +60,9 @@ public class CustomControlLVAdapter extends BaseAdapter {
             public void onClick(View v) {
                 //제어창 표시및 방이름 보내기
                 Intent intent = new Intent(context, ControlDialogActivity.class);
-                intent.putExtra("Room", SeminarArrayList.get(position));
-                Log.i("Room : ", SeminarArrayList.get(position));
+                intent.putExtra("Room", seminarRoomNameList.get(position)); //방 이름을 보낸다.
+                intent.putExtra("id", seminarRoomIdList.get(position)); //방  id를 보낸다.
+                Log.i("Room : ", seminarRoomNameList.get(position));
                 context.startActivity(intent);
             }
         });
@@ -69,13 +72,14 @@ public class CustomControlLVAdapter extends BaseAdapter {
     public void init(View convertView, final int position){
         //textview에 현재 position의 문자열 추가
         TextView SeminarRoomName=(TextView)convertView.findViewById(R.id.SeminarListText);
-        SeminarRoomName.setText(SeminarArrayList.get(position));
+        SeminarRoomName.setText(seminarRoomNameList.get(position));
 
         //버튼 매핑
         BtnSeminarControl=(Button)convertView.findViewById(R.id.btn_SeminarControl);
     }
 
-    public void add(String item){
-        SeminarArrayList.add(item);
+    public void addRoomId(int id) { seminarRoomIdList.add(id); }
+    public void addRoomName(String item){
+        seminarRoomNameList.add(item);
     }
 }

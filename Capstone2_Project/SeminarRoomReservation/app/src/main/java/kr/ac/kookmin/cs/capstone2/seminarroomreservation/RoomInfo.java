@@ -1,24 +1,25 @@
 package kr.ac.kookmin.cs.capstone2.seminarroomreservation;
 
+import java.util.HashMap;
+
 /**
  * Created by ehye on 2015-09-24.
  */
 public class RoomInfo {
-    public static String roomNames[];
+    public static HashMap<Integer , String> roomNames = new HashMap<Integer , String>();
 
-    public static void setRoomNames(int numOfRooms){
-        roomNames = new String[numOfRooms];
+    public RoomInfo(){
+
+    }
+
+    public static void setRoomInfo(Integer key, String value){
+        roomNames.put(key, value);
+    }
+
+    public static String getRoomName(Integer key){
+        return roomNames.get(key);
     }
 
 
-    public static String[] getRoomNames(){
-        return roomNames;
-    }
 
-    // 서버와의 통신  확인후 삭제 할것
-    public static void printRoomNames(){
-        for(int i=0 ; i<roomNames.length ; i++){
-            System.out.println("roomName : "+roomNames[i]);
-        }
-    }
 }
