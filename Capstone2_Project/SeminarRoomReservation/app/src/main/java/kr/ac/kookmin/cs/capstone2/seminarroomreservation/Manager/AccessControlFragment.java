@@ -54,12 +54,10 @@ public class AccessControlFragment extends Fragment {
         HashMap room = RoomInfo.roomNames;
         Iterator<Integer> iterator = room.keySet().iterator();
 
-        Log.d("Access Control ", room.keySet().toString());
-
         while(iterator.hasNext()){
             int key = iterator.next();
             listAdapter.addRoomId(key);
-            listAdapter.addRoomName(room.get(key).toString());
+            listAdapter.addRoomName(room.get(key).toString().replace("\"",""));
         }
     }
 }

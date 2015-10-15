@@ -3,13 +3,6 @@ package kr.ac.kookmin.cs.capstone2.seminarroomreservation;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-
-import java.util.Set;
-
-import kr.ac.kookmin.cs.capstone2.seminarroomreservation.User.UserInfo;
-
 /**
  * Created by ehye on 2015-09-23.
  */

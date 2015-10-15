@@ -67,7 +67,7 @@ public class CustomReservationLVAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         final Context context=parent.getContext();
-
+        ReservationViewHolder reservationViewHolder;
         if(convertView == null){
             //view가 null 일 경우 커스텀 레이아웃을 얻어 옴
             LayoutInflater inflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -76,7 +76,28 @@ public class CustomReservationLVAdapter extends BaseAdapter {
 
             //초기 설정 부분
             init(convertView, position);
+
+            //view holder 설정
+            reservationViewHolder = new ReservationViewHolder();
+            reservationViewHolder.userId = (TextView)convertView.findViewById(R.id.item_reservation_user);
+            reservationViewHolder.room = (TextView)convertView.findViewById(R.id.item_reservation_roomname);
+            reservationViewHolder.stime = (TextView)convertView.findViewById(R.id.item_reservation_starttime);
+            reservationViewHolder.etime = (TextView)convertView.findViewById(R.id.item_reservation_endtime);
+            reservationViewHolder.date = (TextView)convertView.findViewById(R.id.item_reservation_date);
+
+            convertView.setTag(reservationViewHolder);
         }
+        else
+        {
+            reservationViewHolder = (ReservationViewHolder)convertView.getTag();
+        }
+
+        //내용 설정
+        reservationViewHolder.userId.setText(arrayUserList.get(position));
+        reservationViewHolder.room.setText(arrayRoomList.get(position));
+        reservationViewHolder.stime.setText(arrayStartList.get(position));
+        reservationViewHolder.etime.setText(arrayEndList.get(position));
+        reservationViewHolder.date.setText(arrayDate.get(position));
 
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -158,10 +179,8 @@ public class CustomReservationLVAdapter extends BaseAdapter {
         TextView endTime = (TextView)convertView.findViewById(R.id.item_reservation_endtime);
         TextView date = (TextView)convertView.findViewById(R.id.item_reservation_date);
 
-        Log.d("position", position + "");
-
         userName.setText(arrayUserList.get(position));
-        //roomName.setText(arrayRoomList.get(position));
+        roomName.setText(arrayRoomList.get(position));
         startTime.setText(arrayStartList.get(position));
         endTime.setText(arrayEndList.get(position));
         date.setText(arrayDate.get(position));
@@ -196,6 +215,14 @@ public class CustomReservationLVAdapter extends BaseAdapter {
         arrayStartList.clear();
         arrayRoomList.clear();
         arrayDate.clear();
+    }
+
+    public class ReservationViewHolder{
+        public TextView userId;
+        public TextView room;
+        public TextView stime;
+        public TextView etime;
+        public TextView date;
     }
 
 }

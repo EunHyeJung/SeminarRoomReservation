@@ -19,6 +19,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Calendar;
+
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Manager.AccessHistoryFragment;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Network.RestRequestHelper;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
@@ -60,6 +62,8 @@ public class ReservationStatusFragment extends Fragment {
         btnAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                date = "ALL";
+                Log.d("RSF date1", date);
                 getReservationData();
             }
         });
@@ -105,12 +109,10 @@ public class ReservationStatusFragment extends Fragment {
         reservationLVAdapter = new CustomReservationLVAdapter();// 함수 내 선언으로 바꾸기
         reservationListView.setAdapter(reservationLVAdapter);
 
-        //reservationLVAdapter.clear();
-        //reservationLVAdapter.notifyDataSetChanged();
-
         restRequestHelper.requestList(date, new Callback<JsonObject>() {
             @Override
             public void success(JsonObject jsonObject, Response response) {
+                Log.d("RSF date2", date);
                 try {
                     JsonObject responseData = jsonObject.getAsJsonObject("responseData");
                     JsonArray requestList = responseData.getAsJsonArray("requestList");
@@ -132,7 +134,7 @@ public class ReservationStatusFragment extends Fragment {
                     e.printStackTrace();
                 }
 
-                reservationLVAdapter.notifyDataSetChanged();
+                reservationLVAdapter.notifyDataSetChanged();// 데이터 변경
             }
 
             @Override
