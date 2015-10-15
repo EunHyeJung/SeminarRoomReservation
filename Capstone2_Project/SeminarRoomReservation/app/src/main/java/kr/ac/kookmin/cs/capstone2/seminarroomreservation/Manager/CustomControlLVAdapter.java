@@ -22,6 +22,7 @@ public class CustomControlLVAdapter extends BaseAdapter {
     ArrayList<String> seminarRoomNameList;
     ArrayList<Integer> seminarRoomIdList;
     Button BtnSeminarControl=null;//다이얼로그 띄우는 버튼
+    TextView SeminarRoomName;
 
     public CustomControlLVAdapter(){
         seminarRoomNameList = new ArrayList<String>();
@@ -45,6 +46,8 @@ public class CustomControlLVAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         final Context context=parent.getContext();
+        final int pos = position;
+        ControlViewHolder holder;
         //리스트가 길어져서 현재 화면에 보이지 않은 아이템은 convertView가 null 상태로 들어옴
         if(convertView==null){
             //view가 null 일 경우 커스텀 레이아웃을 얻어 옴
@@ -53,7 +56,25 @@ public class CustomControlLVAdapter extends BaseAdapter {
 
             //초기 설정 부분
             init(convertView, position);
+
+            holder = new ControlViewHolder();
+            holder.id = seminarRoomIdList.get(pos);
+            holder.controlTxt = (TextView)convertView.findViewById(R.id.SeminarListText);
+            holder.controlBtn = (Button)convertView.findViewById(R.id.btn_SeminarControl);
+
+            convertView.setTag(holder); //안쓰면 null pointer Exception 발생
+
         }
+        //캐시된 뷰가 있을 경우 저장된 뷰 홀더 사용
+        else {
+            holder = (ControlViewHolder) convertView.getTag();
+        }
+
+        holder.id = seminarRoomIdList.get(pos);
+        holder.controlBtn.setText("제어");
+        holder.controlTxt.setText(seminarRoomNameList.get(pos));
+
+
         //제어 버튼 이벤트
         BtnSeminarControl.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,12 +87,13 @@ public class CustomControlLVAdapter extends BaseAdapter {
                 context.startActivity(intent);
             }
         });
+
         return convertView;
     }
 
     public void init(View convertView, final int position){
         //textview에 현재 position의 문자열 추가
-        TextView SeminarRoomName=(TextView)convertView.findViewById(R.id.SeminarListText);
+        SeminarRoomName=(TextView)convertView.findViewById(R.id.SeminarListText);
         SeminarRoomName.setText(seminarRoomNameList.get(position));
 
         //버튼 매핑
@@ -81,5 +103,11 @@ public class CustomControlLVAdapter extends BaseAdapter {
     public void addRoomId(int id) { seminarRoomIdList.add(id); }
     public void addRoomName(String item){
         seminarRoomNameList.add(item);
+    }
+
+    public class ControlViewHolder{
+        public int id;
+        public TextView controlTxt;
+        public Button controlBtn;
     }
 }

@@ -22,7 +22,7 @@ public class RestRequestHelper {
     private RestAdapter restAdapter;
     private RestRequest restRequest;
 
-    private static final String url = "http://10.30.115.90:8081/smartdoorlock";
+    private static final String url = "http://192.168.23.111:8081/smartdoorlock";
 
     public static RestRequestHelper newInstance(){
         if(instance == null){
@@ -101,6 +101,11 @@ public class RestRequestHelper {
         @POST("/requestlist")
         void requestList(@Field("date") String date ,
                          Callback<JsonObject> requestListCallback);
+
+        @FormUrlEncoded
+        @POST("/mybooking")
+        void myBooking(@Field("info") JsonObject info,
+                       Callback<JsonObject> mybookingListCallback);
 
         @FormUrlEncoded
         @POST("/bookingfilter")

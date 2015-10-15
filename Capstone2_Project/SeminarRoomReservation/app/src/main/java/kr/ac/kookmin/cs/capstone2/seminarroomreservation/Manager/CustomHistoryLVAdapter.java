@@ -50,13 +50,34 @@ public class CustomHistoryLVAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final Context context = parent.getContext();
-
+        HistoryViewHolder historyViewHolder;
         if(convertView == null ){
             LayoutInflater inflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView=inflater.inflate(R.layout.custom_listview_history, parent, false);
 
+            //초기 설정 부분
             init(convertView, position);
+
+            //View holder 설정
+            historyViewHolder = new HistoryViewHolder();
+            historyViewHolder.roomName = (TextView)convertView.findViewById(R.id.list_history_roomId);
+            historyViewHolder.date = (TextView)convertView.findViewById(R.id.list_history_time);
+            historyViewHolder.userId = (TextView)convertView.findViewById(R.id.list_history_userId);
+            historyViewHolder.command = (TextView)convertView.findViewById(R.id.list_history_command);
+
+            convertView.setTag(historyViewHolder);
         }
+        else
+        {
+            historyViewHolder = (HistoryViewHolder) convertView.getTag();
+        }
+
+        historyViewHolder.roomName.setText(roomIdArray.get(position));
+        historyViewHolder.date.setText(dateArray.get(position));
+        historyViewHolder.userId.setText(userIdArray.get(position));
+        historyViewHolder.command.setText(commandArray.get(position));
+
+        //내용 설정
         return convertView;
     }
 
@@ -91,5 +112,13 @@ public class CustomHistoryLVAdapter extends BaseAdapter {
         dateArray.clear();
         userIdArray.clear();
         commandArray.clear();
+    }
+
+    //View holder Class
+    public class HistoryViewHolder{
+        public TextView roomName;
+        public TextView userId;
+        public TextView date;
+        public TextView command;
     }
 }

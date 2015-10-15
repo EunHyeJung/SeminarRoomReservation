@@ -171,7 +171,7 @@ public class AccessHistoryFragment extends Fragment implements AdapterView.OnIte
         while(iterator.hasNext())
         {
             int key = iterator.next();
-            spinnerAdapter.add(room.get(key).toString());
+            spinnerAdapter.add(room.get(key).toString().replace("\"",""));
         }
         spinnerAdapter.notifyDataSetChanged();
     }
