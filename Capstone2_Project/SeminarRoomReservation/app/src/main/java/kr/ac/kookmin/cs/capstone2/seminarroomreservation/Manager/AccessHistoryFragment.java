@@ -161,8 +161,9 @@ public class AccessHistoryFragment extends Fragment implements AdapterView.OnIte
         spinnerAdapter = new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_list_item_1,entry);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         roomSpinner.setAdapter(spinnerAdapter);
-        String[] roomList = RoomInfo.getRoomNames();
+      //  String[] roomList = RoomInfo.getRoomNames();
 
+/*
         if(roomList.length >0 ){
             for(int i=0 ; i < roomList.length ; i++){
                 spinnerAdapter.add(roomList[i]);
@@ -170,6 +171,7 @@ public class AccessHistoryFragment extends Fragment implements AdapterView.OnIte
 
             spinnerAdapter.notifyDataSetChanged();// 스피너 갱신
         }
+*/
     }
 
 }

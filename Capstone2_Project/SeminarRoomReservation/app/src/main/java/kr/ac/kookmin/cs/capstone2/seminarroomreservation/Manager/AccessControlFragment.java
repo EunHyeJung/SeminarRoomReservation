@@ -48,13 +48,13 @@ public class AccessControlFragment extends Fragment {
 
     //리스트에 방 내용 추가
     public void addSeminarList(){
-        String[] roomList = RoomInfo.getRoomNames();
+   /*     String[] roomList = RoomInfo.getRoomNames();
 
         if(roomList.length > 0){
             for(int i =0 ; i < roomList.length ; i++){
                 listAdapter.add(roomList[i]);
             }
             listAdapter.notifyDataSetChanged();//리스트 갱신
-        }
+      }*/
     }
 }

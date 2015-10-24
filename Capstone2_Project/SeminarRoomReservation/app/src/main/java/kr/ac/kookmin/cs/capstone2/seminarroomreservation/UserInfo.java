@@ -10,13 +10,15 @@ import kr.ac.kookmin.cs.capstone2.seminarroomreservation.SharedPreferenceClass;
  */
 public class UserInfo {
     private static int id;
+    private static int userMode;
     private static String userId;
     private static String password;
 
 
-    public static void setUserInfo(int _id){
+    public static void setUserInfo(int _id, int _userMode){
         id = _id;
-        SharedPreferenceClass.putValue("id", id);
+        userMode = _userMode;
+        SharedPreferenceClass.putValue("_id", id);
     }
 
     public static void setUserInfo(String _userId, String _password) {
@@ -38,5 +40,7 @@ public class UserInfo {
     public String getPassword() {
         return password;
     }
+
+    public static int getUserMode() { return userMode; }
 
 }

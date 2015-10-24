@@ -8,9 +8,6 @@ import java.security.NoSuchAlgorithmException;
  */
 public class EncryptionClass {
     public  static String testSHA256(String str) {
-        System.out.println("str : "+str);
-        System.out.println("str : "+str.getBytes());
-
         String SHA = "";
 
         try {
@@ -22,7 +19,6 @@ public class EncryptionClass {
                 sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
             }
             SHA = sb.toString();
-            System.out.println("testing . . .");
 
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();

@@ -1,13 +1,15 @@
 package kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
 
@@ -57,4 +59,6 @@ public class CustomListAdapter extends BaseAdapter {
         TextView listItem =  (TextView) convertView.findViewById(R.id.textView_listItem);
         listItem.setText(inputValues[position]);
     }
+
+
 }

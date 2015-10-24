@@ -21,12 +21,13 @@ public class CustomPagerAdapter extends FragmentPagerAdapter {
     private FragmentManager fragmentManager;
     private Map<Integer, String> fragmentTags;
     private int userId;
+    private int userMode;
 
     public CustomPagerAdapter(FragmentManager fm) {
         super(fm);
 
-        userId = SharedPreferenceClass.getValue("userId",0);
-
+        userMode = UserInfo.getUserMode();
+        System.out.println("사용자모드 : "+userMode);
         fragmentManager = fm;
         fragmentTags = new HashMap<Integer, String>();
     }
@@ -34,7 +35,7 @@ public class CustomPagerAdapter extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
 
-        if(userId == 1) {
+        if(userMode == 1) {
             switch (position) {         // 일반 사용자
                 case 0:
                     return "이용현황";
@@ -64,8 +65,8 @@ public class CustomPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
 
         Fragment currentFragment = null;
-
-        if(userId == 1) {           // 일반사용자
+        System.out.println("사용자 모드 : "+userMode);
+        if(userMode == 1) {           // 일반사용자
             switch (position) {
                 case 0:
                     currentFragment = new UsingStatusFragment();
