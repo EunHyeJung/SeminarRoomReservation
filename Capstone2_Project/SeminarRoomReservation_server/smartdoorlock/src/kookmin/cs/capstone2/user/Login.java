@@ -35,7 +35,6 @@ public class Login extends HttpServlet {
 		String text_id = request.getParameter("id");
 		String password = request.getParameter("password");
 
-		String jocl = "jdbc:apache:commons:dbcp:/pool1"; //커넥션 풀을 위한 DBCP 설정 파일
 		Connection conn = null; //DB 연결을 위한 Connection 객체
 		Statement stmt = null; //ready for DB Query result
 		PrintWriter pw = response.getWriter();
@@ -49,7 +48,7 @@ public class Login extends HttpServlet {
 		
 		try {
 			
-			conn = DriverManager.getConnection(jocl); //커넥션 풀에서 대기 상태인 커넥션을 얻는다
+			conn = DriverManager.getConnection(StaticVariables.JOCL); //커넥션 풀에서 대기 상태인 커넥션을 얻는다
 			stmt = conn.createStatement(); //DB에 SQL문을 보내기 위한 Statement를 생성
 			
 			//request로 들어온 id와 password가 일치하는 회원을 찾는 질의문

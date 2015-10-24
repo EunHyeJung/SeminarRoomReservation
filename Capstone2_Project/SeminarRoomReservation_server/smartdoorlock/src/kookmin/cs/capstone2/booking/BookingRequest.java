@@ -27,12 +27,12 @@ import kookmin.cs.capstone2.common.StaticVariables;
 import kookmin.cs.capstone2.common.StaticMethods;
 
 public class BookingRequest extends HttpServlet {
-	
+
 	/*
 	 * request : 세미나실 id, 신청자 id, 날짜(yyyy-MM-dd), 시작시간, 끝시간, 예약 목적, 세미나 참석자 id
 	 * response : 회원 등록 성공 여부
 	 */
-	
+
 	@Override
 	protected void service(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
@@ -40,107 +40,68 @@ public class BookingRequest extends HttpServlet {
 		// request, response 인코딩 방식 지정
 		request.setCharacterEncoding("utf-8");
 		response.setContentType("text/html;charset=utf-8");
-		
-		//RequestBody to String
+
+		// RequestBody to String
 		String requestString = StaticMethods.getBody(request);
-		
+
 		// request 파라미터에서 json 파싱
-		JSONObject jsonObject = (JSONObject)JSONValue.parse(requestString);
-		JSONObject requestJSON = (JSONObject)jsonObject.get("bookingRequest");
-		
+		JSONObject jsonObject = (JSONObject) JSONValue.parse(requestString);
+		JSONObject requestJSON = (JSONObject) jsonObject.get("bookingRequest");
+
 		String roomId = requestJSON.get("roomId").toString();
 		String userId = requestJSON.get("userId").toString();
 		String date = requestJSON.get("date").toString();
 		String startTime = requestJSON.get("startTime").toString();
 		String endTime = requestJSON.get("endTime").toString();
 		String context = requestJSON.get("context").toString();
-		JSONArray participantsArray = (JSONArray)requestJSON.get("participants");
-		
-		System.out.println(roomId + " " + userId + " " + date + " " + startTime + " " + endTime + " " + context);
-		
-		//JSONObject for result
+		JSONArray participantsJSONArray = (JSONArray) requestJSON.get("participants");
+
+		System.out.println(roomId + " " + userId + " " + date + " " + startTime
+				+ " " + endTime + " " + context);
+
+		// JSONObject for result
 		JSONObject resultJSON = new JSONObject();
 
-		String jocl = "jdbc:apache:commons:dbcp:/pool1"; //커넥션 풀을 위한 DBCP 설정 파일
-		Connection conn = null; //DB 연결을 위한 Connection 객체
-		Statement stmt = null; //ready for DB Query result
+		Connection conn = null; // DB 연결을 위한 Connection 객체
+		Statement stmt = null; // ready for DB Query result
 		PrintWriter pw = response.getWriter();
 		ResultSet rs = null; // SQL Query 결과를 담을 테이블 형식의 객체
-		
-		try {
-			
-			conn = DriverManager.getConnection(jocl); //커넥션 풀에서 대기 상태인 커넥션을 얻는다
-			stmt = conn.createStatement(); //DB에 SQL문을 보내기 위한 Statement를 생성
-			
-			//오토커밋을 false로 지정하여 트랜잭션 조건을 맞춘다
-			conn.setAutoCommit(false);
-			
-			String sql;
-			
-			//table reservationinfo에 데이터 insert
-			sql = "insert into reservationinfo(room_id, user_id, date, start_time, end_time, context) "
-					+ "values ("+ roomId + "," + userId + ", '" + date + "', '" + startTime + "', '" + endTime + "', '" + context + "');";
 
-			//insert 후 생성된 고유 id값 받아오기
+		try {
+
+			conn = DriverManager.getConnection(StaticVariables.JOCL); // 커넥션 풀에서 대기 상태인 커넥션을 얻는다
+			stmt = conn.createStatement(); // DB에 SQL문을 보내기 위한 Statement를 생성
+
+			// 오토커밋을 false로 지정하여 트랜잭션 조건을 맞춘다
+			conn.setAutoCommit(false);
+
+			// table reservationinfo에 데이터 insert
+			String sql;
+			sql = "insert into reservationinfo(room_id, user_id, date, start_time, end_time, context) "
+					+ "values (" + roomId+ "," + userId+ ", '" + date + "', '" + startTime + "', '" + endTime+ "', '"+ context+ "');";
+
+			// insert 후 생성된 고유 id값(key) 받아오기
 			stmt.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
 			rs = stmt.getGeneratedKeys();
-			while(rs.next()) {
-				ResultSetMetaData rsMetaData = (ResultSetMetaData)rs.getMetaData();
-			      int columnCount = rsMetaData.getColumnCount();
+			rs.next();
+			int key = rs.getInt(1);
 
-			      for (int i = 1; i <= columnCount; i++) {
-			        String key = rs.getString(i);
-			        System.out.println("key " + i + " is " + key);
-			      }
+			// participantsArray의 회원들, table seminarmember에 insert하기
+			sql = "insert into seminarmember(id, user_id) " + "values ";
+			JSONObject participantObject = new JSONObject();
+			String participantId = "";
+			for (int i = 0; i < participantsJSONArray.size(); i++) {
+				participantObject = (JSONObject) participantsJSONArray.get(i);
+				participantId = participantObject.get("id").toString();
+				sql += "(" + key + "," + participantId + ")";
+				if ( i != participantsJSONArray.size() - 1 ) 
+					sql += ", ";
 			}
-			conn.commit();
-					
-					/*rs = stmt.executeQuery(sql);
-					if(rs.next()){
-						
-						int reservationId = rs.getInt("id"); //예약 고유 번호
-						String participantStrId = null; //participantsArray에서 가져올 회의 참가자들의 text_id
-						JSONObject object = new JSONObject(); //participantsArray의 객체 요소
-						int participantId; //회의 참가자들의 고유 id
-						
-						//회의 참가자들의 고유 id를 검색할 질의
-						sql = "select id from user where text_id=?;";
-						
-						//회의 참가자 정보를 seminarmember table에 insert
-						String insertSql = "insert into seminarmember values(reservationId, ?);";
-						
-						PreparedStatement selectStmt = conn.prepareStatement(sql),
-								insertStmt = conn.prepareStatement(insertSql);
-						
-						for(int i = 0 ; i < participantsArray.size() ; i++){
-							object = (JSONObject)participantsArray.get(i); //JSONObject 배열 요소
-							participantStrId = (String)object.get("id"); //전달된 회의 참석자 text id
-							selectStmt.setString(1, participantStrId);
-							rs = selectStmt.executeQuery();
-							participantId = rs.getInt("id"); //participantStrId를 가진 유저의 고유 id
-							insertStmt.setInt(1, participantId);
-							insertStmt.executeUpdate(); //table 'seminarmember'에 insert
-							
-							//clear for preparedStatement close()
-							selectStmt.clearParameters();
-							insertStmt.clearParameters();
-						}
-						
-						//preparedStatement close
-						selectStmt.close();
-						insertStmt.close();
-						
-						conn.commit(); //트랜젝션
-						resultJSON.put("status", StaticVariables.SUCCESS);
-					}
-				} else {
-					conn.rollback();
-					resultJSON.put("status", StaticVariables.FAIL);
-				}
-			} else {
-				conn.rollback();
-				resultJSON.put("status", StaticVariables.FAIL);
-			}*/
+			System.out.println(sql);
+			if(stmt.executeUpdate(sql) != 0){ // the row count for SQL DML stmt
+				conn.commit();
+				resultJSON.put("status", StaticVariables.SUCCESS);
+			}
 		} catch (SQLException se) {
 			System.out.println(se.getMessage());
 			try {
