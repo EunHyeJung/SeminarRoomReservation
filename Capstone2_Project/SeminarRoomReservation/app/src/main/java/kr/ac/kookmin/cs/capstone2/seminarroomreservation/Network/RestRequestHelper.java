@@ -2,12 +2,10 @@ package kr.ac.kookmin.cs.capstone2.seminarroomreservation.Network;
 
 import com.google.gson.JsonObject;
 
-import org.json.JSONObject;
-
-import java.util.Date;
-
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation.TransmissionData;
 import retrofit.Callback;
 import retrofit.RestAdapter;
+import retrofit.http.Body;
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
 import retrofit.http.POST;
@@ -22,7 +20,7 @@ public class RestRequestHelper {
     private RestAdapter restAdapter;
     private RestRequest restRequest;
 
-    private static final String url = "http://10.30.115.90:8081/smartdoorlock";
+    private static final String url = "http://192.168.1.100:8081/smartdoorlock";
 
     public static RestRequestHelper newInstance(){
         if(instance == null){
@@ -65,16 +63,15 @@ public class RestRequestHelper {
                    Callback<JsonObject> loginCallback
         );
 
-        @FormUrlEncoded
+    //    @FormUrlEncoded
         @POST("/usingstatus")
-        void receiveUsingStatus(@Field("date")String date,
+        void receiveUsingStatus(@Body TransmissionData transmissionData,
                                 Callback<JsonObject> usingStatusCallback
         );
 
         @FormUrlEncoded
         @POST("/roomstatus")
-        void roomStatus(@Field("id") int id,
-                        @Field("roomName")String roomName,
+        void roomStatus(@Field("roomName")String roomName,
                         Callback<JsonObject> roomStatusCallback);
 
         @FormUrlEncoded
@@ -123,16 +120,16 @@ public class RestRequestHelper {
     }
 
 
-    public void receiveUsingStatue(String date, Callback<JsonObject > usingStatusCallback){
-        restRequest.receiveUsingStatus(date, usingStatusCallback);
+    public void receiveUsingStatue(TransmissionData transmissionData, Callback<JsonObject> usingStatusCallback){
+        restRequest.receiveUsingStatus(transmissionData, usingStatusCallback);
     }
 
     public void roomList(String id,Callback<String> roomListCallback){
         restRequest.roomList(id, roomListCallback);
     }
 
-    public void roomStatus(int id, String roomName, Callback<JsonObject> roomStatusCallback){
-        restRequest.roomStatus(id, roomName, roomStatusCallback);
+    public void roomStatus(String roomName, Callback<JsonObject> roomStatusCallback){
+        restRequest.roomStatus(roomName, roomStatusCallback);
     }
 
     public void controlDoor(int id, String doorName, boolean status, Callback<JsonObject> controlDoorCallback ){

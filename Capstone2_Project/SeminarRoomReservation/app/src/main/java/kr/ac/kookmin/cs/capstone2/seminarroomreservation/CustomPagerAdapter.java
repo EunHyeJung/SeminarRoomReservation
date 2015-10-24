@@ -9,9 +9,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Manager.AccessControlFragment;
-import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Manager.AccessHistoryFragment;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation.ReservationStatusFragment;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation.UsingStatusFragment;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.User.KeyFragment;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.User.SettingFragment;
 
 /**
@@ -22,12 +22,13 @@ public class CustomPagerAdapter extends FragmentPagerAdapter {
     private FragmentManager fragmentManager;
     private Map<Integer, String> fragmentTags;
     private int userId;
+    private int userMode;
 
     public CustomPagerAdapter(FragmentManager fm) {
         super(fm);
 
-        userId = SharedPreferenceClass.getValue("userId",0);
-
+        userMode = UserInfo.getUserMode();
+        System.out.println("사용자모드 : "+userMode);
         fragmentManager = fm;
         fragmentTags = new HashMap<Integer, String>();
     }
@@ -35,7 +36,7 @@ public class CustomPagerAdapter extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
 
-        if(userId == 1) {
+        if(userMode == 1) {
             switch (position) {         // 일반 사용자
                 case 0:
                     return "이용현황";
@@ -65,17 +66,17 @@ public class CustomPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
 
         Fragment currentFragment = null;
-
-        if(userId == 1) {           // 일반사용자
+        System.out.println("사용자 모드 : "+userMode);
+        if(userMode == 1) {           // 일반사용자
             switch (position) {
                 case 0:
                     currentFragment = new UsingStatusFragment();
                     break;
                 case 1:
-                    currentFragment = new SettingFragment();
+                    currentFragment = new ReservationStatusFragment();
                     break;
                 case 2:
-                    currentFragment = new SettingFragment();
+                    currentFragment = new KeyFragment();
                     break;
                 case 3:
                     currentFragment = new SettingFragment();
@@ -93,7 +94,7 @@ public class CustomPagerAdapter extends FragmentPagerAdapter {
                     currentFragment = new AccessControlFragment();
                     break;
                 case 3:
-                    currentFragment = new AccessHistoryFragment();
+                    currentFragment = new SettingFragment();
             }
         }
         return currentFragment;

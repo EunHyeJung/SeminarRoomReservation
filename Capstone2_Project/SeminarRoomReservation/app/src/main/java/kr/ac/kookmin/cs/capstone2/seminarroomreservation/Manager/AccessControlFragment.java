@@ -9,9 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import java.util.HashMap;
-import java.util.Iterator;
-
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Network.RestRequestHelper;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.RoomInfo;
@@ -39,7 +36,7 @@ public class AccessControlFragment extends Fragment {
         View view=inflater.inflate(R.layout.fragment_aceess_control, container, false);
         requestHelper=RestRequestHelper.newInstance();
         SeminarList = (ListView)view.findViewById(R.id.SeminarList);
-        listAdapter = new CustomControlLVAdapter();
+        listAdapter=new CustomControlLVAdapter();
 
         SeminarList.setAdapter(listAdapter);
 
@@ -51,15 +48,13 @@ public class AccessControlFragment extends Fragment {
 
     //리스트에 방 내용 추가
     public void addSeminarList(){
-        HashMap room = RoomInfo.roomNames;
-        Iterator<Integer> iterator = room.keySet().iterator();
+   /*     String[] roomList = RoomInfo.getRoomNames();
 
-        Log.d("Access Control ", room.keySet().toString());
-
-        while(iterator.hasNext()){
-            int key = iterator.next();
-            listAdapter.addRoomId(key);
-            listAdapter.addRoomName(room.get(key).toString());
-        }
+        if(roomList.length > 0){
+            for(int i =0 ; i < roomList.length ; i++){
+                listAdapter.add(roomList[i]);
+            }
+            listAdapter.notifyDataSetChanged();//리스트 갱신
+      }*/
     }
 }

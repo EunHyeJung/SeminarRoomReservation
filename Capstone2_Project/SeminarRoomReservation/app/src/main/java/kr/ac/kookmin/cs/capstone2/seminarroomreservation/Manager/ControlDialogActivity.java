@@ -111,6 +111,8 @@ public class    ControlDialogActivity extends AppCompatActivity {
         CloseBtn=(Button)findViewById(R.id.btn_DoorClose);
         DoorStatusText=(TextView)findViewById(R.id.text_DoorStatus);
 
+        Log.d("Controld Dialog ID", id+"");
+
         //방 상태를 받아오는 함수를 실행
         requestHelper.roomStatus(id, RoomName, new Callback<JsonObject>() {
             @Override
