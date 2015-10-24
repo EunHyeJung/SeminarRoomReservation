@@ -1,4 +1,4 @@
-package kr.ac.kookmin.cs.capstone2.seminarroomreservation.User;
+package kr.ac.kookmin.cs.capstone2.seminarroomreservation;
 
 import android.app.Activity;
 import android.content.Context;
