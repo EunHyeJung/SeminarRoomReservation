@@ -121,4 +121,22 @@
 		<servlet-name>kookmin.cs.capstone2.booking.BookingFilter</servlet-name>
 		<url-pattern>/bookingfilter</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>kookmin.cs.capstone2.user.test</servlet-name>
+		<servlet-class>kookmin.cs.capstone2.user.test</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>kookmin.cs.capstone2.user.test</servlet-name>
+		<url-pattern>/test</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>kookmin.cs.capstone2.mypage.MyBookingList</servlet-name>
+		<servlet-class>kookmin.cs.capstone2.mypage.MyBookingList</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>kookmin.cs.capstone2.mypage.MyBookingList</servlet-name>
+		<url-pattern>/mybooking</url-pattern>
+	</servlet-mapping>
 </web-app>

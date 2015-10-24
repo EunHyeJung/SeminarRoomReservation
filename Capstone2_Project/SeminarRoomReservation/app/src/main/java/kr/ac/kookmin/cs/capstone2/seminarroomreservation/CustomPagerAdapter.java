@@ -11,6 +11,7 @@ import java.util.Map;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Manager.AccessControlFragment;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation.ReservationStatusFragment;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation.UsingStatusFragment;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.User.KeyFragment;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.User.SettingFragment;
 
 /**
@@ -72,10 +73,10 @@ public class CustomPagerAdapter extends FragmentPagerAdapter {
                     currentFragment = new UsingStatusFragment();
                     break;
                 case 1:
-                    currentFragment = new SettingFragment();
+                    currentFragment = new ReservationStatusFragment();
                     break;
                 case 2:
-                    currentFragment = new SettingFragment();
+                    currentFragment = new KeyFragment();
                     break;
                 case 3:
                     currentFragment = new SettingFragment();
