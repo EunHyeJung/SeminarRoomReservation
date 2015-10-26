@@ -155,4 +155,8 @@ public class RestRequestHelper {
     public void bookingFilter(int id, int command, Callback<JsonObject> bookingFilterCallback){
         restRequest.bookingFilter(id, command, bookingFilterCallback);
     }
+
+    public void myBooking(JsonObject info, Callback<JsonObject> mybookingListCallback){
+        restRequest.myBooking(info, mybookingListCallback);
+    }
 }

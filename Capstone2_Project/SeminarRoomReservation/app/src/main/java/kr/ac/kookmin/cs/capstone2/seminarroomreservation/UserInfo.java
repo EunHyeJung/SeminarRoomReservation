@@ -33,7 +33,7 @@ public class UserInfo {
         return id;
     }
 
-    public String getUserId() {
+    public static String getUserId() {
         return userId;
     }
 
