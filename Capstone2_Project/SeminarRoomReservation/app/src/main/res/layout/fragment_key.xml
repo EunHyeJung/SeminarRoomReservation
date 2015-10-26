@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/background1"
     tools:context="kr.ac.kookmin.cs.capstone2.seminarroomreservation.User.KeyFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -10,17 +11,27 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView android:layout_width="match_parent" android:layout_height="match_parent"
-            android:text="@string/hello_blank_fragment" />
+        <TextView
+            android:id="@+id/text_smart_text"
+            android:paddingTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/hello_blank_fragment"
+            android:textSize="15pt"
+            android:gravity="center"/>
     </LinearLayout>
 
     <LinearLayout
+        android:padding="30dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <Button
+        <ImageButton
+            android:id="@+id/button_smartkey"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="스마트키"/>
+            android:src="@drawable/smartKey"
+            android:scaleType="fitXY"
+            />
     </LinearLayout>
 
 </LinearLayout>
