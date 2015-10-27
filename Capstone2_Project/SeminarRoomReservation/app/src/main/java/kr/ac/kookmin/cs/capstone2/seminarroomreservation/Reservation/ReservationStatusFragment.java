@@ -17,6 +17,7 @@ import com.google.gson.JsonObject;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Manager.AccessHistoryFragment;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Network.RestRequestHelper;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.RoomInfo;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.UserInfo;
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -37,7 +38,7 @@ public class ReservationStatusFragment extends Fragment {
     Button btnDate;
     Button btnAll;
 
-    JsonObject info;
+    TransmissionUserInfo info;
 
     public ReservationStatusFragment() {
         // Required empty public constructor
@@ -60,7 +61,6 @@ public class ReservationStatusFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 date = "ALL";
-                Log.d("RSF date1", date);
                 getReservationData();
             }
         });
@@ -98,11 +98,14 @@ public class ReservationStatusFragment extends Fragment {
         btnDate = (Button)view.findViewById(R.id.btn_reservation_date);
         btnAll = (Button)view.findViewById(R.id.btn_reservation_showall);
 
+       if(UserInfo.getUserMode() == 1){
+            btnDate.setVisibility(View.GONE);
+            btnAll.setVisibility(View.GONE);
+        }
+
         date = "ALL";
 
-        info = new JsonObject();
-        jsonInfo(info);
-
+        info = new TransmissionUserInfo(UserInfo.getId());
     }
 
     public void getReservationData(){
@@ -114,9 +117,8 @@ public class ReservationStatusFragment extends Fragment {
             restRequestHelper.requestList(date, new Callback<JsonObject>() {
                 @Override
                 public void success(JsonObject jsonObject, Response response) {
-                    addList(jsonObject);
+                   addList(jsonObject);
                 }
-
                 @Override
                 public void failure(RetrofitError error) {
                     Log.e("Retrofit Error : ", error.toString());
@@ -130,48 +132,50 @@ public class ReservationStatusFragment extends Fragment {
                 public void success(JsonObject jsonObject, Response response) {
                     addList(jsonObject);
                 }
-
                 @Override
                 public void failure(RetrofitError error) {
-
+                    Log.e("Retrofit Error : ", error.toString());
                 }
             });
         }
     }
 
+    /**
+     * ListView에 예약 현황을 추가하는 함수
+     * */
     public void addList(JsonObject jsonObject) {
         try {
             JsonObject responseData = jsonObject.getAsJsonObject("responseData");
             JsonArray requestList = responseData.getAsJsonArray("requestList");
 
             for (int i = 0; i < requestList.size(); i++) {
-                //requestList.get(i).getAsJsonObject() 변수로 빼서 사용
                 JsonObject tmpObject = requestList.get(i).getAsJsonObject();
+                int mode = UserInfo.getUserMode();
 
                 //add 작업
+                if(mode == 1)//일반 사용자의 경우
+                {
+                    String roomId = RoomInfo.getRoomName(tmpObject.getAsJsonPrimitive("roomId").getAsInt());
+                    reservationLVAdapter.addUser(UserInfo.getUserId());
+                    reservationLVAdapter.addRoom(roomId.replace("\"",""));
+                }else{//관리자의 경우
+                    reservationLVAdapter.addUser(tmpObject.getAsJsonPrimitive("userId").getAsString());
+                    reservationLVAdapter.addRoom(tmpObject.getAsJsonPrimitive("roomId").getAsString());
+                }
+
+                //공통 항목
                 reservationLVAdapter.addNum(tmpObject.getAsJsonPrimitive("reservationId").getAsInt());
-                reservationLVAdapter.addUser(tmpObject.getAsJsonPrimitive("userId").getAsString());
-                reservationLVAdapter.addRoom(tmpObject.getAsJsonPrimitive("roomId").getAsString());
                 reservationLVAdapter.addStartTime(tmpObject.getAsJsonPrimitive("startTime").getAsString());
                 reservationLVAdapter.addEndTime(tmpObject.getAsJsonPrimitive("endTime").getAsString());
                 reservationLVAdapter.addDate(tmpObject.getAsJsonPrimitive("date").getAsString());
             }
 
+            reservationLVAdapter.notifyDataSetChanged();// 데이터 변경
+
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        reservationLVAdapter.notifyDataSetChanged();// 데이터 변경
     }
 
-    public void jsonInfo(JsonObject info){
-        JsonObject jsonObject = new JsonObject();
-
-        jsonObject.addProperty("Id", UserInfo.getUserId());
-        jsonObject.addProperty("date", "ALL");
-
-        info.add("info", jsonObject);
-
-        Log.d("RSF", info.toString());
-    }
 }

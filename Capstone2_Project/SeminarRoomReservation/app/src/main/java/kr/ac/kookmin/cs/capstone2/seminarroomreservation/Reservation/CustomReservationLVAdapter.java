@@ -18,6 +18,7 @@ import java.util.ArrayList;
 
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Network.RestRequestHelper;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.UserInfo;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -187,6 +188,12 @@ public class CustomReservationLVAdapter extends BaseAdapter {
 
         btnOkay = (Button)convertView.findViewById(R.id.item_reservokay_button);
         btnCancel = (Button)convertView.findViewById(R.id.item_reservcancel_button);
+
+        if(UserInfo.getUserMode() == 1)
+        {
+            btnOkay.setVisibility(View.GONE);
+            btnCancel.setVisibility(View.GONE);
+        }
     }
 
     //고유 번호 추가

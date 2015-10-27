@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/background1"
+    android:background="@drawable/background2"
     tools:context="kr.ac.kookmin.cs.capstone2.seminarroomreservation.User.KeyFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -22,14 +22,17 @@
     </LinearLayout>
 
     <LinearLayout
-        android:padding="30dp"
+        android:paddingTop="35dp"
+        android:paddingRight="40dp"
+        android:paddingLeft="40dp"
+        android:paddingBottom="50dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <ImageButton
             android:id="@+id/button_smartkey"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/smartKey"
+            android:src="@drawable/smartkey"
             android:scaleType="fitXY"
             />
     </LinearLayout>

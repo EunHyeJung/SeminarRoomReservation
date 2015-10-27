@@ -3,6 +3,7 @@ package kr.ac.kookmin.cs.capstone2.seminarroomreservation.Network;
 import com.google.gson.JsonObject;
 
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation.TransmissionData;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation.TransmissionUserInfo;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.http.Body;
@@ -20,7 +21,7 @@ public class RestRequestHelper {
     private RestAdapter restAdapter;
     private RestRequest restRequest;
 
-    private static final String url = "http://192.168.1.100:8081/smartdoorlock";
+    private static final String url = "http://10.30.115.168:8081/smartdoorlock";
 
     public static RestRequestHelper newInstance(){
         if(instance == null){
@@ -71,7 +72,8 @@ public class RestRequestHelper {
 
         @FormUrlEncoded
         @POST("/roomstatus")
-        void roomStatus(@Field("roomName")String roomName,
+        void roomStatus(@Field("id") int id,
+                        @Field("roomName")String roomName,
                         Callback<JsonObject> roomStatusCallback);
 
         @FormUrlEncoded
@@ -99,11 +101,20 @@ public class RestRequestHelper {
         void requestList(@Field("date") String date ,
                          Callback<JsonObject> requestListCallback);
 
+        //@FormUrlEncoded
+        @POST("/mybooking")
+        void myBooking(@Body TransmissionUserInfo info,
+                       Callback<JsonObject> mybookingListCallback);
+
         @FormUrlEncoded
         @POST("/bookingfilter")
         void bookingFilter(@Field("id") int id,
                            @Field("command") int command,
                            Callback<JsonObject> bookingFilterCallback);
+
+        @POST("/smartkey")
+        void getSmartKey(@Body TransmissionUserInfo info,
+                         Callback<JsonObject> getSmartKeyCallback);
 
 
     }
@@ -128,8 +139,8 @@ public class RestRequestHelper {
         restRequest.roomList(id, roomListCallback);
     }
 
-    public void roomStatus(String roomName, Callback<JsonObject> roomStatusCallback){
-        restRequest.roomStatus(roomName, roomStatusCallback);
+    public void roomStatus(int id, String roomName, Callback<JsonObject> roomStatusCallback){
+        restRequest.roomStatus(id, roomName, roomStatusCallback);
     }
 
     public void controlDoor(int id, String doorName, boolean status, Callback<JsonObject> controlDoorCallback ){
@@ -148,7 +159,11 @@ public class RestRequestHelper {
         restRequest.bookingFilter(id, command, bookingFilterCallback);
     }
 
-    public void myBooking(JsonObject info, Callback<JsonObject> mybookingListCallback){
+    public void myBooking(TransmissionUserInfo info, Callback<JsonObject> mybookingListCallback){
         restRequest.myBooking(info, mybookingListCallback);
+    }
+
+    public void getSmartKey(TransmissionUserInfo info, Callback<JsonObject> getSmartKeyCallback){
+        restRequest.getSmartKey(info, getSmartKeyCallback);
     }
 }
