@@ -25,18 +25,22 @@ public class CalendarDialog extends Dialog implements DialogInterface.OnClickLis
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.dialog_calendar);
 
-
         DatePicker datePicker = (DatePicker) findViewById(R.id.datepicker);
-        datePicker.init(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth(),
+        datePicker.init(UsingStatusFragment.year,UsingStatusFragment.month, UsingStatusFragment.day,
+
                 new DatePicker.OnDateChangedListener() {
                     @Override
                     public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        UsingStatusFragment.year = year;
+                        UsingStatusFragment.month = monthOfYear;
+                        UsingStatusFragment.day = dayOfMonth;
                         UsingStatusFragment.date = year+"-"+String.format("%02d",(monthOfYear+1)) +"-"+String.format("%02d", dayOfMonth);
                         AccessHistoryFragment.date = UsingStatusFragment.date;
                         dismiss();
                     }
                 });
     }
+
 
     @Override
     public void onClick(DialogInterface dialog, int which) {

@@ -28,15 +28,13 @@
         <activity
             android:name=".Join.JoinActivity"
             android:label="@string/title_activity_join" />
-        <activity
-            android:name=".Reservation.ReservationFormActivity"
-          />
+        <activity android:name=".Reservation.ReservationFormActivity" />
         <activity
             android:name=".Manager.ControlDialogActivity"
             android:label="@string/title_activity_control_dialog"
             android:theme="@style/Theme.AppCompat.Dialog" >
-
         </activity>
+
     </application>
 
 </manifest>
