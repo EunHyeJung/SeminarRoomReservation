@@ -114,7 +114,7 @@ public class    ControlDialogActivity extends AppCompatActivity {
         Log.d("Controld Dialog ID", id+"");
 
         //방 상태를 받아오는 함수를 실행
-        requestHelper.roomStatus(id, RoomName, new Callback<JsonObject>() {
+     /*   requestHelper.roomStatus(id, RoomName, new Callback<JsonObject>() {
             @Override
             public void success(JsonObject jsonObject, Response response) {
                 int status = jsonObject.get("status").getAsInt();
@@ -135,5 +135,6 @@ public class    ControlDialogActivity extends AppCompatActivity {
                 Log.e("Error : ",error.toString());
             }
         });
+        */
     }
 }

@@ -27,6 +27,42 @@
         android:layout_marginTop="2dp"
         />
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="90dp"
+        >
+        <CheckBox
+            android:id="@+id/checkbox_id"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="아이디저장"
+            android:textSize="11dp"
+            android:textColor="#80FFFFFF"
+            android:layout_marginLeft="10dp"
+            />
+        <CheckBox
+            android:id="@+id/checkbox_login"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginLeft="10dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="자동로그인"
+            android:textColor="#80FFFFFF"
+            android:textSize="11dp"
+            android:layout_marginLeft="10dp"
+            />
+    </LinearLayout>
+
 
     <Button
         android:id="@+id/button_login"
@@ -37,7 +73,7 @@
         android:textColor="#ff333333"
         android:background="#50FFFFFF"
         android:layout_gravity="center"
-        android:layout_marginTop="23dp"
+        android:layout_marginTop="15dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true" />
 
