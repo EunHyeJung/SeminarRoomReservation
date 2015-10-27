@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import kookmin.cs.capstone2.common.StaticVariables;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -32,8 +34,7 @@ public class RequestList extends HttpServlet {
 		// request 파라미터로 전송된 값 얻기
 		String date = request.getParameter("date");
 		System.out.println(date);
-		
-		String jocl = "jdbc:apache:commons:dbcp:/pool1"; //커넥션 풀을 위한 DBCP 설정 파일
+
 		Connection conn = null; //DB 연결을 위한 Connection 객체
 		Statement stmt = null; //ready for DB Query result
 		PrintWriter pw = response.getWriter();
@@ -46,7 +47,7 @@ public class RequestList extends HttpServlet {
 		JSONObject listInfo = new JSONObject(); //예약 신청 내역 한 개의 정보가 들어갈 JSONObject
 		
 		try {
-			conn = DriverManager.getConnection(jocl); //커넥션 풀에서 대기 상태인 커넥션을 얻는다
+			conn = DriverManager.getConnection(StaticVariables.JOCL); //커넥션 풀에서 대기 상태인 커넥션을 얻는다
 			stmt = conn.createStatement(); //DB에 SQL문을 보내기 위한 Statement를 생성
 			String sql = "";
 			

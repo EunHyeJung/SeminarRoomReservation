@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import kookmin.cs.capstone2.common.StaticMethods;
+import kookmin.cs.capstone2.common.StaticVariables;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -36,36 +37,37 @@ public class MyBookingList extends HttpServlet{
 		
 		//RequestBody to String
 		String requestString = StaticMethods.getBody(request);
+		System.out.println(requestString);
 		
 		// request 파라미터에서 json 파싱
-		JSONObject jsonObject = (JSONObject)JSONValue.parse(requestString);
-		JSONObject requestJSONObject = (JSONObject)jsonObject.get("Info");
+		JSONObject requestObject = (JSONObject)JSONValue.parse(requestString);
+		JSONObject infoJSONObject= (JSONObject) requestObject.get("info");
+		System.out.println(infoJSONObject.toJSONString());
+		String date = infoJSONObject.get("date").toString(); // get date
+		String userId = infoJSONObject.get("userId").toString(); // get userId
 		
-		String userId = requestJSONObject.get("userId").toString();
-		String date = requestJSONObject.get("date").toString();
-		
-		String jocl = "jdbc:apache:commons:dbcp:/pool1"; //커넥션 풀을 위한 DBCP 설정 파일
 		Connection conn = null; //DB 연결을 위한 Connection 객체
 		Statement stmt = null; //ready for DB Query result
 		PrintWriter pw = response.getWriter();
 		ResultSet rs = null; //SQL Query 결과를 담을 테이블 형식의 객체
 
-		//for Json
+		//Json for result
 		JSONObject resultObject = new JSONObject(); //최종 완성될 JSONObject 선언
 		JSONObject arrayObject = new JSONObject();
 		JSONArray reqListArray = new JSONArray(); //예약 신청 내역의 정보를 담을 Array
 		JSONObject listInfo = new JSONObject(); //예약 신청 내역 한 개의 정보가 들어갈 JSONObject
 		
 		try {
-			conn = DriverManager.getConnection(jocl); //커넥션 풀에서 대기 상태인 커넥션을 얻는다
+			conn = DriverManager.getConnection(StaticVariables.JOCL); //커넥션 풀에서 대기 상태인 커넥션을 얻는다
 			stmt = conn.createStatement(); //DB에 SQL문을 보내기 위한 Statement를 생성
-			String sql = "select reservationinfo.id, room.room_id, date, start_time, end_time "
-					+ "from reservationinfo, room "
-					+ "where (reservationinfo.room_id=room.id) and user_id=" + userId;
+			String sql = "select id, room_id, date, start_time, end_time "
+					+ "from reservationinfo "
+					+ "where user_id=" + userId + " "
+					+ "or id in (select id from seminarmember where user_id=" + userId +")";
 			if (date.equals("ALL"))
 				sql += ";";
 			else
-				sql += " and date='" + date + "';";
+				sql = "select * from (" + sql + ") as sub_result where date='" + date + "';";
 			System.out.println(sql);
 			rs = stmt.executeQuery(sql);
 			while (rs.next()) {

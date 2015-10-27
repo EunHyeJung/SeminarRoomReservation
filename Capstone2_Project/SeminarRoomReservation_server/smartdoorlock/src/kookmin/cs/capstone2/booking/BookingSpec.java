@@ -38,14 +38,13 @@ public class BookingSpec extends HttpServlet {
 		// request 파라미터로 전송된 값 얻기
 		String id = request.getParameter("id");
 		
-		String jocl = "jdbc:apache:commons:dbcp:/pool1"; //커넥션 풀을 위한 DBCP 설정 파일
 		Connection conn = null; //DB 연결을 위한 Connection 객체
 		Statement stmt = null; //ready for DB Query result
 		PrintWriter pw = response.getWriter();
 		ResultSet rs = null; //SQL Query 결과를 담을 테이블 형식의 객체
 		
 		try {
-			conn = DriverManager.getConnection(jocl); //커넥션 풀에서 대기 상태인 커넥션을 얻는다
+			conn = DriverManager.getConnection(StaticVariables.JOCL); //커넥션 풀에서 대기 상태인 커넥션을 얻는다
 			stmt = conn.createStatement(); //DB에 SQL문을 보내기 위한 Statement를 생성
 			String sql = "select * from reservationinfo where id='" + id + "';";
 			rs = stmt.executeQuery(sql);

@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import kookmin.cs.capstone2.common.StaticMethods;
+import kookmin.cs.capstone2.common.StaticVariables;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -37,18 +38,11 @@ public class UsingStatus extends HttpServlet {
 		System.out.println(requestString);
 				
 		// request 파라미터에서 json 파싱
-		JSONObject reqObject = (JSONObject)JSONValue.parse(requestString);
-		JSONArray reqJSONArray = (JSONArray)reqObject.get("sendingData");
-		String date = reqObject.get("date").toString();
-		System.out.println(reqObject);
-		//String roomId = reqJSONArray.get("roomId").toString();
-		//String userId = reqJSONArray.get("userId").toString();
+		JSONObject requestObject = (JSONObject)JSONValue.parse(requestString);
+		JSONArray requestJSONArray = (JSONArray)requestObject.get("roomIds"); //get room Id JSONArray
+		String date = requestObject.get("date").toString(); // get date
+		System.out.println(requestObject);
 		
-		// request 파라미터로 전송된 값 얻기
-		//String date = request.getParameter("date");
-		//System.out.println(date);
-		
-		String jocl = "jdbc:apache:commons:dbcp:/pool1"; //커넥션 풀을 위한 DBCP 설정 파일
 		Connection conn = null; //DB 연결을 위한 Connection 객체
 		Statement stmt = null; //ready for DB Query result
 		PrintWriter pw = response.getWriter();
@@ -60,19 +54,36 @@ public class UsingStatus extends HttpServlet {
 		JSONArray statusArray = new JSONArray(); //예약 내역의 정보를 담을 Array
 		JSONObject statusInfo = new JSONObject(); //예약 내역 한 개의 정보가 들어갈 JSONObject
 		
+		//룸 아이디가 안들어오면 return한다
 		try {
-			conn = DriverManager.getConnection(jocl); //커넥션 풀에서 대기 상태인 커넥션을 얻는다
+			conn = DriverManager.getConnection(StaticVariables.JOCL); //커넥션 풀에서 대기 상태인 커넥션을 얻는다
 			stmt = conn.createStatement(); //DB에 SQL문을 보내기 위한 Statement를 생성
 			  
 			//status!=0, 즉 거절상태가 아닌 예약 내역 정보를 가져온다
 			String sql = "select reservationinfo.id, room.id as room_id, reservationinfo.start_time, reservationinfo.end_time, reservationinfo.status "
-					+ "from reservationinfo, room where (reservationinfo.room_id=room.id) and date='" + date + "' and reservationinfo.status != 0 "
-							+ "Order by room.room_id asc;";
+					+ "from reservationinfo, room "
+					+ "where (reservationinfo.room_id=room.id) "
+					+ "and date='" + date + "'" 
+					+ "and reservationinfo.status != " + StaticVariables.REJECTION;
+			
+			String tempSql = "";
+			String roomId;
+			for(int i = 0 ; i < requestJSONArray.size(); i++){
+				JSONObject roomIdJSONObject = (JSONObject)requestJSONArray.get(i);
+				roomId = roomIdJSONObject.get("roomId").toString();
+				tempSql += roomId;
+				if( i != requestJSONArray.size()-1 )
+					tempSql += ", ";
+			}
+			if ( requestJSONArray.size() != 0 )
+				sql += " and room.id in (" + tempSql +") order by room.id asc;"; //room id가 없을 때 
+			System.out.println(sql);
 			
 			rs = stmt.executeQuery(sql);
 			if(!rs.next()){
 				jsonObject.put("responseData", null);
 			}else {
+				rs.beforeFirst(); // sql결과의 커서를 맨 앞으로 옮긴다
 				while (rs.next()) {
 					statusInfo = new JSONObject();
 					statusInfo.put("reservationId", rs.getInt("id"));
