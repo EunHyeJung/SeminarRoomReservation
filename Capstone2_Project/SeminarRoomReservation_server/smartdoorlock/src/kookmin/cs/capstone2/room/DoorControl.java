@@ -3,7 +3,9 @@ package kookmin.cs.capstone2.room;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -119,38 +121,25 @@ public class DoorControl extends HttpServlet { // 1.httpservlet 상속  2.driver
 	// 라즈베리파이로 명령 보내기
 	private String sendPost(String command) throws Exception{
 		getServletContext().log("1");
-		URL url = new URL("http://www.naver.com"); // 요청을 보낼 URL
-		HttpURLConnection con = null;
-		String result = null; // 통신 결과
-
-		// add request header
-		String urlParameters ="";// "order=" + command + "";
-
-		con = (HttpURLConnection) url.openConnection();
-		con.setRequestMethod("POST");
+		URL url = new URL("http://203.246.112.200/?command=" + command); // 요청을 보낼 URL
+		byte[] data = ("command=1").getBytes("UTF-8");
+		HttpURLConnection con = (HttpURLConnection) url.openConnection();
+		con.setUseCaches(false);
+		con.setRequestMethod("GET");
 		
-		// Send post request
-		con.setDoOutput(true); // to use the url connection for output
-		DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-		wr.writeBytes(urlParameters);
-		wr.flush();
-		wr.close();
-
 		int responseCode = con.getResponseCode();
-		System.out.println("\nSending 'POST' request to URL : " + url.toString());
-		System.out.println("Post parameters : " + urlParameters);
-		System.out.println("Response Code : " + responseCode);
-
+		System.out.println("response Code : " + responseCode);
+		
 		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-		String inputLine;
+		String inputLine; 
 		StringBuffer response = new StringBuffer();
-
+		
 		while ((inputLine = in.readLine()) != null) {
 			response.append(inputLine);
 		}
 		in.close();
-
-		// print result
+		
+		//print result
 		System.out.println(response.toString());
 		return response.toString();
 	}
