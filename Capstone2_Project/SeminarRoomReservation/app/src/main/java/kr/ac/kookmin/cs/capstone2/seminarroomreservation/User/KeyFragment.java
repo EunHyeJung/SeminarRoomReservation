@@ -44,17 +44,27 @@ public class KeyFragment extends Fragment implements View.OnClickListener {
             @Override
             public void success(JsonObject jsonObject, Response response) {
                 JsonObject data = jsonObject.getAsJsonObject("responseData");
-                String stime = data.getAsJsonPrimitive("startTime").getAsString();
-                String etime = data.getAsJsonPrimitive("endTime").getAsString();
-                roomId = RoomInfo.getRoomName(data.getAsJsonPrimitive("roomId").getAsInt());
-                String date = data.getAsJsonPrimitive("date").getAsString();
+                int id = data.getAsJsonPrimitive("key").getAsInt();
 
-                textStatus.setText(date+" "+stime+" ~ "
-                                   +etime
-                                   +"까지 "+roomId+"를 이용 가능합니다."
-                );
+                if(id == -1){
+                    textStatus.setText("There is no vaild key");
+                    btnSmartKey.setClickable(false);
+                }
+                else
+                {
+                    String stime = data.getAsJsonPrimitive("startTime").getAsString();
+                    String etime = data.getAsJsonPrimitive("endTime").getAsString();
+                    roomId = RoomInfo.getRoomName(data.getAsJsonPrimitive("roomId").getAsInt());
+                    String date = data.getAsJsonPrimitive("date").getAsString();
 
-                btnSmartKey.setClickable(true);//클릭 활성화
+                    textStatus.setText(date+" "+stime+" ~ "
+                                    +etime
+                                    +"까지 "+roomId+"를 이용 가능합니다."
+                    );
+
+                    if(id == 1)
+                        btnSmartKey.setClickable(true);
+                }
             }
 
             @Override
