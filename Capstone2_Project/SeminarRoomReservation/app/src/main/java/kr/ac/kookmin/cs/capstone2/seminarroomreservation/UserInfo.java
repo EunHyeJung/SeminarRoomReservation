@@ -33,7 +33,7 @@ public class UserInfo {
     }
 
 
-    public int getId() {
+    public static int getId() {
         return id;
     }
 
@@ -41,7 +41,7 @@ public class UserInfo {
         return userId;
     }
 
-    public String getPassword() {
+    public static String getPassword() {
         return password;
     }
 
