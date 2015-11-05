@@ -8,6 +8,13 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+
+	<classpathentry kind="lib" path="gcm-server.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/com.fasterxml.jackson.annotations.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/com.fasterxml.jackson.core.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/com.fasterxml.jackson.databind.jar"/>
+
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

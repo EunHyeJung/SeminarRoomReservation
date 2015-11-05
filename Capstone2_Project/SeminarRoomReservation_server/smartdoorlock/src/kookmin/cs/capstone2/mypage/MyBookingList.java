@@ -41,10 +41,9 @@ public class MyBookingList extends HttpServlet{
 		
 		// request 파라미터에서 json 파싱
 		JSONObject requestObject = (JSONObject)JSONValue.parse(requestString);
-		JSONObject infoJSONObject= (JSONObject) requestObject.get("info");
-		System.out.println(infoJSONObject.toJSONString());
-		String date = infoJSONObject.get("date").toString(); // get date
-		String userId = infoJSONObject.get("userId").toString(); // get userId
+		System.out.println("MyBookingList : " + requestObject.toJSONString());
+		String date = requestObject.get("date").toString(); // get date
+		String userId = requestObject.get("Id").toString(); // get userId
 		
 		Connection conn = null; //DB 연결을 위한 Connection 객체
 		Statement stmt = null; //ready for DB Query result
@@ -60,11 +59,11 @@ public class MyBookingList extends HttpServlet{
 		try {
 			conn = DriverManager.getConnection(StaticVariables.JOCL); //커넥션 풀에서 대기 상태인 커넥션을 얻는다
 			stmt = conn.createStatement(); //DB에 SQL문을 보내기 위한 Statement를 생성
-			String sql = "select id, room_id, date, start_time, end_time "
+			String sql = "select id, room_id, date, start_time, end_time, status "
 					+ "from reservationinfo "
-					+ "where user_id=" + userId + " "
-					+ "or id in (select id from seminarmember where user_id=" + userId +")";
-			if (date.equals("ALL"))
+					+ "where (user_id=" + userId + " "
+					+ "or id in (select id from seminarmember where user_id=" + userId +"))" ;
+			if (date.equals("ALL")) //숫자 0
 				sql += ";";
 			else
 				sql = "select * from (" + sql + ") as sub_result where date='" + date + "';";
