@@ -30,6 +30,13 @@ public class SharedPreferenceClass {
         editor.commit();
     }
 
+    public static void putValue(String key, Boolean value) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(key, value);
+        editor.commit();
+    }
+
 
     public static int getValue(String key, int defaultValue) {
         SharedPreferences preferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
@@ -39,7 +46,8 @@ public class SharedPreferenceClass {
             return defaultValue;
         }
     }
-    public static String  getValue(String key, String defaultValue) {
+
+    public static String getValue(String key, String defaultValue) {
         SharedPreferences preferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         try {
             return preferences.getString(key, defaultValue);
@@ -48,5 +56,20 @@ public class SharedPreferenceClass {
         }
     }
 
+    public static Boolean getValue(String key, Boolean defaultValue) {
+        SharedPreferences preferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+  //      SharedPreferences preferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        try {
+            return preferences.getBoolean(key, defaultValue);
+        } catch (Exception e) {
+            return defaultValue;
+        }
+    }
 
+    public static void removeAllPreferences(){
+        SharedPreferences pref = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.clear();
+        editor.commit();
+    }
 }

@@ -47,7 +47,7 @@ public class CustomControlLVAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         final Context context=parent.getContext();
         final int pos = position;
-        ControlViewHolder holder;
+        final ControlViewHolder holder;
         //리스트가 길어져서 현재 화면에 보이지 않은 아이템은 convertView가 null 상태로 들어옴
         if(convertView==null){
             //view가 null 일 경우 커스텀 레이아웃을 얻어 옴
@@ -80,10 +80,12 @@ public class CustomControlLVAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 //제어창 표시및 방이름 보내기
+                //holder에 가진 값으로 보내주지 않으면
+                //새로 캐시된 값이 보내지기 때문에 값이 오류가 난다.
                 Intent intent = new Intent(context, ControlDialogActivity.class);
-                intent.putExtra("Room", seminarRoomNameList.get(position)); //방 이름을 보낸다.
-                intent.putExtra("id", seminarRoomIdList.get(position)); //방  id를 보낸다.
-                Log.i("Room : ", seminarRoomNameList.get(position));
+                intent.putExtra("Room", holder.controlTxt.toString()); //방 이름을 보낸다.
+                intent.putExtra("id", holder.id); //방  id를 보낸다.
+
                 context.startActivity(intent);
             }
         });

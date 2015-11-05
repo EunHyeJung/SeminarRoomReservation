@@ -17,99 +17,81 @@ import kr.ac.kookmin.cs.capstone2.seminarroomreservation.ReservationsInfo;
 /**
  * Created by eunhye on 2015-10-13.
  */
-public class CustomGridAdapter  extends BaseAdapter {
+public class CustomGridAdapter extends BaseAdapter {
 
 
-        private Context mContext;
-        private LayoutInflater mLayoutInflater;
-        private ArrayList<Integer> inputValues;
+    private Context mContext;
+    private LayoutInflater mLayoutInflater;
+    private ArrayList<Integer> inputValues;
 
-        private TextView textViewGridItem;
-        private ReservationsInfo[] reservationsInfo;
+    private TextView textViewGridItem;
+    private ReservationsInfo[] reservationsInfo;
 
-        public CustomGridAdapter(Context mContext, ArrayList<Integer> inputValues){
-            this.mContext = mContext;
-            this.mLayoutInflater = LayoutInflater.from(mContext);
-            this.inputValues = inputValues;
-        }
+    public CustomGridAdapter(Context mContext, ArrayList<Integer> inputValues) {
+        this.mContext = mContext;
+        this.mLayoutInflater = LayoutInflater.from(mContext);
+        this.inputValues = inputValues;
+    }
 
-        public CustomGridAdapter(Context mContext, ArrayList<Integer> inputValues,
-                                 ReservationsInfo[] reservationsInfo){
-            this. mContext = mContext;
-            this.mLayoutInflater = LayoutInflater.from(mContext);
-            this.inputValues = inputValues;
-            this.reservationsInfo = reservationsInfo;
-        }
+    public CustomGridAdapter(Context mContext, ArrayList<Integer> inputValues,
+                             ReservationsInfo[] reservationsInfo) {
+        this.mContext = mContext;
+        this.mLayoutInflater = LayoutInflater.from(mContext);
+        this.inputValues = inputValues;
+        this.reservationsInfo = reservationsInfo;
+    }
 
-        @Override
-        public int getCount() {
-            return 120;
-        }
+    @Override
+    public int getCount() {
+        return 120;
+    }
 
-        @Override
-        public Object getItem(int position) {
-            return null;
-        }
+    @Override
+    public Object getItem(int position) {
+        return null;
+    }
 
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
 
-        public boolean checkReservation(int c){
-            return true;
+    @Override
+    public View getView(final int position, View convertView, ViewGroup parent) {
 
-        }
-        @Override
-        public View getView(final int position, View convertView, ViewGroup parent) {
+        if (convertView == null) {
+            convertView = mLayoutInflater.inflate(R.layout.item_gridview, parent, false);
+            textViewGridItem = (TextView) convertView.findViewById(R.id.textView_gridItem);
 
-            if(convertView == null) {
-                convertView = mLayoutInflater.inflate(R.layout.item_gridview, parent, false);
-                textViewGridItem = (TextView) convertView.findViewById(R.id.textView_gridItem);
-
-                if(reservationsInfo != null){
-                    for(int i=0 ; i<reservationsInfo.length ; i++) {
-                        int startTime = reservationsInfo[i].getStartTime();
-                        int endTme = reservationsInfo[i].getEndTime();
-                        for (int j = startTime; j <= endTme; j += 5) {
-                            if (j == position) {
-                                if (reservationsInfo[i].getReservationStatus() == 1)
-                                    textViewGridItem.setBackgroundColor(Color.parseColor("#90C84646"));
-                                else if (reservationsInfo[i].getReservationStatus() == 2)
-                                    textViewGridItem.setBackgroundColor(Color.parseColor("#90008EC8"));
-                            }
+            if (reservationsInfo != null) {
+                for (int i = 0; i < reservationsInfo.length; i++) {
+                    int startTime = reservationsInfo[i].getStartTime();
+                    int endTme = reservationsInfo[i].getEndTime();
+                    for (int j = startTime; j <= endTme; j += 5) {
+                        if (j == position) {
+                            if (reservationsInfo[i].getReservationStatus() == 1)
+                                textViewGridItem.setBackgroundColor(Color.parseColor("#90C84646"));
+                            else if (reservationsInfo[i].getReservationStatus() == 2)
+                                textViewGridItem.setBackgroundColor(Color.parseColor("#90008EC8"));
                         }
-                }
-/*                    System.out.println("그리드뷰 테스트 : "+reservationsInfo[i].getStartTime());
-                    System.out.println("그리드뷰 테스트 : "+reservationsInfo[i].getEndTime());*/
-                }
-            //    textViewGridItem.setText("" + position);
-
-/*
-
-                if(position == 7 || position== 12)
-                    textViewGridItem.setBackgroundColor(Color.parseColor("#90C84646"));
-                if(position == 51 || position == 56 || position == 61)
-                    textViewGridItem.setBackgroundColor(Color.parseColor("#90E86E59"));
-*/
-
-
-
-
-                textViewGridItem.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(mContext, ReservationFormActivity.class);        //
-                        mContext.startActivity(intent);
                     }
-                });
-
-
+                }
             }
-            return convertView;
+
+                    textViewGridItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, ReservationFormActivity.class);        //
+                    mContext.startActivity(intent);
+                }
+            });
+
+
         }
+        return convertView;
+    }
 
 
         /* -------------------- End Of getView -------------------- */
-    }
+}
 

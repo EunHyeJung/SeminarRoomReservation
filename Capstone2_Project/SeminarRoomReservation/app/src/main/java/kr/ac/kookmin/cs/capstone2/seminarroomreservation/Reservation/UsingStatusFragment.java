@@ -54,7 +54,7 @@ public class UsingStatusFragment extends Fragment {
     Button buttonDate;
 
     static String date;
-    int year, month, day;
+    static int year, month, day;
 
     Button buttonNext;
     Button buttonBack;
@@ -192,14 +192,11 @@ public class UsingStatusFragment extends Fragment {
                     gridView.setVerticalScrollBarEnabled(false);
                 }
             }
-
             @Override
             public void failure(RetrofitError error) {
                 error.printStackTrace();
             }
         });
-
-
     }
     /*      End of Init         */
 

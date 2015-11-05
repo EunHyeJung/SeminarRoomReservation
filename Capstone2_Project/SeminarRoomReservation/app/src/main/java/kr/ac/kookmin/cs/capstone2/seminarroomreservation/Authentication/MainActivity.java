@@ -5,12 +5,13 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-
 
 
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Encryption.EncryptionClass;
@@ -31,19 +32,65 @@ public class MainActivity extends AppCompatActivity {
     EditText editTextPassword;
     SharedPreferenceClass sharedPreference;
 
+    CheckBox checkBoxAutoLogin;
+    CheckBox checkBoxId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        sharedPreference = new SharedPreferenceClass(this);
+
         editTextId = (EditText) findViewById(R.id.editText_loginId);
         editTextPassword = (EditText) findViewById(R.id.editText_loginPassword);
 
-        sharedPreference = new SharedPreferenceClass(this);
+        checkBoxId = (CheckBox) findViewById(R.id.checkbox_id);
+        checkBoxAutoLogin = (CheckBox) findViewById(R.id.checkbox_login);
+
+        if (SharedPreferenceClass.getValue("autoLogin", false)) {       // 자동로그인 설정일 경우
+            String userId = SharedPreferenceClass.getValue("id", "userId");
+            String password = SharedPreferenceClass.getValue("password", "password");
+            editTextId.setText(userId);
+            editTextPassword.setText(password);
+            login();
+        }
+        if (SharedPreferenceClass.getValue("storeId", false)) {        // 아이디 저장이 되어 있는 상태이면
+            String userId = SharedPreferenceClass.getValue("id", "input your Id");
+            editTextId.setText(userId);
+            checkBoxId.setChecked(true);
+        }
+
+
 
         Button buttonLogin = (Button) findViewById(R.id.button_login);
         Button buttonJoin = (Button) findViewById(R.id.button_join);
 
+
+        checkBoxAutoLogin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    Toast.makeText(getApplicationContext(), "자동로그인 설정", Toast.LENGTH_SHORT).show();
+                    SharedPreferenceClass.putValue("autoLogin",true);
+                } else {
+                    Toast.makeText(getApplicationContext(), "자동로그인 해제", Toast.LENGTH_SHORT).show();
+                    SharedPreferenceClass.putValue("autoLogin",false);
+                }
+            }
+        });
+        checkBoxId.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    Toast.makeText(getApplicationContext(), "아이디저장", Toast.LENGTH_SHORT).show();
+                    SharedPreferenceClass.putValue("storeId", true);
+                } else {
+                    Toast.makeText(getApplicationContext(), "아이디저장 해제", Toast.LENGTH_SHORT).show();
+                    SharedPreferenceClass.putValue("storeId", false);
+                }
+            }
+        });
 
         buttonJoin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,43 +102,51 @@ public class MainActivity extends AppCompatActivity {
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
-                final String id = editTextId.getText().toString();
-                final String password = EncryptionClass.testSHA256(editTextPassword.getText().toString());
-
-                /* -------------------------  Retrofit 통신  -------------------------  */
-                RestRequestHelper requestHelper = RestRequestHelper.newInstance();
-                requestHelper.login(id, password, new Callback<JsonObject>() {
-                    @Override
-                    public void success(JsonObject loginCallback, Response response) {
-                        UserInfo.setUserInfo(id, password);
-                        jsonParsing(loginCallback);
-                    }
-
-                    @Override
-                    public void failure(RetrofitError error) {
-
-                        error.printStackTrace();
-                    }
-                });
-                /*End of RequestHelper*/
-
-
-
-
+                login();
             }
         });
-         /*End of LoginButton*/
+         /* End of LoginButton  */
     }
 
     /* End Of onCreateView */
 
+
+    /*  Start Of Login  */
+    public void login() {
+        final String id = editTextId.getText().toString();
+        final String password = EncryptionClass.testSHA256(editTextPassword.getText().toString());
+
+
+         /* -------------------------  Retrofit 통신  -------------------------  */
+        RestRequestHelper requestHelper = RestRequestHelper.newInstance();
+        requestHelper.login(id, password, new Callback<JsonObject>() {
+            @Override
+            public void success(JsonObject loginCallback, Response response) {
+                UserInfo.setUserInfo(id, editTextPassword.getText().toString());
+                jsonParsing(loginCallback);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Toast.makeText(getApplicationContext(), "네트워크 접속 오류", Toast.LENGTH_SHORT).show();
+                error.printStackTrace();
+            }
+        });
+                /*End of RequestHelper*/
+    }
+
+    /*  End Of Login   */
+
+
     public void jsonParsing(JsonObject jsonObject) {
         JsonObject responseData = jsonObject.getAsJsonObject("responseData"); //2 레벨 제이슨 객체를 얻음
-        System.out.println("사용자 : "+responseData);
-        int userId = responseData.getAsJsonPrimitive("id").getAsInt();
+
         int userMode = responseData.getAsJsonPrimitive("result").getAsInt();
+        if(userMode == -1) {
+            Toast.makeText(getApplicationContext(), "잘못된 아이디입니다.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        int userId = responseData.getAsJsonPrimitive("id").getAsInt();
 
         UserInfo.setUserInfo(userId, userMode);           // 사용자 고유 ID 설정
 
@@ -99,8 +154,8 @@ public class MainActivity extends AppCompatActivity {
 
         for (int i = 0; i < roomNames.size(); i++) {
             int roomId = roomNames.get(i).getAsJsonObject().getAsJsonPrimitive("roomId").getAsInt();
-           String roomName = roomNames.get(i).getAsJsonObject().getAsJsonPrimitive("roomName").toString();
-                RoomInfo.setRoomInfo(roomId, roomName);
+            String roomName = roomNames.get(i).getAsJsonObject().getAsJsonPrimitive("roomName").toString();
+            RoomInfo.setRoomInfo(roomId, roomName);
         }
 
 

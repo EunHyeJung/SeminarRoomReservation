@@ -19,6 +19,8 @@ import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Iterator;
 
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Network.RestRequestHelper;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
@@ -35,7 +37,7 @@ import retrofit.client.Response;
 public class AccessHistoryFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
     ListView SeminarLogView;
-   CustomHistoryLVAdapter LogViewAdapter;
+    CustomHistoryLVAdapter LogViewAdapter;
     RestRequestHelper restRequest;//네트워크 변수
     public static String date;
     String roomName;//기본은 ALL
@@ -106,7 +108,7 @@ public class AccessHistoryFragment extends Fragment implements AdapterView.OnIte
 
     //기록 가져오기
     public void getHistory(){
-       // LogViewAdapter.clear();//내용을 비운다.
+        // LogViewAdapter.clear();//내용을 비운다.
         LogViewAdapter = new CustomHistoryLVAdapter();
         SeminarLogView.setAdapter(LogViewAdapter);
 
@@ -119,7 +121,7 @@ public class AccessHistoryFragment extends Fragment implements AdapterView.OnIte
                     JsonArray history = responseData.getAsJsonArray("history");//2레벨 추출
 
                     //Array 내용을 추출해서 담는다.
-                    for(int i = 0; i < history.size(); i++){
+                    for (int i = 0; i < history.size(); i++) {
                         JsonObject tmpObject = history.get(i).getAsJsonObject();
 
                         LogViewAdapter.addRoomId(tmpObject.getAsJsonPrimitive("roomId").getAsString());
@@ -149,7 +151,8 @@ public class AccessHistoryFragment extends Fragment implements AdapterView.OnIte
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> parent) {   }
+    public void onNothingSelected(AdapterView<?> parent) {
+    }
 
     //스피너 데이터 초기화
     public void initSpinnerList(View view){
@@ -161,17 +164,16 @@ public class AccessHistoryFragment extends Fragment implements AdapterView.OnIte
         spinnerAdapter = new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_list_item_1,entry);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         roomSpinner.setAdapter(spinnerAdapter);
-      //  String[] roomList = RoomInfo.getRoomNames();
 
-/*
-        if(roomList.length >0 ){
-            for(int i=0 ; i < roomList.length ; i++){
-                spinnerAdapter.add(roomList[i]);
-            }
+        HashMap room = RoomInfo.roomNames;
+        Iterator<Integer> iterator = room.keySet().iterator();//이터레이터로 받아온다.
 
-            spinnerAdapter.notifyDataSetChanged();// 스피너 갱신
+        while(iterator.hasNext())
+        {
+            int key = iterator.next();
+            spinnerAdapter.add(room.get(key).toString().replace("\"",""));
         }
-*/
+        spinnerAdapter.notifyDataSetChanged();
     }
 
 }

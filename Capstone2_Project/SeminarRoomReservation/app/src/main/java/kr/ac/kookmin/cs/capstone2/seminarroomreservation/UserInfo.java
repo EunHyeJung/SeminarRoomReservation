@@ -6,7 +6,11 @@ import android.content.Context;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.SharedPreferenceClass;
 
 /**
- * Created by eunhye on 2015-10-05.
+ *  UserInfo : 사용자 정보를 담는 클래스
+ *  id : 사용자에게 부여되는 고유 아이디
+ *  userMode : 사용자 모드
+ *  usderID : 사용자가 지정한 아이디
+ *  password : 사용자가 지정한 비밀번호
  */
 public class UserInfo {
     private static int id;
@@ -29,15 +33,15 @@ public class UserInfo {
     }
 
 
-    public int getId() {
+    public static int getId() {
         return id;
     }
 
-    public String getUserId() {
+    public static String getUserId() {
         return userId;
     }
 
-    public String getPassword() {
+    public static String getPassword() {
         return password;
     }
 
