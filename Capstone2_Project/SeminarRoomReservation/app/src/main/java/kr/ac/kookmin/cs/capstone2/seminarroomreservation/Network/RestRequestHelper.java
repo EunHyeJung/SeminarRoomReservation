@@ -54,8 +54,8 @@ public class RestRequestHelper {
                              @Field("start_time") String start_time,
                              @Field("end_time") String end_time,
                              @Field("room_id") String room_id,
+                             @Field("context") String context,
                              Callback<Integer> makeReservationCallback);
-
 
 
         @FormUrlEncoded
@@ -121,6 +121,12 @@ public class RestRequestHelper {
         void getSmartKey(@Body TransmissionUserInfo info,
                          Callback<JsonObject> getSmartKeyCallback);
 
+        @FormUrlEncoded
+        @POST("/userlist")
+        void dayWatch(@Field("date") String date,
+                      Callback<JsonObject> userlistCallback
+        );
+
 
     }
     public void signUp(String id, String password, String name, String phone, Callback<Integer> signUpCallback){
@@ -131,8 +137,8 @@ public class RestRequestHelper {
         restRequest.login(id, password, loginCallback);
     }
 
-    public void makeReservation(String date, String start_time, String end_time ,String room_id, Callback<Integer> makeReservationCallback){
-        restRequest.makeReservation(date, start_time, end_time, room_id, makeReservationCallback);
+    public void makeReservation(String date, String start_time, String end_time ,String room_id,String context, Callback<Integer> makeReservationCallback){
+        restRequest.makeReservation(date, start_time, end_time, room_id, context, makeReservationCallback);
     }
 
 
@@ -176,5 +182,8 @@ public class RestRequestHelper {
 
     public void getSmartKey(TransmissionUserInfo info, Callback<JsonObject> getSmartKeyCallback){
         restRequest.getSmartKey(info, getSmartKeyCallback);
+    }
+    public void getUserList(String date, Callback<JsonObject> userlistCallback){
+        restRequest.dayWatch(date, userlistCallback);
     }
 }

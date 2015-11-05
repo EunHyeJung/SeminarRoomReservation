@@ -25,6 +25,7 @@ import java.util.GregorianCalendar;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Manager.ManagerActivity;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Network.RestRequestHelper;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.RoomInfo;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -36,14 +37,18 @@ public class ReservationFormActivity extends AppCompatActivity implements Adapte
     private EditText TxtCheckInDate;
     private EditText TxtCheckInTime;
     private EditText TxtCheckOutTime;
-    //private EditText Edittxt_reason;
+    private TextView Invite;
+    private TextView Test;
+
+
+    private EditText Edittxt_reason;
 
     private Button button_makereservation;
 
     int year, month, day, hour, minute;
 
-    Spinner spinner;
-    ArrayAdapter<CharSequence> adapter;
+    Spinner spinner_room;
+    ArrayList<String> Roomlistarr;
 
 
     @Override
@@ -52,23 +57,9 @@ public class ReservationFormActivity extends AppCompatActivity implements Adapte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reservationform);
 
-        spinner = (Spinner) findViewById(R.id.spinner_roomList);
-        adapter = ArrayAdapter.createFromResource(this, R.array.roomList, android.R.layout.simple_spinner_item);
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(this);
-/*
-        spinner = (Spinner) findViewById(R.id.spinner_memberList);
-        adapter = ArrayAdapter.createFromResource(this, R.array.memberlist, android.R.layout.simple_spinner_item);
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(this);*/
+        findViewsById();
 
-        TxtCheckInDate = (EditText) findViewById(R.id.txtCheckInDate);
-        TxtCheckInTime = (EditText) findViewById(R.id.txtCheckInTime);
-        TxtCheckOutTime = (EditText) findViewById(R.id.txtCheckOutTime);
-        //Edittxt_reason = (EditText) findViewById(R.id.reason);
-        button_makereservation = (Button) findViewById(R.id.button_makereservation);
-
-        //예약버튼 누르면 예약하기 함수 호출
+        //예약하기 함수 호출
         button_makereservation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,7 +67,11 @@ public class ReservationFormActivity extends AppCompatActivity implements Adapte
             }
         });
 
-        //calendar
+
+        //*********************  spinner ***********************
+        SpinnerRoomList();
+
+        //*********************  calendar ***********************
         GregorianCalendar calendar = new GregorianCalendar();
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH);
@@ -112,24 +107,43 @@ public class ReservationFormActivity extends AppCompatActivity implements Adapte
             }
         });
 
+        //UserListActivity 열기
+        Invite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                Intent myintent = new Intent(getApplicationContext(), UserListActivity.class);
+                startActivity(myintent);
+            }
+        });
 
-        //임시 DB
-        // Create DataHelper object and insert some sample data
-        DBHelper datahelper=new DBHelper(this);
-        datahelper.insertProvince("20113344");
-        datahelper.insertProvince("20113324");
-        datahelper.insertProvince("20120815");
-        datahelper.insertProvince("12947251");
-
-        // Get sample data from the database and display them in the spinner
-        Spinner spinner=(Spinner)findViewById(R.id.spinner_memberList);
-        ArrayList<String> list=datahelper.getAllProvinces();
-        ArrayAdapter<String> adapter=new ArrayAdapter<String>(this, R.layout.spinner_layout, R.id.text, list);
-        spinner.setAdapter(adapter);
+        //test
+        Test.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                Intent myintent = new Intent(getApplicationContext(), UserListActivity_test.class);
+                startActivity(myintent);
+            }
+        });
 
 
     }
-//날짜. 시간 설정
+
+    private void findViewsById() {
+
+        TxtCheckInDate = (EditText) findViewById(R.id.txtCheckInDate);
+        TxtCheckInTime = (EditText) findViewById(R.id.txtCheckInTime);
+        TxtCheckOutTime = (EditText) findViewById(R.id.txtCheckOutTime);
+
+        Invite = (TextView) findViewById(R.id.text_memberlist);
+        Test = (TextView) findViewById(R.id.test);
+
+        Edittxt_reason = (EditText) findViewById(R.id.context);
+        button_makereservation = (Button) findViewById(R.id.button_makereservation);
+    }
+
+    //날짜, 시간 설정
     private DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -159,6 +173,29 @@ public class ReservationFormActivity extends AppCompatActivity implements Adapte
 
 
 
+    //스피너 : 세미나실 목록
+    public void SpinnerRoomList() {
+
+        String[] strRoomList = new String[RoomInfo.roomNamesSize()];
+        for(int i=1 ; i<strRoomList.length ; i++){
+            strRoomList[i] = RoomInfo.getRoomName(i);
+        }
+
+        Roomlistarr= new ArrayList<String>();
+        for(int i=1 ; i < RoomInfo.roomNamesSize(); i ++) {
+            Roomlistarr.add(strRoomList[i]);
+        }
+
+        ArrayAdapter <String> adapter;
+
+        adapter= new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, Roomlistarr);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_room = (Spinner)findViewById(R.id.spinner_roomList);
+        spinner_room.setAdapter(adapter);
+
+
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -170,6 +207,7 @@ public class ReservationFormActivity extends AppCompatActivity implements Adapte
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -180,8 +218,7 @@ public class ReservationFormActivity extends AppCompatActivity implements Adapte
         return super.onOptionsItemSelected(item);
     }
 
-    //예약하기 함수
-    //서버로 예약 신청 정보 전송
+    //예약함수
     public void makereservation(){
 
         //
@@ -193,11 +230,11 @@ public class ReservationFormActivity extends AppCompatActivity implements Adapte
         String date = TxtCheckInDate.getText().toString();
         String start_time = TxtCheckInTime.getText().toString();
         String end_time = TxtCheckOutTime.getText().toString();
-        String room_id = "1";
-        //String reason =  Edittxt_reason.getText().toString();
+        String room_id = spinner_room.toString(); // room number 불러오기
+        String context =  Edittxt_reason.getText().toString();
 
         RestRequestHelper requestHelper = RestRequestHelper.newInstance();
-        requestHelper.makeReservation(date, start_time, end_time, room_id,  new Callback<Integer>() {
+        requestHelper.makeReservation(date, start_time, end_time, room_id, context, new Callback<Integer>() {
 
             @Override
             public void success(Integer makeReservationCallback, Response response) {
@@ -217,7 +254,6 @@ public class ReservationFormActivity extends AppCompatActivity implements Adapte
         TextView myText = (TextView) view;
         Toast.makeText(ReservationFormActivity.this, "Room "+myText.getText()+" selected", Toast.LENGTH_SHORT).show();
     }
-
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 

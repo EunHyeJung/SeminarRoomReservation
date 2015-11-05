@@ -34,6 +34,12 @@
             android:label="@string/title_activity_control_dialog"
             android:theme="@style/Theme.AppCompat.Dialog" >
         </activity>
+        <activity
+            android:name=".Reservation.UserListActivity">
+        </activity>
+        <activity
+            android:name=".Reservation.UserListActivity_test">
+        </activity>
 
     </application>
 
