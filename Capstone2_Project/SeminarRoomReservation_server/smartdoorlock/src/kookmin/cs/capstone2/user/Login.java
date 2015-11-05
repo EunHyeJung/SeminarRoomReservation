@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import kookmin.cs.capstone2.GCM.GcmSender;
+import kookmin.cs.capstone2.common.StaticMethods;
 import kookmin.cs.capstone2.common.StaticVariables;
 
 public class Login extends HttpServlet {
@@ -28,13 +30,13 @@ public class Login extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 
 		// request, response 인코딩 방식 지정
-		request.setCharacterEncoding("utf-8");
 		response.setContentType("text/html;charset=utf-8");
-
-		// request 파라미터로 전송된 값 얻기
+		
 		String text_id = request.getParameter("id");
 		String password = request.getParameter("password");
-
+		String regId = request.getParameter("instanceId");
+	
+		System.out.println("아이디 : " + text_id + " , password : " + password + " , regId :" + regId );
 		Connection conn = null; //DB 연결을 위한 Connection 객체
 		Statement stmt = null; //ready for DB Query result
 		PrintWriter pw = response.getWriter();
@@ -46,8 +48,9 @@ public class Login extends HttpServlet {
 		JSONArray roomArray = new JSONArray(); //방 정보를 담을 jsonArray
 		JSONObject roomInfo = new JSONObject(); //방 정보 한 개의 정보가 들어갈 JSONObject
 		
+		GcmSender gs = new GcmSender();
+		
 		try {
-			
 			conn = DriverManager.getConnection(StaticVariables.JOCL); //커넥션 풀에서 대기 상태인 커넥션을 얻는다
 			stmt = conn.createStatement(); //DB에 SQL문을 보내기 위한 Statement를 생성
 			
@@ -87,6 +90,7 @@ public class Login extends HttpServlet {
 			pw.println(StaticVariables.ERROR_MYSQL);
 		} finally {
 			try {
+				//gs.sendPush();
 				pw.close();
 				if (stmt != null)
 					stmt.close();
