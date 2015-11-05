@@ -7,19 +7,76 @@
     tools:context="kr.ac.kookmin.cs.capstone2.seminarroomreservation.User.KeyFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <LinearLayout
+    <TableLayout
+        android:padding="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/text_smart_text"
-            android:paddingTop="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/hello_blank_fragment"
-            android:textSize="15pt"
-            android:gravity="center"/>
-    </LinearLayout>
+        <TableRow>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Date : "
+                android:textSize="10pt"
+                />
+            <TextView
+                android:id="@+id/text_key_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="10pt"
+                android:gravity="center"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Time : "
+                android:textSize="10pt"
+                />
+            <TextView
+                android:id="@+id/text_key_stime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="10pt"
+                android:gravity="center"
+                android:layout_weight="1"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" ~ "
+                android:textSize="10pt"
+                android:gravity="center"
+                android:layout_weight="1"
+                />
+            <TextView
+                android:id="@+id/text_key_etime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="10pt"
+                android:gravity="center"
+                android:layout_weight="1"
+                />
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ROOM : "
+                android:textSize="10pt"
+                />
+            <TextView
+                android:id="@+id/text_key_room"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="10pt"
+                android:gravity="center"
+                />
+        </TableRow>
+
+    </TableLayout>
 
     <LinearLayout
         android:paddingTop="35dp"
@@ -28,13 +85,16 @@
         android:paddingBottom="50dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <ImageButton
             android:id="@+id/button_smartkey"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:src="@drawable/smartkey"
+            android:background="#90124F54"
             android:scaleType="fitXY"
             />
+
     </LinearLayout>
 
 </LinearLayout>

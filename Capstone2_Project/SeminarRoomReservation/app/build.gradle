@@ -28,9 +28,4 @@ dependencies {
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.squareup.okhttp:okhttp:2.2.0'
     compile 'com.wdullaer:materialdatetimepicker:1.5.1'
-<<<<<<< HEAD
-    compile 'com.google.android.gms:play-services-gcm:8.1.0'
 }
-=======
-}
->>>>>>> song

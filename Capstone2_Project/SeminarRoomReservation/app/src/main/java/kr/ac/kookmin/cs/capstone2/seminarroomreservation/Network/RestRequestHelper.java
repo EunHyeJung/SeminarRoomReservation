@@ -22,7 +22,7 @@ public class RestRequestHelper {
     private RestRequest restRequest;
 
 
-    private static final String url = "http://10.30.115.168:8081/smartdoorlock";
+    private static final String url = "http://192.168.1.103:8081/smartdoorlock";
 
     public static RestRequestHelper newInstance(){
         if(instance == null){
@@ -97,9 +97,13 @@ public class RestRequestHelper {
                       Callback<JsonObject> dayWatchCallback
                       );
 
-        @FormUrlEncoded
+     /*   @FormUrlEncoded
         @POST("/requestlist")
         void requestList(@Field("date") String date ,
+                         Callback<JsonObject> requestListCallback);*/
+
+        @POST("/requestlist")
+        void requestList(@Field("info") TransmissionUserInfo info,
                          Callback<JsonObject> requestListCallback);
 
         //@FormUrlEncoded
@@ -152,8 +156,14 @@ public class RestRequestHelper {
         restRequest.dayWatch(date, roomName, dayWatchCallback);
     }
 
-    public void requestList(String date, Callback<JsonObject> requestCallback){
+    //관리자 권한인지 아닌지를 이 함수에서 받고, mybooking과 함께 처리
+    //date, id
+/*    public void requestList(String date, Callback<JsonObject> requestCallback){
         restRequest.requestList(date, requestCallback);
+    }*/
+
+    public void requestList(TransmissionUserInfo info,Callback<JsonObject> requestCallback){
+        restRequest.requestList(info, requestCallback);
     }
 
     public void bookingFilter(int id, int command, Callback<JsonObject> bookingFilterCallback){

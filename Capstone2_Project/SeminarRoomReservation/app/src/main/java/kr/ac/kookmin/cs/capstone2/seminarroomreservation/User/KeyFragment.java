@@ -22,7 +22,10 @@ import retrofit.client.Response;
 
 public class KeyFragment extends Fragment implements View.OnClickListener {
     ImageButton btnSmartKey;
-    TextView textStatus;
+    TextView textDate;
+    TextView textStime;
+    TextView textEtime;
+    TextView textRoom;
     RestRequestHelper restRequestHelper;
     TransmissionUserInfo info;
     String roomId;
@@ -46,24 +49,26 @@ public class KeyFragment extends Fragment implements View.OnClickListener {
                 JsonObject data = jsonObject.getAsJsonObject("responseData");
                 int id = data.getAsJsonPrimitive("key").getAsInt();
 
-                if(id == -1){
-                    textStatus.setText("There is no vaild key");
-                    btnSmartKey.setClickable(false);
+                System.out.println("KF"+ id);
+                if(id == -1)//키가 아예 존재하지 않을 경우
+                {
+                    textDate.setText("There is no valid key");
+                    btnSmartKey.setEnabled(false);
                 }
-                else
+                else// 키가 있을 경우
                 {
                     String stime = data.getAsJsonPrimitive("startTime").getAsString();
                     String etime = data.getAsJsonPrimitive("endTime").getAsString();
                     roomId = RoomInfo.getRoomName(data.getAsJsonPrimitive("roomId").getAsInt());
                     String date = data.getAsJsonPrimitive("date").getAsString();
 
-                    textStatus.setText(date+" "+stime+" ~ "
-                                    +etime
-                                    +"까지 "+roomId+"를 이용 가능합니다."
-                    );
+                    textDate.setText(date);
+                    textStime.setText(stime);
+                    textEtime.setText(etime);
+                    textRoom.setText(roomId.replace("\"",""));
 
-                    if(id == 1)
-                        btnSmartKey.setClickable(true);
+                    if(id == 1)//현재 시간이 예약 시간 안에 겹칠 때
+                        btnSmartKey.setEnabled(true);
                 }
             }
 
@@ -79,12 +84,16 @@ public class KeyFragment extends Fragment implements View.OnClickListener {
 
     public void init(View view){
         btnSmartKey = (ImageButton)view.findViewById(R.id.button_smartkey);
-        textStatus = (TextView)view.findViewById(R.id.text_smart_text);
+        textDate = (TextView)view.findViewById(R.id.text_key_date);
+        textStime = (TextView)view.findViewById(R.id.text_key_stime);
+        textEtime = (TextView)view.findViewById(R.id.text_key_etime);
+        textRoom = (TextView)view.findViewById(R.id.text_key_room);
         roomId = null;
 
-        btnSmartKey.setClickable(false);
+        btnSmartKey.setEnabled(false); //키는 비활성화
 
-        info = new TransmissionUserInfo(UserInfo.getId());
+        textDate.setText("Network error!"); //서버 연결이 안되어 있음.
+        info = new TransmissionUserInfo(UserInfo.getId(), "ALL");
     }
 
     @Override

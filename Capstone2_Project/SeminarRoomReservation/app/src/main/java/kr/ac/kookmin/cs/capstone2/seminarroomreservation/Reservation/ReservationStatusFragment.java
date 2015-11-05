@@ -98,46 +98,27 @@ public class ReservationStatusFragment extends Fragment {
         btnDate = (Button)view.findViewById(R.id.btn_reservation_date);
         btnAll = (Button)view.findViewById(R.id.btn_reservation_showall);
 
-       if(UserInfo.getUserMode() == 1){
-            btnDate.setVisibility(View.GONE);
-            btnAll.setVisibility(View.GONE);
-        }
-
         date = "ALL";
-
-        info = new TransmissionUserInfo(UserInfo.getId());
     }
 
     public void getReservationData(){
         reservationLVAdapter = new CustomReservationLVAdapter();//리스트뷰 초기화
         reservationListView.setAdapter(reservationLVAdapter);
 
-        if(UserInfo.getUserMode() == 2) //관리자
-        {
-            restRequestHelper.requestList(date, new Callback<JsonObject>() {
-                @Override
-                public void success(JsonObject jsonObject, Response response) {
-                   addList(jsonObject);
-                }
-                @Override
-                public void failure(RetrofitError error) {
-                    Log.e("Retrofit Error : ", error.toString());
-                }
-            });
-        }
-        else // id ==1 , 일반
-        {
-            restRequestHelper.myBooking(info, new Callback<JsonObject>() {
-                @Override
-                public void success(JsonObject jsonObject, Response response) {
-                    addList(jsonObject);
-                }
-                @Override
-                public void failure(RetrofitError error) {
-                    Log.e("Retrofit Error : ", error.toString());
-                }
-            });
-        }
+        info = new TransmissionUserInfo(UserInfo.getId(), date);
+
+        restRequestHelper.requestList(info, new Callback<JsonObject>() {
+            @Override
+            public void success(JsonObject jsonObject, Response response) {
+                addList(jsonObject);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.e("Retrofit Error : ", error.toString());
+            }
+        });
+
     }
 
     /**
