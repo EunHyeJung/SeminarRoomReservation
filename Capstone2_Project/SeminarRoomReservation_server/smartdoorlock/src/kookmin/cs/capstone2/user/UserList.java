@@ -48,13 +48,15 @@ public class UserList extends HttpServlet {
 		try {
 			conn = DriverManager.getConnection(StaticVariables.JOCL); // 커넥션 풀에서 대기 상태인 커넥션을 얻는다
 			stmt = conn.createStatement(); // DB에 SQL문을 보내기 위한 Statement를 생성
-			String sql = "select text_id from user;"; // 가입된 회원들의 아이디를 프로젝션
+			String sql = "select id, text_id, name from user;"; // 가입된 회원들의 아이디를 프로젝션
 			rs = stmt.executeQuery(sql); // SQL Query Result
 
 			// 가입된 회원들의 아이디를 jsonArray에 담는다
 			while (rs.next()) {
 				userInfo = new JSONObject();
+				userInfo.put("id", rs.getString("id"));
 				userInfo.put("userId", rs.getString("text_id"));
+				userInfo.put("name", rs.getString("name"));
 				userArray.add(userInfo); // Array에 Object 추가
 			}
 
