@@ -18,6 +18,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.servlet.ServletException;
@@ -132,58 +134,65 @@ public class DoorControl extends HttpServlet { // 1.httpservlet 상속
 	}
 
 	// 라즈베리파이로 명령 보내기
-	private String sendPost(String command){
+	private int sendPost(String command){
 		
-		String result= "";
+		int result = -1;
 		try{
 			String outStr = "command=" + command;
 			String serverIp = "203.246.112.200";
-			System.out.println("1");
 			OutputStreamWriter osw=null;
 			
 			Socket socket = new Socket(serverIp, 80);
 			System.out.println("소켓 생성 성공");
+			// 소켓의 입력 스트림과 Reader를 얻는다.
+			//////////////////////
+			InputStream in = socket.getInputStream();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+			String echo="";
+			////////////////////////
+			Timer t = new Timer();
+			TimerTask task1 = new MyTimeTask();
 			
 			try {
 				osw=new OutputStreamWriter(socket.getOutputStream());
 				System.out.println("소켓 생성 후 OutputStreamWriter 생성 성공");
 				osw.write(outStr, 0, 9);
-			    osw.flush();
+			    osw.flush(); //데이터 전송
+			    String tmp;
+			    while((tmp=reader.readLine())!=null)
+			    	echo += tmp;
+			    System.out.println("\tServerEcho : " + echo);
+
 			    System.out.println("데이터 전송");
 			} catch (IOException e) {
 				System.out.println("OutputSteamWriter 생성 실패");
 				System.exit(-1);
+				e.printStackTrace();
 			}
+
+			System.out.println("연결을 종료합니다.");		
 			
-			 /*try {
-			    osw.write(outStr, 0, 9);
-			    osw.flush();
-			    System.out.println("데이터 전송");
-			 } catch (IOException e) {
-			    System.out.println("데이터 전송에 실패했습니다.");
-			 } */ 
-			 
 			 try {
 			    osw.close();
+			    in.close();
+			    reader.close();
+			    socket.close();
 			    System.out.println("소켓 닫음");
 			 } catch (IOException e) {
 			    System.out.println("소켓을 닫는데 실패했습니다.");
 			 }
 			 
-			// 소켓의 입력 스트림을 얻는다.
-			//InputStream in = socket.getInputStream();
-			//DataInputStream dis = new DataInputStream(in);
-			
-			// 소켓으로부터 받은 데이터를 출력한다.
-			//System.out.println("서버로부터 받은 메시지 : " + dis.readUTF());
-			//System.out.println("연결을 종료합니다.");
-			
-			//result = dis.readUTF();
-			 result = "temp";
 		}catch (IOException e) {
 			System.out.println("IOException이 발생했습니다.");
 			e.printStackTrace();
 		}
 		return result;
+	}
+	
+	public class MyTimeTask extends TimerTask {
+		@Override
+		public void run(){
+			System.out.println("이것은 TimeTask 작업입니다.");
+		}
 	}
 }
