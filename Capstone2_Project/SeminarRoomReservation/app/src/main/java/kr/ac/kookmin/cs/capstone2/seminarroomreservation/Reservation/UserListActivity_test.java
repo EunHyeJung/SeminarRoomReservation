@@ -113,7 +113,7 @@ public class UserListActivity_test extends AppCompatActivity implements View.OnC
                 convertView = vi.inflate(R.layout.userlist_info, null);
 
                 holder = new ViewHolder();
-                holder.id = (TextView) convertView.findViewById(R.id.code);
+                holder.id = (TextView) convertView.findViewById(R.id.id);
                 holder.name = (CheckBox) convertView.findViewById(R.id.checkBox);
                 convertView.setTag(holder);
 

@@ -24,8 +24,7 @@ import retrofit.client.Response;
  */
 public class UserListActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    ListView sampleuserlistview;
-
+    ListView userListview;
     UserListAdapter userlistviewAdapter;
 
     RestRequestHelper restRequest;//네트워크 변수
@@ -54,7 +53,7 @@ public class UserListActivity extends AppCompatActivity implements AdapterView.O
 
         //레이아웃과 매핑하기
         button_sample=(Button) findViewById(R.id.button_sample);
-        sampleuserlistview=(ListView) findViewById(R.id.sampleuserlistview);
+        userListview=(ListView) findViewById(R.id.userListview);
 
         getUserList();
 
@@ -82,8 +81,7 @@ public class UserListActivity extends AppCompatActivity implements AdapterView.O
         // userlistviewAdapter.clear();//내용을 비운다.
 
         userlistviewAdapter = new UserListAdapter();
-
-        sampleuserlistview.setAdapter(userlistviewAdapter);
+        userListview.setAdapter(userlistviewAdapter);
 
         restRequest.getUserList(date, new Callback<JsonObject>() {
 
