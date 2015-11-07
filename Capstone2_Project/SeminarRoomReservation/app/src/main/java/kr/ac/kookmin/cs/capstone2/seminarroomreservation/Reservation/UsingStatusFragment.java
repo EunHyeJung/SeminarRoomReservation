@@ -117,7 +117,6 @@ public class UsingStatusFragment extends Fragment {
         });
 
 
-        //date="2015-10-10";
         try {
             init(date);
         } catch (JSONException e) {
@@ -151,9 +150,6 @@ public class UsingStatusFragment extends Fragment {
             startTime.put(inputTimeValues[i - 1].substring(0, 5), i);
             endTime.put(inputTimeValues[i - 1].substring(8, 13), i);
         }
-        // date = "2015-10-10";        // 예약확인 위해 임의 날짜 설정, 나중에 삭제할 것.
-
-
         int[] roomIds = new int[5];
         for (int i = 0; i < roomIds.length; i++) {
             roomIds[i] = 5 * page + i + 1;
@@ -211,17 +207,23 @@ public class UsingStatusFragment extends Fragment {
             reservationsInfos[i] = new ReservationsInfo();
         }
 
+        // 이 부분을 gridViewAdapter에서 처리하고, 예약자 이름 셀에다 넣어줄것
+        /*
+        *       reservationInfo.
+        *       roomId, status, startTime, endTime
+        *      int (컬러값) = checkStatus(roomId, startTime, endTime)
+        *
+        * */
         for (int i = 0; i < reservations.size(); i++) {
             String tempStartTime = (reservations.get(i).getAsJsonObject().getAsJsonPrimitive("startTime").getAsString()).substring(0, 5);
             String tempEndTime = (reservations.get(i).getAsJsonObject().getAsJsonPrimitive("endTime").getAsString()).substring(0, 5);
             int reservationStatus = (reservations.get(i).getAsJsonObject().getAsJsonPrimitive("reservationStatus").getAsInt());
             int reservedRoomId = (reservations.get(i).getAsJsonObject().getAsJsonPrimitive("roomId").getAsInt());
-            int temp1 = (5 * (startTime.get(tempStartTime) - 1)) + (reservedRoomId % 5) - 1; // 시작시간
-            int temp2 = (5 * (endTime.get(tempEndTime) - 1)) + (reservedRoomId % 5) - 1; // 끝나는 시간
-            reservationsInfos[i].setReservationsInfo(reservationStatus, temp1, temp2);
+            int cellStartPosition = (5 * (startTime.get(tempStartTime) - 1)) + (reservedRoomId % 5) - 1; // 셀 시작 위치
+            int cellEndPosition = (5 * (endTime.get(tempEndTime) - 1)) + (reservedRoomId % 5) - 1; // 셀 종료 위치
+            reservationsInfos[i].setReservationsInfo(reservationStatus, cellStartPosition, cellEndPosition);
         }
 
-        // 한번 검토, for문의 과정이 꼭 필요할까??
         ArrayList<Integer> inputValues = new ArrayList<Integer>();
         for (int i = 0; i < 120; i++) {
             inputValues.add(i);

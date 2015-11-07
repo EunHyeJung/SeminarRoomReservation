@@ -1,5 +1,7 @@
 package kr.ac.kookmin.cs.capstone2.seminarroomreservation.User;
 
+import android.content.DialogInterface;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 
 import android.os.Bundle;
@@ -13,9 +15,10 @@ import com.astuetz.PagerSlidingTabStrip;
 
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.CustomPagerAdapter;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation.UsingStatusFragment;
 
 
-public class UserActivity extends AppCompatActivity {
+public class UserActivity extends AppCompatActivity implements DialogInterface.OnDismissListener, UsingStatusFragment.AccidentListener {
 
     ViewPager viewPager;
 
@@ -31,6 +34,13 @@ public class UserActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        Fragment fragment = ((CustomPagerAdapter) viewPager.getAdapter()).getFragment(0);
+        if (fragment != null) {
+            fragment.onResume();
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -52,5 +62,14 @@ public class UserActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void refershFragment(int page) {
+        Fragment fragment = ((CustomPagerAdapter) viewPager.getAdapter()).getFragment(0);
+        if (fragment != null) {
+            fragment.onResume();
+
+        }
     }
 }

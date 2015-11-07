@@ -36,7 +36,9 @@ public class SettingFragment extends Fragment {
         buttonLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SharedPreferenceClass.removeAllPreferences();
+              //  SharedPreferenceClass.removeAllPreferences();
+                SharedPreferenceClass.putValue("autoLogin", false);
+                SharedPreferenceClass.putValue("storeId", false);
                 getActivity().finish();
             }
         });

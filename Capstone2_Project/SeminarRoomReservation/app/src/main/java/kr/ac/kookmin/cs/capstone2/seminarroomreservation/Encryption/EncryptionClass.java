@@ -7,7 +7,7 @@ import java.security.NoSuchAlgorithmException;
  * Created by ehye on 2015-09-14.
  */
 public class EncryptionClass {
-    public  static String testSHA256(String str) {
+    public  static String encryptSHA256(String str) {
         String SHA = "";
 
         try {
@@ -19,7 +19,6 @@ public class EncryptionClass {
                 sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
             }
             SHA = sb.toString();
-
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
             SHA = null;
