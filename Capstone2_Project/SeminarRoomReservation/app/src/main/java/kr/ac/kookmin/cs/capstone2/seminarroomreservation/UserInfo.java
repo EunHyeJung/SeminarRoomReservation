@@ -33,15 +33,15 @@ public class UserInfo {
     }
 
 
-    public int getId() {
+    public static int getId() {
         return id;
     }
 
-    public String getUserId() {
+    public static String getUserId() {
         return userId;
     }
 
-    public String getPassword() {
+    public static String getPassword() {
         return password;
     }
 

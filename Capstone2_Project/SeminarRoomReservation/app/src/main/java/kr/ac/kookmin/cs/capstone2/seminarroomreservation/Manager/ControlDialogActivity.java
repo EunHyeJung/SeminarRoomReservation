@@ -50,7 +50,7 @@ public class    ControlDialogActivity extends AppCompatActivity {
                         switch (result) {
                             //문 관리 실패
                             case 0:
-                                Toast.makeText(getApplicationContext(),"네트워크 사정으로 문을 열 수 없습니다.",Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(getApplicationContext(),"네트워크 사정으로 문을 열 수 없습니다.",Toast.LENGTH_SHORT).show();
                                 break;
                             //문 열기 가능
                             case 1:
@@ -78,7 +78,7 @@ public class    ControlDialogActivity extends AppCompatActivity {
                         switch (result){
                             //문 닫기 실패
                             case 0 :
-                                Toast.makeText(getApplicationContext(),"네트워크 사정으로 문을 닫을 수 없습니다.",Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(getApplicationContext(),"네트워크 사정으로 문을 닫을 수 없습니다.",Toast.LENGTH_SHORT).show();
                                 break;
                             //문 닫기 성공
                             case 1:
@@ -112,29 +112,5 @@ public class    ControlDialogActivity extends AppCompatActivity {
         DoorStatusText=(TextView)findViewById(R.id.text_DoorStatus);
 
         Log.d("Controld Dialog ID", id+"");
-
-        //방 상태를 받아오는 함수를 실행
-     /*   requestHelper.roomStatus(id, RoomName, new Callback<JsonObject>() {
-            @Override
-            public void success(JsonObject jsonObject, Response response) {
-                int status = jsonObject.get("status").getAsInt();
-                switch (status){
-                    //닫힘
-                    case 0 :
-                        DoorStatusText.setText("Door Status : Close");
-                        break;
-                    //열림
-                    case 1:
-                        DoorStatusText.setText("Door Status : Open");
-                        break;
-                }
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                Log.e("Error : ",error.toString());
-            }
-        });
-        */
     }
 }
