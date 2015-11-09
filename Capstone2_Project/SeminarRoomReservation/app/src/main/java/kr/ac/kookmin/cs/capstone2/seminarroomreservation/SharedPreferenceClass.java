@@ -58,7 +58,6 @@ public class SharedPreferenceClass {
 
     public static Boolean getValue(String key, Boolean defaultValue) {
         SharedPreferences preferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-  //      SharedPreferences preferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         try {
             return preferences.getBoolean(key, defaultValue);
         } catch (Exception e) {
@@ -66,7 +65,7 @@ public class SharedPreferenceClass {
         }
     }
 
-    public static void removeAllPreferences(){
+    public static void removeAllPreferences() {
         SharedPreferences pref = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         editor.clear();

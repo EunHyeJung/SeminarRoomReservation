@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/background2"
+    android:background="@drawable/background"
     tools:context="kr.ac.kookmin.cs.capstone2.seminarroomreservation.JoinActivity">
 
     <FrameLayout
@@ -21,8 +21,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:text="예약신청"
-            android:textSize="25dp"
+            android:text="예약 신청"
+            android:textSize="20dp"
             android:textColor="#FFFFFF"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="30dp"
@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="5dp"
             >
 
 
@@ -51,10 +51,12 @@
                 android:inputType="date"
                 android:ems="10"
                 android:id="@+id/txtCheckInDate"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+
+                />
         </LinearLayout>
 
-        <!--입실날짜-->
+        <!--입실시간-->
         <LinearLayout
             android:layout_width="243dp"
             android:layout_height="wrap_content"
@@ -71,13 +73,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:inputType="time"
-                android:text="09:00          "
                 android:ems="10"
                 android:id="@+id/txtCheckInTime"
                 android:layout_weight="1" />
         </LinearLayout>
 
-        <!--입실날짜-->
+        <!--퇴실시간-->
         <LinearLayout
             android:layout_width="243dp"
             android:layout_height="wrap_content"
@@ -93,11 +94,33 @@
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="09:30          "
                 android:inputType="time"
                 android:ems="10"
                 android:id="@+id/txtCheckOutTime"
                 android:layout_weight="1" />
+        </LinearLayout>
+
+        <!--이용목적-->
+        <LinearLayout
+            android:layout_width="243dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal">
+            <TextView
+                android:layout_width="78dp"
+                android:layout_height="29dp"
+                android:layout_marginTop="5dp"
+                android:text="이용목적"
+                android:id="@+id/reason" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="time|text"
+                android:ems="10"
+                android:id="@+id/context"
+                android:layout_weight="1"
+                android:autoText="false" />
         </LinearLayout>
 
         <!--이용장소-->
@@ -124,31 +147,37 @@
                 android:gravity="center_horizontal" />
         </LinearLayout>
 
-
         <!--회의 참여자 -->
         <LinearLayout
             android:layout_width="243dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_gravity="center_horizontal">
+            android:layout_gravity="center_horizontal"
+            android:clickable="true"
+            android:onClick="onClickInvite">
             <TextView
                 android:layout_width="78dp"
                 android:layout_height="29dp"
 
                 android:layout_marginTop="13dp"
                 android:text="회의 참여자"
-                android:id="@+id/text_memberlist" />
-            <Spinner
-                android:id="@+id/spinner_memberList"
-                android:layout_width="163dp"
-                android:layout_height="40dp"
-                android:layout_gravity="right"
-                android:clickable="true"
-                android:gravity="center_horizontal" />
+                android:id="@+id/text_memberlist"
+                android:clickable="true" />
+
+            <TextView
+                android:layout_width="78dp"
+                android:layout_height="29dp"
+
+                android:layout_marginTop="13dp"
+                android:text="추가하기"
+                android:id="@+id/test"
+                android:clickable="true" />
+
         </LinearLayout>
 
 
     </LinearLayout>
+
 
     <Button
         android:id="@+id/button_makereservation"

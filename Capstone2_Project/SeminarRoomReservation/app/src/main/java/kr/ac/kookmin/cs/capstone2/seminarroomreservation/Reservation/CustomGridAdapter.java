@@ -68,7 +68,7 @@ public class CustomGridAdapter extends BaseAdapter {
                     int startTime = reservationsInfo[i].getStartTime();
                     int endTme = reservationsInfo[i].getEndTime();
                     for (int j = startTime; j <= endTme; j += 5) {
-                        if (j == position) {
+                        if (j == position) {        // reservationStatus 값 define으로 바꿀 것
                             if (reservationsInfo[i].getReservationStatus() == 1)
                                 textViewGridItem.setBackgroundColor(Color.parseColor("#90C84646"));
                             else if (reservationsInfo[i].getReservationStatus() == 2)

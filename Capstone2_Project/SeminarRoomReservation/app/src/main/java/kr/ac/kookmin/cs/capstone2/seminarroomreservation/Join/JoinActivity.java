@@ -76,7 +76,7 @@ public class JoinActivity extends Activity {
     public void signup() {
 
         final String id = editTextId.getText().toString();
-        final String password = EncryptionClass.testSHA256(editTextPassword.getText().toString());
+        final String password = EncryptionClass.encryptSHA256(editTextPassword.getText().toString());
         final String name = editTextName.getText().toString();
         final String phone = editTextPhone.getText().toString();
 

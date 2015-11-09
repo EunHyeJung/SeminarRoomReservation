@@ -42,15 +42,6 @@
 	</servlet-mapping>
 
 	<servlet>
-		<servlet-name>kookmin.cs.capstone2.room.Room</servlet-name>
-		<servlet-class>kookmin.cs.capstone2.room.Room</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>kookmin.cs.capstone2.room.Room</servlet-name>
-		<url-pattern>/room</url-pattern>
-	</servlet-mapping>
-
-	<servlet>
 		<servlet-name>kookmin.cs.capstone2.booking.UsingStatus</servlet-name>
 		<servlet-class>kookmin.cs.capstone2.booking.UsingStatus</servlet-class>
 	</servlet>
@@ -139,4 +130,14 @@
 		<servlet-name>kookmin.cs.capstone2.mypage.MyBookingList</servlet-name>
 		<url-pattern>/mybooking</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>kookmin.cs.capstone2.mypage.CancelMyBooking</servlet-name>
+		<servlet-class>kookmin.cs.capstone2.mypage.CancelMyBooking</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>kookmin.cs.capstone2.mypage.CancelMyBooking</servlet-name>
+		<url-pattern>/cancelmybooking</url-pattern>
+	</servlet-mapping>
+
 </web-app>
