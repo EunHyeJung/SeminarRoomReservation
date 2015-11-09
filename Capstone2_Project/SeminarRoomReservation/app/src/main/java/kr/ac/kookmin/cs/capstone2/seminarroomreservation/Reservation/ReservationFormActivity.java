@@ -186,10 +186,12 @@ public class ReservationFormActivity extends AppCompatActivity implements Adapte
             Roomlistarr.add(strRoomList[i]);
         }
 
+        //ArrayAdapter를 이용해 adapter 객체 생성
         ArrayAdapter <String> adapter;
-
         adapter= new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, Roomlistarr);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        //Spinner 에 adapter 설정
         spinner_room = (Spinner)findViewById(R.id.spinner_roomList);
         spinner_room.setAdapter(adapter);
 
@@ -248,7 +250,7 @@ public class ReservationFormActivity extends AppCompatActivity implements Adapte
 
     }
 
-    //Spinner
+    //Spinner 의 item 이 선택되었을 때 처리하는 메소드 정의
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         TextView myText = (TextView) view;

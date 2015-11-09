@@ -61,10 +61,6 @@ public class UserListActivity_test extends AppCompatActivity implements View.OnC
 
     public void getUserList(){
 
-        myAdapter = new MyCustomAdapter(this, R.layout.userlist_info, UserListArrayList);
-        ListView userlistview = (ListView) findViewById(R.id.userlistview);
-        userlistview.setAdapter(myAdapter);
-
         restRequest_userlist.getUserList(date, new Callback<JsonObject>() {
 
             @Override
@@ -96,6 +92,10 @@ public class UserListActivity_test extends AppCompatActivity implements View.OnC
                 Log.e("Retrofit Error : ", error.toString());
             }
         });
+
+        myAdapter = new MyCustomAdapter(this, R.layout.userlist_info, UserListArrayList);
+        ListView userlistview = (ListView) findViewById(R.id.userlistview);
+        userlistview.setAdapter(myAdapter);
 
         userlistview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

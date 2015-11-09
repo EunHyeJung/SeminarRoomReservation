@@ -11,7 +11,7 @@
         android:label="@string/app_name"
         android:theme="@style/Theme.AppCompat.NoActionBar" >
         <activity
-            android:name=".Authentication.MainActivity"
+            android:name=".Reservation.ReservationFormActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,7 +28,7 @@
         <activity
             android:name=".Join.JoinActivity"
             android:label="@string/title_activity_join" />
-        <activity android:name=".Reservation.ReservationFormActivity" />
+
         <activity
             android:name=".Manager.ControlDialogActivity"
             android:label="@string/title_activity_control_dialog"
