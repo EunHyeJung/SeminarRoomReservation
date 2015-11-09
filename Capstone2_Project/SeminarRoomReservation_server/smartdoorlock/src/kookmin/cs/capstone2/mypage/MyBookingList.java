@@ -20,6 +20,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
+//일반 사용자가 자신이 포함된 예약 내역을 볼 수 있다.
+
 public class MyBookingList extends HttpServlet{
 	
 	/*
@@ -32,7 +34,6 @@ public class MyBookingList extends HttpServlet{
 			HttpServletResponse response) throws ServletException, IOException {
 
 		// request, response 인코딩 방식 지정
-		request.setCharacterEncoding("utf-8");
 		response.setContentType("text/html;charset=utf-8");
 		
 		//RequestBody to String
@@ -67,7 +68,7 @@ public class MyBookingList extends HttpServlet{
 				sql += ";";
 			else
 				sql = "select * from (" + sql + ") as sub_result where date='" + date + "';";
-			System.out.println(sql);
+			System.out.println("MyBookingList : " + sql);
 			rs = stmt.executeQuery(sql);
 			while (rs.next()) {
 				listInfo = new JSONObject();
