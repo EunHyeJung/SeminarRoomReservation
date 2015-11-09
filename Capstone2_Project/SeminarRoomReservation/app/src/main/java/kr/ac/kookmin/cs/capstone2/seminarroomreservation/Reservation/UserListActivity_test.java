@@ -15,9 +15,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
 import java.util.ArrayList;
 
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Network.RestRequestHelper;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * Created by hongjuhae on 2015. 10. 25..
@@ -31,9 +38,9 @@ public class UserListActivity_test extends AppCompatActivity implements View.OnC
     ArrayList<UserList> UserListArrayList = new ArrayList<UserList>();
     UserList userlist;
 
-
+    public static String date="";
+    RestRequestHelper restRequest_userlist;//네트워크 변수
     Button button_invite;
-
     ArrayAdapter<String> myArrayAdapter;
 
     @Override
@@ -42,38 +49,55 @@ public class UserListActivity_test extends AppCompatActivity implements View.OnC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.custom_listview_userlist);
 
+        restRequest_userlist= RestRequestHelper.newInstance();
         findViewsById();
 
+        getUserList();
         //Generate list View from ArrayList
-        displayListView();
+        //displayListView();
         inviteButtonClick();
 
     }
 
-    private void displayListView() {
-
-        userlist = new UserList("20103424","박민욱",false);
-        UserListArrayList.add(userlist);
-
-        userlist = new UserList("20113344","홍주혜",false);
-        UserListArrayList.add(userlist);
-
-        userlist = new UserList("20123314","임은지",false);
-        UserListArrayList.add(userlist);
-
-        userlist = new UserList("20123335","정은혜",false);
-        UserListArrayList.add(userlist);
-
-        userlist = new UserList("20123336","이송미",false);
-        UserListArrayList.add(userlist);
-
+    public void getUserList(){
 
         myAdapter = new MyCustomAdapter(this, R.layout.userlist_info, UserListArrayList);
-        ListView listView = (ListView) findViewById(R.id.userlistview);
+        ListView userlistview = (ListView) findViewById(R.id.userlistview);
+        userlistview.setAdapter(myAdapter);
 
-        listView.setAdapter(myAdapter);
+        restRequest_userlist.getUserList(date, new Callback<JsonObject>() {
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void success(JsonObject jsonObject, Response response) {
+                Log.d("JSON Object : ", jsonObject.toString());
+                try {
+                    JsonObject responseData = jsonObject.getAsJsonObject("responseData");// 1레벨 추출
+                    JsonArray history = responseData.getAsJsonArray("userList");//2레벨 추출
+
+                    //Array 내용을 추출해서 담는다.
+                    for (int i = 0; i < history.size(); i++) {
+                        JsonObject tmpObject = history.get(i).getAsJsonObject();
+
+                        userlist = new UserList(tmpObject.getAsJsonPrimitive("userId").getAsString(),
+                                tmpObject.getAsJsonPrimitive("name").getAsString(), false);
+                        UserListArrayList.add(userlist);
+
+                    }
+
+                    myAdapter.notifyDataSetChanged();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.e("Retrofit Error : ", error.toString());
+            }
+        });
+
+        userlistview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // 줄 클릭 : 클릭시, 메세지 보여주기
                 UserList userlist = (UserList) parent.getItemAtPosition(position);
@@ -81,7 +105,6 @@ public class UserListActivity_test extends AppCompatActivity implements View.OnC
                         "Clicked on Row: " + userlist.getName() + ". Check Box 를 클릭하세요", Toast.LENGTH_LONG).show();
             }
         });
-
     }
 
     private class MyCustomAdapter extends ArrayAdapter<UserList> {
@@ -132,6 +155,7 @@ public class UserListActivity_test extends AppCompatActivity implements View.OnC
             }
 
             UserList userlist = UserListArrayList.get(position);
+
             holder.id.setText(" (" +  userlist.getId() + ")");
             holder.name.setText(userlist.getName());
             holder.name.setChecked(userlist.isSelected());
@@ -166,7 +190,7 @@ public class UserListActivity_test extends AppCompatActivity implements View.OnC
                 responseText.append("입니다.\n");
 
                 Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
-                //?? String product = listView_userlist.toString();
+                //String product = listView_userlist.toString();
 
             }
         });
@@ -174,9 +198,8 @@ public class UserListActivity_test extends AppCompatActivity implements View.OnC
     }
 
     private void findViewsById() {
-
-
-
+        button_invite=(Button) findViewById(R.id.button_invite);
+        listView_userlist=(ListView) findViewById(R.id.userlistview);
     }
 
     @Override
