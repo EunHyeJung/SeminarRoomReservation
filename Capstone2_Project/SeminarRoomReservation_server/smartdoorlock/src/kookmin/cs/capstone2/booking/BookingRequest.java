@@ -26,6 +26,8 @@ import com.mysql.jdbc.ResultSetMetaData;
 import kookmin.cs.capstone2.common.StaticVariables;
 import kookmin.cs.capstone2.common.StaticMethods;
 
+//관리자가 예약 신청 승인 또는 거절을 위해 내역을 받는다.
+
 public class BookingRequest extends HttpServlet {
 
 	/*
