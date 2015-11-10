@@ -20,8 +20,9 @@ import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
 
 public class UserListAdapter extends BaseAdapter {
 
-    ArrayList<String> UserIdArray;
-    ArrayList<String> UserNameArray;
+    static ArrayList<String> UserIdArray;
+    static ArrayList<String> UserNameArray;
+
 
     RestRequestHelper restRequestHelper;
 
@@ -97,11 +98,8 @@ public class UserListAdapter extends BaseAdapter {
     public void addUserId(String userid) {
         UserIdArray.add(userid); }
 
-
     //방 번호 추가
     public void addUserName(String username) { UserNameArray.add(username); }
-
-
 
     //초기화
     public void clear(){

@@ -34,9 +34,8 @@ public class UserListActivity extends AppCompatActivity implements AdapterView.O
     String roomName;//기본은 ALL
     Button button_sample;//친구 추가 버튼
 
-
-    ArrayList<String> entry;
-    CalendarDialog calendarDialog;
+    //
+    ArrayList<UserList> UserListArrayList = new ArrayList();
 
     public UserListActivity() {
         // Required empty public constructor
@@ -110,9 +109,19 @@ public class UserListActivity extends AppCompatActivity implements AdapterView.O
                 StringBuffer responseText = new StringBuffer();
                 responseText.append("추가된 참가자 : \n");
 
+                /* //수정해야함
+                for (int i = 0; i < UserListAdapter.UserIdArray.size(); i++) {
+                    UserList userlist = UserListArrayList.get(i);
+                    if (userlist.isSelected()) {
+                        responseText.append("\n" + UserListAdapter.UserNameArray.get(i));
+                    }
+                }*/
+
                 responseText.append("입니다.\n");
                 Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
                 //String product = listView_userlist.toString();
+
+                //ReservationFormActivity 로 값 intent
                 finish();
             }
         });

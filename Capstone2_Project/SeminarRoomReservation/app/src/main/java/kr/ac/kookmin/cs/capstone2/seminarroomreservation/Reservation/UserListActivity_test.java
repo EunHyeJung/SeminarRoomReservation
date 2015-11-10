@@ -61,6 +61,8 @@ public class UserListActivity_test extends AppCompatActivity implements View.OnC
 
     public void getUserList(){
 
+
+
         restRequest_userlist.getUserList(date, new Callback<JsonObject>() {
 
             @Override
@@ -76,7 +78,7 @@ public class UserListActivity_test extends AppCompatActivity implements View.OnC
 
                         userlist = new UserList(tmpObject.getAsJsonPrimitive("userId").getAsString(),
                                 tmpObject.getAsJsonPrimitive("name").getAsString(), false);
-                        UserListArrayList.add(userlist);
+                        UserListArrayList.add(i, userlist);
 
                     }
 
@@ -96,7 +98,6 @@ public class UserListActivity_test extends AppCompatActivity implements View.OnC
         myAdapter = new MyCustomAdapter(this, R.layout.userlist_info, UserListArrayList);
         ListView userlistview = (ListView) findViewById(R.id.userlistview);
         userlistview.setAdapter(myAdapter);
-
 
 
         userlistview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
