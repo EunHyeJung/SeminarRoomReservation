@@ -97,6 +97,8 @@ public class UserListActivity_test extends AppCompatActivity implements View.OnC
         ListView userlistview = (ListView) findViewById(R.id.userlistview);
         userlistview.setAdapter(myAdapter);
 
+
+
         userlistview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // 줄 클릭 : 클릭시, 메세지 보여주기
@@ -154,7 +156,7 @@ public class UserListActivity_test extends AppCompatActivity implements View.OnC
                 holder = (ViewHolder) convertView.getTag();
             }
 
-            UserList userlist = UserListArrayList.get(position);
+            //UserList userlist = UserListArrayList.get(position);
 
             holder.id.setText(" (" +  userlist.getId() + ")");
             holder.name.setText(userlist.getName());
@@ -164,7 +166,6 @@ public class UserListActivity_test extends AppCompatActivity implements View.OnC
             return convertView;
 
         }
-
     }
 
     private void inviteButtonClick() {
@@ -191,7 +192,7 @@ public class UserListActivity_test extends AppCompatActivity implements View.OnC
 
                 Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
                 //String product = listView_userlist.toString();
-
+                finish();
             }
         });
 

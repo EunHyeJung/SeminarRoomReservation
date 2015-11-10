@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -56,26 +57,10 @@ public class UserListActivity extends AppCompatActivity implements AdapterView.O
         userListview=(ListView) findViewById(R.id.userListview);
 
         getUserList();
+        inviteButtonClick();
 
     }
 
-    /*
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View view=inflater.inflate(R.layout.fragment_userlistview, container, false);
-
-        //네트워크와 연결
-        restRequest= RestRequestHelper.newInstance();
-
-        //초기 설정
-        init(view);
-
-        getUserList();
-
-        //뷰화면 리턴하기
-        return view;
-    }
-*/
     //기록 가져오기
     public void getUserList(){
         // userlistviewAdapter.clear();//내용을 비운다.
@@ -113,6 +98,25 @@ public class UserListActivity extends AppCompatActivity implements AdapterView.O
                 Log.e("Retrofit Error : ", error.toString());
             }
         });
+    }
+
+    private void inviteButtonClick() {
+        Button myButton = (Button) findViewById(R.id.button_sample);
+        myButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                StringBuffer responseText = new StringBuffer();
+                responseText.append("추가된 참가자 : \n");
+
+                responseText.append("입니다.\n");
+                Toast.makeText(getApplicationContext(), responseText, Toast.LENGTH_LONG).show();
+                //String product = listView_userlist.toString();
+                finish();
+            }
+        });
+
     }
 
     @Override

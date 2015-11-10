@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -57,15 +58,15 @@ public class UserListAdapter extends BaseAdapter {
 
         if(convertView == null ){
             LayoutInflater inflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView=inflater.inflate(R.layout.custom_listview_sample, parent, false);
+            convertView=inflater.inflate(R.layout.userlist_info, parent, false);
 
             //초기 설정 부분
             init(convertView, position);
 
             //View holder 설정
             userlistViewHolder = new UserListViewHolder();
-            userlistViewHolder.userId = (TextView)convertView.findViewById(R.id.list_userId);
-            userlistViewHolder.userName = (TextView)convertView.findViewById(R.id.list_userName);
+            userlistViewHolder.userId = (TextView)convertView.findViewById(R.id.id);
+            userlistViewHolder.userName = (CheckBox)convertView.findViewById(R.id.checkBox);
 
             convertView.setTag(userlistViewHolder);
         }
@@ -74,7 +75,7 @@ public class UserListAdapter extends BaseAdapter {
             userlistViewHolder = (UserListViewHolder) convertView.getTag();
         }
 
-        userlistViewHolder.userId.setText(UserIdArray.get(position));
+        userlistViewHolder.userId.setText("(" + UserIdArray.get(position) + ") ");
         userlistViewHolder.userName.setText(UserNameArray.get(position));
 
 
@@ -84,8 +85,8 @@ public class UserListAdapter extends BaseAdapter {
 
     //초기화 작업
     public void init(View convertView, int position){
-        TextView userId = (TextView)convertView.findViewById(R.id.list_userId);
-        TextView userName = (TextView)convertView.findViewById(R.id.list_userName);
+        TextView userId = (TextView)convertView.findViewById(R.id.id);
+        CheckBox userName = (CheckBox) convertView.findViewById(R.id.checkBox);
 
         userId.setText(UserIdArray.get(position));
         userName.setText(UserNameArray.get(position));
@@ -112,5 +113,8 @@ public class UserListAdapter extends BaseAdapter {
     public class UserListViewHolder{
         public TextView userId;
         public TextView userName;
+        TextView id;
+        CheckBox name;
+
     }
 }
