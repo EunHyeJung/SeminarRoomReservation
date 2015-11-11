@@ -4,6 +4,8 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -21,6 +24,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Iterator;
 
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Manager.ManagerActivity;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Network.RestRequestHelper;
@@ -38,7 +43,7 @@ public class ReservationFormActivity extends AppCompatActivity implements Adapte
     private EditText TxtCheckInTime;
     private EditText TxtCheckOutTime;
     private TextView Invite;
-    private TextView Test;
+    private Button buttonAddMember;
 
 
     private EditText Edittxt_reason;
@@ -63,7 +68,7 @@ public class ReservationFormActivity extends AppCompatActivity implements Adapte
         button_makereservation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                makereservation();
+                makeReservation();
             }
         });
 
@@ -107,23 +112,14 @@ public class ReservationFormActivity extends AppCompatActivity implements Adapte
             }
         });
 
-        //UserListActivity 열기
-        Invite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                Intent myintent = new Intent(getApplicationContext(), UserListActivity.class);
-                startActivity(myintent);
-            }
-        });
 
-        //test
-        Test.setOnClickListener(new View.OnClickListener() {
+        // 회의 참여자 추가하기
+        buttonAddMember.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                Intent myintent1 = new Intent(getApplicationContext(), UserListActivity_test.class);
-                startActivity(myintent1);
+                 Intent intent = new Intent(getApplicationContext(), UserListActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -132,14 +128,14 @@ public class ReservationFormActivity extends AppCompatActivity implements Adapte
 
     private void findViewsById() {
 
-        TxtCheckInDate = (EditText) findViewById(R.id.txtCheckInDate);
-        TxtCheckInTime = (EditText) findViewById(R.id.txtCheckInTime);
-        TxtCheckOutTime = (EditText) findViewById(R.id.txtCheckOutTime);
+        TxtCheckInDate = (EditText) findViewById(R.id.editText_checkInDate);
+        TxtCheckInTime = (EditText) findViewById(R.id.editText_checkInTime);
+        TxtCheckOutTime = (EditText) findViewById(R.id.editText_checkOutTime);
 
         Invite = (TextView) findViewById(R.id.text_memberlist);
-        Test = (TextView) findViewById(R.id.test);
+        buttonAddMember = (Button) findViewById(R.id.button_addMemeber);
 
-        Edittxt_reason = (EditText) findViewById(R.id.context);
+        Edittxt_reason = (EditText) findViewById(R.id.editText_context);
         button_makereservation = (Button) findViewById(R.id.button_makereservation);
     }
 
@@ -192,8 +188,6 @@ public class ReservationFormActivity extends AppCompatActivity implements Adapte
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_room = (Spinner)findViewById(R.id.spinner_roomList);
         spinner_room.setAdapter(adapter);
-
-
     }
 
     @Override
@@ -219,27 +213,35 @@ public class ReservationFormActivity extends AppCompatActivity implements Adapte
     }
 
     //예약함수
-    public void makereservation(){
+    public void makeReservation(){
 
-        //
-        Toast.makeText(ReservationFormActivity.this, "예약신청 완료", Toast.LENGTH_SHORT).show(); //확인
-        Intent intent = new Intent(getApplicationContext(), ManagerActivity.class);
-        startActivity(intent);
-
-        //
         String date = TxtCheckInDate.getText().toString();
-        String start_time = TxtCheckInTime.getText().toString();
-        String end_time = TxtCheckOutTime.getText().toString();
-        String room_id = spinner_room.toString(); // room number 불러오기
+        String startTime = TxtCheckInTime.getText().toString();
+        String endTime = TxtCheckOutTime.getText().toString();
+        String roomId = spinner_room.toString(); // room number 불러오기
         String context =  Edittxt_reason.getText().toString();
+        ArrayList<Integer> participants = new ArrayList<Integer>();
+
+        Intent intent = getIntent();
+        // UserListActivity로부터 회의참가자들을 받앙옴
+        HashMap<Integer, String> selectedUsers = (HashMap<Integer, String>) intent.getSerializableExtra("participants");
+
+        Iterator<Integer> iterator = selectedUsers.keySet().iterator();
+        while (iterator.hasNext()) {
+            int key = (Integer) iterator.next();
+            participants.add(key);      // 참가자 고유 ID값을 얻음
+      /*      System.out.print("key=" + key);
+            System.out.println(" value=" + selectedUsers.get(key));*/
+        }
+        final TransmissionResInfo transmissionResInfo = new TransmissionResInfo(6, 2, date, startTime, endTime, context, participants);
 
         RestRequestHelper requestHelper = RestRequestHelper.newInstance();
-        requestHelper.makeReservation(date, start_time, end_time, room_id, context, new Callback<Integer>() {
-
+        requestHelper.makeReservation(transmissionResInfo, new Callback<Integer>() {
             @Override
-            public void success(Integer makeReservationCallback, Response response) {
-                System.out.println("reservation success" + makeReservationCallback);
+            public void success(Integer integer, Response response) {
+                    System.out.println("성공 ? : "+integer);
             }
+
             @Override
             public void failure(RetrofitError error) {
                 error.printStackTrace();
@@ -258,4 +260,6 @@ public class ReservationFormActivity extends AppCompatActivity implements Adapte
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+
+
 }

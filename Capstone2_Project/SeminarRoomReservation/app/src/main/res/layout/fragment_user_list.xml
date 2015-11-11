@@ -1,0 +1,31 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#EFEFEF">
+
+    <ListView
+        android:id="@+id/listView_memberList"
+        android:layout_width="wrap_content"
+        android:layout_height="270dp"
+        android:layout_marginTop="20dp"
+        android:verticalSpacing="1dp"
+        android:focusable="false"
+        android:clickable="false"
+    ></ListView>
+
+    <Button
+        android:id="@+id/button_sample"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:text="추가하기"
+        android:textColor="#FFFFFF"
+        android:background="#3e3e3e"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="25dp"
+        android:onClick="onClickedMakeReservation"
+        />
+
+
+</LinearLayout>

@@ -1,195 +1,199 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@drawable/background"
+    android:orientation="vertical"
     tools:context="kr.ac.kookmin.cs.capstone2.seminarroomreservation.JoinActivity">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"></FrameLayout>
-
-    <LinearLayout
-        android:layout_width="350dp"
-        android:layout_height="380dp"
-        android:orientation="vertical"
-        android:layout_gravity="center_horizontal"
-        android:background="#90000000"
-        android:layout_marginTop="60dp"
-        >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:text="예약 신청"
-            android:textSize="20dp"
-            android:textColor="#FFFFFF"
+        <LinearLayout
+            android:id="@+id/layout_reservation_from"
+            android:layout_width="350dp"
+            android:layout_height="380dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="30dp"
-            />
-
-        <!--입실날짜-->
-        <LinearLayout
-            android:layout_width="243dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="5dp"
-            >
-
+            android:layout_marginTop="60dp"
+            android:background="#90000000"
+            android:orientation="vertical">
 
             <TextView
-                android:layout_width="78dp"
-                android:layout_height="29dp"
-                android:layout_marginTop="5dp"
-                android:text="입실날짜"
-                android:id="@+id/check_in_date" />
-
-            <EditText
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="date"
-                android:ems="10"
-                android:id="@+id/txtCheckInDate"
-                android:layout_weight="1"
-
-                />
-        </LinearLayout>
-
-        <!--입실시간-->
-        <LinearLayout
-            android:layout_width="243dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center_horizontal">
-            <TextView
-                android:layout_width="78dp"
-                android:layout_height="29dp"
-                android:layout_marginTop="5dp"
-                android:text="입실시간"
-                android:id="@+id/check_in_time" />
-
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="time"
-                android:ems="10"
-                android:id="@+id/txtCheckInTime"
-                android:layout_weight="1" />
-        </LinearLayout>
-
-        <!--퇴실시간-->
-        <LinearLayout
-            android:layout_width="243dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center_horizontal">
-            <TextView
-                android:layout_width="78dp"
-                android:layout_height="29dp"
-                android:layout_marginTop="5dp"
-                android:text="퇴실시간"
-                android:id="@+id/check_out_time" />
-
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="time"
-                android:ems="10"
-                android:id="@+id/txtCheckOutTime"
-                android:layout_weight="1" />
-        </LinearLayout>
-
-        <!--이용목적-->
-        <LinearLayout
-            android:layout_width="243dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center_horizontal">
-            <TextView
-                android:layout_width="78dp"
-                android:layout_height="29dp"
-                android:layout_marginTop="5dp"
-                android:text="이용목적"
-                android:id="@+id/reason" />
-
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="time|text"
-                android:ems="10"
-                android:id="@+id/context"
-                android:layout_weight="1"
-                android:autoText="false" />
-        </LinearLayout>
-
-        <!--이용장소-->
-        <LinearLayout
-            android:layout_width="243dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center_horizontal">
-            <TextView
-                android:layout_width="78dp"
-                android:layout_height="29dp"
-
-                android:layout_marginTop="13dp"
-                android:text="이용장소"
-                android:id="@+id/text_roomNumber" />
-            <Spinner
-                android:id="@+id/spinner_roomList"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:layout_width="163dp"
                 android:layout_height="40dp"
-                android:layout_gravity="right"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="30dp"
+                android:text="예약 신청"
+                android:textColor="#FFFFFF"
+                android:textSize="20dp" />
+
+            <!--입실날짜-->
+            <LinearLayout
+                android:layout_width="243dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+
+                <TextView
+                    android:id="@+id/check_in_date"
+                    android:layout_width="78dp"
+                    android:layout_height="29dp"
+                    android:layout_marginTop="5dp"
+                    android:text="입실날짜" />
+
+                <EditText
+                    android:id="@+id/editText_checkInDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="date"
+                    android:focusable="false"
+                    />
+            </LinearLayout>
+
+            <!--입실시간-->
+            <LinearLayout
+                android:layout_width="243dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/check_in_time"
+                    android:layout_width="78dp"
+                    android:layout_height="29dp"
+                    android:layout_marginTop="5dp"
+                    android:text="입실시간" />
+
+                <EditText
+                    android:id="@+id/editText_checkInTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="time"
+                    android:focusable="false"
+                    />
+
+            </LinearLayout>
+
+            <!--퇴실시간-->
+            <LinearLayout
+                android:layout_width="243dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/check_out_time"
+                    android:layout_width="78dp"
+                    android:layout_height="29dp"
+                    android:layout_marginTop="5dp"
+                    android:text="퇴실시간" />
+
+                <EditText
+                    android:id="@+id/editText_checkOutTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="time"
+                    android:focusable="false"
+                    />
+            </LinearLayout>
+
+            <!--이용목적-->
+            <LinearLayout
+                android:layout_width="243dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/reason"
+                    android:layout_width="78dp"
+                    android:layout_height="29dp"
+                    android:layout_marginTop="5dp"
+                    android:text="이용목적" />
+
+                <EditText
+                    android:id="@+id/editText_context"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:autoText="false"
+                    android:ems="10"
+                    android:inputType="time|text"
+                    />
+            </LinearLayout>
+
+            <!--이용장소-->
+            <LinearLayout
+                android:layout_width="243dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/text_roomNumber"
+                    android:layout_width="78dp"
+                    android:layout_height="29dp"
+                    android:layout_marginTop="13dp"
+                    android:text="이용장소" />
+
+                <Spinner
+                    android:id="@+id/spinner_roomList"
+                    android:layout_width="163dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_gravity="right"
+                    android:clickable="true"
+                    android:gravity="center_horizontal" />
+            </LinearLayout>
+
+            <!--회의 참여자 -->
+            <LinearLayout
+                android:layout_width="243dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:clickable="true"
-                android:gravity="center_horizontal" />
-        </LinearLayout>
+                android:onClick="onClickInvite"
+                android:orientation="horizontal">
 
-        <!--회의 참여자 -->
-        <LinearLayout
-            android:layout_width="243dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center_horizontal"
-            android:clickable="true"
-            android:onClick="onClickInvite">
-            <TextView
-                android:layout_width="78dp"
-                android:layout_height="29dp"
+                <TextView
+                    android:id="@+id/text_memberlist"
+                    android:layout_width="78dp"
+                    android:layout_height="29dp"
+                    android:layout_marginTop="13dp"
+                    android:clickable="true"
+                    android:text="회의 참여자" />
 
-                android:layout_marginTop="13dp"
-                android:text="회의 참여자"
-                android:id="@+id/text_memberlist"
-                android:clickable="true" />
+                <Button
+                    android:id="@+id/button_addMemeber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="13dp"
+                    android:clickable="true"
+                    android:text="추가하기" />
 
-            <TextView
-                android:layout_width="78dp"
-                android:layout_height="29dp"
-
-                android:layout_marginTop="13dp"
-                android:text="추가하기"
-                android:id="@+id/test"
-                android:clickable="true" />
-
+            </LinearLayout>
         </LinearLayout>
 
 
-    </LinearLayout>
 
 
     <Button
         android:id="@+id/button_makereservation"
         android:layout_width="250dp"
         android:layout_height="40dp"
-        android:text="예약하기"
-        android:textColor="#FFFFFF"
-        android:background="#1D4A4F"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="35dp"
+        android:background="#1D4A4F"
         android:onClick="onClickedMakeReservation"
-        />
+        android:text="예약하기"
+        android:textColor="#FFFFFF" />
+
 
 </LinearLayout>
 
