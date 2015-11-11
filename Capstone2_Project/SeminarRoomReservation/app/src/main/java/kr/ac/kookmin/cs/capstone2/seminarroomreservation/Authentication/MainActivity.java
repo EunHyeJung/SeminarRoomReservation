@@ -168,7 +168,6 @@ public class MainActivity extends AppCompatActivity {
     /*  Start Of jsonParsing */
     public void jsonParsing(JsonObject jsonObject) {
         JsonObject responseData = jsonObject.getAsJsonObject("responseData"); //2 레벨 제이슨 객체를 얻음
-
         int userMode = responseData.getAsJsonPrimitive("result").getAsInt();
         if(userMode == WRONG_USER_INFO){
             loginProcess(userMode);
@@ -178,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
 
         UserInfo.setUserInfo(userId, userMode);
 
-        JsonArray roomNames = responseData.getAsJsonArray("room");
+            JsonArray roomNames = responseData.getAsJsonArray("room");
 
         for (int i = 0; i < roomNames.size(); i++) {
             int roomId = roomNames.get(i).getAsJsonObject().getAsJsonPrimitive("roomId").getAsInt();
