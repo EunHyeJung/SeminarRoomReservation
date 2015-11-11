@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import kookmin.cs.capstone2.GCM.GcmSender;
 import kookmin.cs.capstone2.common.StaticMethods;
 import kookmin.cs.capstone2.common.StaticVariables;
 
@@ -78,18 +79,16 @@ public class RequestList extends HttpServlet {
 				
 				reqListArray.add(listInfo); //Array에 Object 추가
 			}
-			
 			arrayObject.put("requestList", reqListArray);
 			//전체의 JSONObejct에 status란 이름으로 JSON정보로 구성된 Array value 입력
 			jsonObject.put("responseData", arrayObject);
-			//requestList로 한 번 더 감싸기
-			pw.println(jsonObject.toString());
-			System.out.println(jsonObject.toJSONString());
 		} catch (SQLException e) {
 			System.err.print("SQLException: ");
 			System.err.println(e.getMessage());
 			e.printStackTrace();
 		} finally {
+			pw.println(jsonObject.toString());
+			System.out.println(jsonObject.toJSONString());
 			try {
 				if (stmt != null) 
 					stmt.close();

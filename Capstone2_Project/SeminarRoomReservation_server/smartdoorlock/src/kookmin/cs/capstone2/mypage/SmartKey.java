@@ -76,16 +76,19 @@ public class SmartKey extends HttpServlet {
 				
 				//현재 날짜와 DB에서 얻어온 Date/start_time을 같은 형식으로 맞춰주기
 				Date today = new Date(); //오늘 날짜
-				Date resultDate;
-				String strResultDate = date + " " + startTime;
-				resultDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(strResultDate);
+				Date resultStartDate, resultEndDate;
+				String strStartDate = date + " " + startTime;
+				String strEndDate = date + " " + endTime;
+				
+				resultStartDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(strStartDate);
+				resultEndDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(strEndDate);
 				
 				keyInfo.put("roomId", rs.getInt("room_id"));
 				keyInfo.put("date", date);
 				keyInfo.put("startTime", startTime);
 				keyInfo.put("endTime",endTime);
 				
-				if(resultDate != null && resultDate.getTime() <= today.getTime())// 현재 시간이 예약 시간 사이일 때
+				if(resultStartDate.getTime() <= today.getTime() && resultEndDate.getTime() >= today.getTime())// 현재 시간이 예약 시간 사이일 때
 					keyInfo.put("key", StaticVariables.SUCCESS);
 				else 
 					keyInfo.put("key", StaticVariables.RESERVATION);

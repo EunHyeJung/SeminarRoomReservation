@@ -5,21 +5,21 @@ public class GcmSender{
 
 	String API_KEY = "AIzaSyB4L3iqk93D8Z4T2OZYlWO4p0SqhSodPDY";
 	
-	public void sendPush(){
+	public void sendPush(String gcmId, String message){
 		System.out.println("Sending POST to GCM");
 		
-		Content content = createContent();
+		Content content = createContent(gcmId, message);
 		
 		POST2GCM.post(API_KEY, content);
 	}
 	
-	 public static Content createContent(){
+	public static Content createContent(String gcmId, String message){
 
-	        Content c = new Content();
+        Content c = new Content();
 
-	        c.addRegId("dptmTBOZX-Y:APA91bH1ADWENUzXftIFmwd2RE7Tx0s8NQaw8dO69MBV2PddAf274KTN75HTataPf_2fEL4wVcqYu0I3VPeksVFE8hl9PM2mPi-ac0GmzAIKpMZPZbI2utFdckAncZeJC0P3JcGLrOAs");
-	        c.createData("Test Title", "It's ME!");
+        c.addRegId(gcmId);
+	    c.createData("SmartDoorLock", message);
 
-	        return c;
-	    }
+	    return c;
+	}
 }
