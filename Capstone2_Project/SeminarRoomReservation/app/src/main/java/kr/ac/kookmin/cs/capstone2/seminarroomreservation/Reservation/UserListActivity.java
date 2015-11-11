@@ -1,11 +1,8 @@
 package kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -19,23 +16,19 @@ import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 
-import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Network.RestRequestHelper;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 public class UserListActivity extends AppCompatActivity {
 
 
     ListView listViewUsers;
     UserListAdapter userListAdapter;
-    HashMap<Integer, String> selectedUsers;
+    public static HashMap<Integer, String> selectedUsers;
 
     private ArrayList<ItemUser> mUsers;
     private Button buttonAddMember;
+    ItemUser itemUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +44,17 @@ public class UserListActivity extends AppCompatActivity {
 
         buttonAddMember = (Button) findViewById(R.id.button_sample);
         buttonAddMember.setOnClickListener(new View.OnClickListener() {
+
+
             @Override
             public void onClick(View view) {
+
+                //선택된 userlist 넘겨줌
+                //Toast.makeText(UserListActivity.this, selectedUsers.toString(), Toast.LENGTH_SHORT).show();
+
                 Intent intent = new Intent(getApplicationContext(), ReservationFormActivity.class);
                 intent.putExtra("participants", selectedUsers);
+                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
 
                 /*
@@ -72,7 +72,7 @@ public class UserListActivity extends AppCompatActivity {
 
     public void init(){
         // 서버로부터 사용자 리스트를 받아옴
-        int id=0;
+        /*int id=0;
         String userName=null;
         String userId=null;
         RestRequestHelper requestHelper = RestRequestHelper.newInstance();
@@ -87,7 +87,26 @@ public class UserListActivity extends AppCompatActivity {
             public void failure(RetrofitError error) {
 
             }
-        });
+        });*/
+
+        //임시 출력
+        itemUser = new ItemUser(20113344, "홍주혜", "jh");
+        mUsers.add(itemUser);
+
+        itemUser = new ItemUser(20113314,"임은지", "ej");
+        mUsers.add(itemUser);
+
+        itemUser = new ItemUser(20123355,"정은혜","eh");
+        mUsers.add(itemUser);
+
+        itemUser = new ItemUser(20123336,"이송미","sm");
+        mUsers.add(itemUser);
+
+        userListAdapter = new UserListAdapter(mUsers);
+        listViewUsers.setAdapter(userListAdapter);
+
+
+
     }
 
 

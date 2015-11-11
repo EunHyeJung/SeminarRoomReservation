@@ -4,8 +4,6 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,7 +13,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -27,7 +24,6 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Manager.ManagerActivity;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Network.RestRequestHelper;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.RoomInfo;
@@ -54,6 +50,10 @@ public class ReservationFormActivity extends AppCompatActivity implements Adapte
 
     Spinner spinner_room;
     ArrayList<String> Roomlistarr;
+    ArrayList<Integer> participantsId = new ArrayList<Integer>();
+    ArrayList<Integer> participantsName = new ArrayList<Integer>();
+    private TextView Show_userlist; //받아온 userlist 보여주기
+
 
 
     @Override
@@ -114,7 +114,7 @@ public class ReservationFormActivity extends AppCompatActivity implements Adapte
 
 
         // 회의 참여자 추가하기
-        buttonAddMember.setOnClickListener(new View.OnClickListener() {
+        Invite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
@@ -133,7 +133,8 @@ public class ReservationFormActivity extends AppCompatActivity implements Adapte
         TxtCheckOutTime = (EditText) findViewById(R.id.editText_checkOutTime);
 
         Invite = (TextView) findViewById(R.id.text_memberlist);
-        buttonAddMember = (Button) findViewById(R.id.button_addMemeber);
+        //buttonAddMember = (Button) findViewById(R.id.button_addMemeber);
+        Show_userlist = (TextView) findViewById(R.id.show_userlisttxt);
 
         Edittxt_reason = (EditText) findViewById(R.id.editText_context);
         button_makereservation = (Button) findViewById(R.id.button_makereservation);
@@ -168,6 +169,27 @@ public class ReservationFormActivity extends AppCompatActivity implements Adapte
     };
 
 
+/*
+    protected void onNewIntent(Intent intent) {
+
+        ArrayList<ItemUser> Participants;
+        Participants = (ArrayList<ItemUser>) getIntent().getSerializableExtra("participants");
+
+        // 텍스트뷰에 받아온 값을 띄워준다
+        Iterator<Integer> iterator = UserListActivity.selectedUsers.keySet().iterator();
+        while (iterator.hasNext()) {
+            int key = (Integer) iterator.next();
+            participantsId.add(key);
+        }
+
+        //msg = "참가자 : " + UserListActivity.selectedUsers.toString();
+        String msg = participantsId.toString();
+        Show_userlist.setText(msg);
+
+        super.onNewIntent(intent);
+    }
+
+*/
 
     //스피너 : 세미나실 목록
     public void SpinnerRoomList() {
@@ -233,6 +255,7 @@ public class ReservationFormActivity extends AppCompatActivity implements Adapte
       /*      System.out.print("key=" + key);
             System.out.println(" value=" + selectedUsers.get(key));*/
         }
+
         final TransmissionResInfo transmissionResInfo = new TransmissionResInfo(6, 2, date, startTime, endTime, context, participants);
 
         RestRequestHelper requestHelper = RestRequestHelper.newInstance();

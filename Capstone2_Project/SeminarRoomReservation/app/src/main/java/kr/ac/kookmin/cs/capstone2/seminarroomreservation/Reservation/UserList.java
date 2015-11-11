@@ -9,9 +9,9 @@ public class UserList {
     String name = null;
     boolean selected = false;
 
-    public UserList(String code, String name, boolean selected) {
+    public UserList(String id, String name, boolean selected) {
         super();
-        this.id = code;
+        this.id = id;
         this.name = name;
         this.selected = selected;
     }
