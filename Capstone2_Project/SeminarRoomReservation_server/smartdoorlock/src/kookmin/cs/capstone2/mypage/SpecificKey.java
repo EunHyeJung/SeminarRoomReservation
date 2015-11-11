@@ -94,7 +94,7 @@ public class SpecificKey extends HttpServlet {
 				conn.rollback();
 				throw e;
 			}
-			int result = StaticMethods.rasberrySocket(command); // 라즈베리파이에 요청 보내기
+			int result = StaticMethods.rasberrySocket(command, roomId); // 라즈베리파이에 요청 보내기
 			if (result == StaticVariables.SUCCESS) {
 				resultInfo.put("result", StaticVariables.SUCCESS);
 				conn.commit();

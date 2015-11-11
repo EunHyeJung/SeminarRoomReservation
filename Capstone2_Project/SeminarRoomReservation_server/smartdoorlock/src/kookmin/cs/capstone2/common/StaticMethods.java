@@ -56,13 +56,13 @@ public class StaticMethods {
 	}
 
 	// 라즈베리파이로 명령 보내기
-	public static int rasberrySocket(String command) {
+	public static int rasberrySocket(String command, int roomId) {
 
 		int result = StaticVariables.FAIL;
 		
 		try {
 			String outStr = "command=" + command;
-			String serverIp = "203.246.112.200";
+			String serverIp = StaticVariables.room1Url; 
 			OutputStreamWriter osw = null;
 
 			Socket socket = new Socket(serverIp, 80);

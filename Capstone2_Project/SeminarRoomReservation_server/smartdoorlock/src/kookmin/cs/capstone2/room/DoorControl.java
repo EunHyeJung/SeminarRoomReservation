@@ -51,10 +51,11 @@ public class DoorControl extends HttpServlet { // 1.httpservlet 상속
 		request.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html;charset=utf-8");
 
-		// request 파라미터로 전송된 값 얻기 => json으로 수정해야 함
+		// request 파라미터로 전송된 값 얻기 => !!json으로 수정해야 함
 		// ******************************* //송미랑도 맞춰야함
 		String userId = request.getParameter("id"); // 사용자 고유 id
-		String roomId = request.getParameter("roomId");
+		String roomStr = request.getParameter("roomId");
+		int roomId = Integer.parseInt(roomStr);
 		command = request.getParameter("command");
 		
 		System.out.println("doorControl : " + userId + " " + roomId + " " + command);
@@ -83,7 +84,7 @@ public class DoorControl extends HttpServlet { // 1.httpservlet 상속
 				int insertResult = stmt.executeUpdate(sql); // roomhistory에 기록 추가
 
 				if (insertResult == 1) {
-					int result = StaticMethods.rasberrySocket(command); // 라즈베리파이에 요청 보내기
+					int result = StaticMethods.rasberrySocket(command, roomId); // 라즈베리파이에 요청 보내기
 					if (result == StaticVariables.SUCCESS) {
 						jsonObject.put("result", StaticVariables.SUCCESS);
 						conn.commit();
