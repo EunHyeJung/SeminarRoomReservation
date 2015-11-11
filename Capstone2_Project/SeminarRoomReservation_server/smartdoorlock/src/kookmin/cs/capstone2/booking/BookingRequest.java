@@ -47,8 +47,8 @@ public class BookingRequest extends HttpServlet {
 		String requestString = StaticMethods.getBody(request);
 
 		// request 파라미터에서 json 파싱
-		JSONObject jsonObject = (JSONObject) JSONValue.parse(requestString);
-		JSONObject requestJSON = (JSONObject) jsonObject.get("bookingRequest");
+		//JSONObject jsonObject = (JSONObject) JSONValue.parse(requestString);
+		JSONObject requestJSON = (JSONObject) JSONValue.parse(requestString);
 
 		String roomId = requestJSON.get("roomId").toString();
 		String userId = requestJSON.get("userId").toString();
@@ -68,6 +68,8 @@ public class BookingRequest extends HttpServlet {
 		Statement stmt = null; // ready for DB Query result
 		PrintWriter pw = response.getWriter();
 		ResultSet rs = null; // SQL Query 결과를 담을 테이블 형식의 객체
+		
+		int result = -1;
 
 		try {
 
@@ -102,7 +104,8 @@ public class BookingRequest extends HttpServlet {
 			System.out.println(sql);
 			if(stmt.executeUpdate(sql) != 0){ // the row count for SQL DML stmt
 				conn.commit();
-				resultJSON.put("status", StaticVariables.SUCCESS);
+				//resultJSON.put("status", StaticVariables.SUCCESS);
+				result = StaticVariables.SUCCESS;
 			}
 		} catch (SQLException se) {
 			System.out.println(se.getMessage());
@@ -112,7 +115,8 @@ public class BookingRequest extends HttpServlet {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			resultJSON.put("status", StaticVariables.ERROR_MYSQL);
+			//resultJSON.put("status", StaticVariables.ERROR_MYSQL);
+			result = StaticVariables.ERROR_MYSQL;
 		} finally {
 			pw.println(resultJSON);
 			pw.close();
