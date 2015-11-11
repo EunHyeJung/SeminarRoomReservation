@@ -1,21 +1,28 @@
 package kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation;
 
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+
+import android.content.Context;
 import android.os.Bundle;
+
+import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+
+import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,8 +34,12 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class UserListActivity extends AppCompatActivity {
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class UserListFragment extends Fragment {
 
+    private static final String TAG = "UserListFragment";
 
     ListView listViewUsers;
     UserListAdapter userListAdapter;
@@ -37,40 +48,44 @@ public class UserListActivity extends AppCompatActivity {
     private ArrayList<ItemUser> mUsers;
     private Button buttonAddMember;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_list);
+    public UserListFragment() {
+        // Required empty public constructor
+    }
 
-        listViewUsers = (ListView) findViewById(R.id.listView_memberList);
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_user_list, container, false);
+
+        listViewUsers = (ListView) view.findViewById(R.id.listView_memberList);
         listViewUsers.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+
+
         mUsers = new ArrayList<ItemUser>();
         selectedUsers = new HashMap<Integer, String>();
-
         init();
 
-        buttonAddMember = (Button) findViewById(R.id.button_sample);
+
+        buttonAddMember = (Button) view.findViewById(R.id.button_sample);
         buttonAddMember.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), ReservationFormActivity.class);
-                intent.putExtra("participants", selectedUsers);
-                startActivity(intent);
-
-                /*
-                중요- 해시맵출력
                 Iterator<Integer> iterator = selectedUsers.keySet().iterator();
                 while (iterator.hasNext()) {
                     int key = (Integer) iterator.next();
-                    System.out.print("key=" + key);
-                    System.out.println(" value=" + selectedUsers.get(key));
-                }*/
+                    System.out.print("key="+key);
+                    System.out.println(" value="+selectedUsers.get(key));
+                }
             }
         });
 
+        return view;
     }
 
-    public void init(){
+    ///////////////////////////////////////////////////////////////////////
+    private void init(){
         // 서버로부터 사용자 리스트를 받아옴
         int id=0;
         String userName=null;
@@ -88,8 +103,8 @@ public class UserListActivity extends AppCompatActivity {
 
             }
         });
-    }
 
+    }
 
     public void jsonParsing(JsonObject jsonObject) {
         JsonObject responseData = jsonObject.getAsJsonObject("responseData"); //2 레벨 제이슨 객체를 얻음
@@ -105,15 +120,26 @@ public class UserListActivity extends AppCompatActivity {
 
         userListAdapter = new UserListAdapter(mUsers);
         listViewUsers.setAdapter(userListAdapter);
+      /*  listViewUsers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                System.out.println("테스트 리스트뷰 위치 : " + i);
+                ItemUser itemUser = userListAdapter.getItem(i);
+                Toast.makeText(getActivity().getApplicationContext(), itemUser.getUserName()+" 추가", Toast.LENGTH_LONG).show();
+            }
+        });*/
+
     }
-    private class UserListAdapter extends ArrayAdapter<ItemUser> {
+
+
+    private class UserListAdapter extends ArrayAdapter<ItemUser>{
 
 
         ArrayList<ItemUser> usersInfo;
         HashMap<Integer, Boolean> mCheck;
 
         public UserListAdapter(ArrayList<ItemUser> usersInfo) {
-            super(getApplicationContext(), 0, usersInfo);
+            super(getActivity(), 0, usersInfo);
             this.usersInfo = new ArrayList<ItemUser>();
             this.usersInfo = usersInfo;
 
@@ -122,7 +148,7 @@ public class UserListActivity extends AppCompatActivity {
             for(int i=0 ; i<getCount() ; i++){
                 mCheck.put(i, false);
             }
-
+            System.out.println("테스트 몇번 불리는지");
         }
 
         @Override
@@ -141,7 +167,7 @@ public class UserListActivity extends AppCompatActivity {
             final ItemUser content = this.getItem(position);
 
             if(convertView == null){
-                convertView = getLayoutInflater()
+                convertView = getActivity().getLayoutInflater()
                         .inflate(R.layout.list_item_user, null);
                 holder = new ViewHolder();
                 holder.userName = (TextView) convertView.findViewById(R.id.list_item_textView_userName);
@@ -161,7 +187,7 @@ public class UserListActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     if (!mCheck.get(position)) {      // 현재체크박스의 상태가 false이면  true가 되도록 설정
                         mCheck.put(position, true);
-                        selectedUsers.put(content.getId(), content.getUserName());
+                       selectedUsers.put(content.getId(), content.getUserName());
                         //selectedUsers.a
                     } else{                                 // 현재체크박스의 상태가 true이면 false가 되도록 설정
                         mCheck.put(position, false);
@@ -179,6 +205,7 @@ public class UserListActivity extends AppCompatActivity {
             TextView userName;
             CheckBox isChecked;
         }
+
     }
 
 }

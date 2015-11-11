@@ -69,10 +69,14 @@ public class CustomGridAdapter extends BaseAdapter {
                     int endTme = reservationsInfo[i].getEndTime();
                     for (int j = startTime; j <= endTme; j += 5) {
                         if (j == position) {        // reservationStatus 값 define으로 바꿀 것
-                            if (reservationsInfo[i].getReservationStatus() == 1)
+                            if (reservationsInfo[i].getReservationStatus() == 1){
+                                textViewGridItem.setText("예약대기");
                                 textViewGridItem.setBackgroundColor(Color.parseColor("#90C84646"));
-                            else if (reservationsInfo[i].getReservationStatus() == 2)
+                            }
+                            else if (reservationsInfo[i].getReservationStatus() == 2) {
+                                textViewGridItem.setText("예약");
                                 textViewGridItem.setBackgroundColor(Color.parseColor("#90008EC8"));
+                            }
                         }
                     }
                 }

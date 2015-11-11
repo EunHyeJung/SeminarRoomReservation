@@ -3,6 +3,7 @@ package kr.ac.kookmin.cs.capstone2.seminarroomreservation.Network;
 import com.google.gson.JsonObject;
 
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation.TransmissionData;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation.TransmissionResInfo;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation.TransmissionUserInfo;
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -22,7 +23,7 @@ public class RestRequestHelper {
     private RestRequest restRequest;
 
 
-    private static final String url = "http://192.168.1.103:8081/smartdoorlock";
+    private static final String url = "http://10.30.36.11:8081/smartdoorlock";
 
     public static RestRequestHelper newInstance(){
         if(instance == null){
@@ -47,15 +48,11 @@ public class RestRequestHelper {
                     @Field("phone") String phone,
                     Callback<Integer> signUpCallback);
 
-        //jh
-        @FormUrlEncoded
+
         @POST("/bookingrequest")
-        void makeReservation(@Field("date") String date,
-                             @Field("start_time") String start_time,
-                             @Field("end_time") String end_time,
-                             @Field("room_id") String room_id,
-                             @Field("context") String context,
-                             Callback<Integer> makeReservationCallback);
+        void makeReservation(@Body TransmissionResInfo transmissionResInfo,
+                Callback<Integer> makeReservationCallback);
+
 
 
 
@@ -63,10 +60,11 @@ public class RestRequestHelper {
         @POST("/login")
         void login(@Field("id") String id,
                    @Field("password") String password,
+                   @Field("instanceId") String instanceId,
                    Callback<JsonObject> loginCallback
         );
 
-    //    @FormUrlEncoded
+
         @POST("/usingstatus")
         void receiveUsingStatus(@Body TransmissionData transmissionData,
                                 Callback<JsonObject> usingStatusCallback
@@ -125,24 +123,36 @@ public class RestRequestHelper {
         @FormUrlEncoded
         @POST("/userlist")
         void dayWatch(@Field("date") String date,
-                      Callback<JsonObject> userlistCallback
+                      Callback<JsonObject> userlistCallback);
+
+        //////////////////////////////////////////
+        @FormUrlEncoded
+        @POST("/userlist")
+        void getUserList(@Field("id") int id,
+                         @Field("name") String userName,
+                         @Field("userId") String userId,
+                      Callback<JsonObject> userListCallback
         );
 
-
     }
+
+    // 회원가입시 호출
     public void signUp(String id, String password, String name, String phone, Callback<Integer> signUpCallback){
         restRequest.signUp(id, password, name, phone, signUpCallback);
     }
 
-    public void login(String id, String password,  Callback<JsonObject> loginCallback){
-        restRequest.login(id, password, loginCallback);
+    // 로그인 시 호출
+    public void login(String id, String password, String instanceId,  Callback<JsonObject> loginCallback){
+        restRequest.login(id, password, instanceId, loginCallback);
     }
 
-    public void makeReservation(String date, String start_time, String end_time ,String room_id,String context, Callback<Integer> makeReservationCallback){
-        restRequest.makeReservation(date, start_time, end_time, room_id, context, makeReservationCallback);
+    // 예약하기
+    public void makeReservation(TransmissionResInfo transmissionResInfo, Callback<Integer> makeReservationCallback){
+        restRequest.makeReservation(transmissionResInfo, makeReservationCallback);
     }
 
 
+    // 예약 현황 호출 시, 서버로 날짜를 전송 후 날짜에 해당하는 예약 내역 정보를 받아옴
     public void receiveUsingStatue(TransmissionData transmissionData, Callback<JsonObject> usingStatusCallback){
         restRequest.receiveUsingStatus(transmissionData, usingStatusCallback);
     }
@@ -187,5 +197,10 @@ public class RestRequestHelper {
 
     public void getUserList(String date, Callback<JsonObject> userlistCallback){
         restRequest.dayWatch(date, userlistCallback);
+    }
+
+    /////////////////////////////
+    public void getUserList(int id, String userName, String userId, Callback<JsonObject> userListCallback){
+        restRequest.getUserList(id, userName, userId, userListCallback);
     }
 }
