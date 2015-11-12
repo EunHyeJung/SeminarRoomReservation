@@ -24,7 +24,7 @@ public class RestRequestHelper {
     private RestRequest restRequest;
 
 
-    private static final String url = "http://10.30.64.6:8081/smartdoorlock";
+    private static final String url = "http://10.30.113.215:8081/smartdoorlock";
 
     public static RestRequestHelper newInstance(){
         if(instance == null){
@@ -139,6 +139,18 @@ public class RestRequestHelper {
         void cancelBooking(@Body TransmissionReservation info,
                            Callback<JsonObject> cancelBookingCallback);
 
+        @FormUrlEncoded
+        @POST("/Reservationcheck")
+        void checkReservation(@Field("userId") int userId,
+                              @Field("userName") String userName,
+                              @Field("date") String date,
+                              @Field("startTime") String startTime,
+                              @Field("endTime") String endTime,
+                              @Field("context") String context,
+                              @Field("participants") String participants,
+                              Callback<JsonObject> checkReservationCallback
+        );
+
     }
 
     // 회원가입시 호출
@@ -209,5 +221,8 @@ public class RestRequestHelper {
     /////////////////////////////
     public void getUserList(int id, String userName, String userId, Callback<JsonObject> userListCallback){
         restRequest.getUserList(id, userName, userId, userListCallback);
+    }
+    public void checkReservation(int userId, String userName, String date, String startTime, String endTime, String context, String participants,  Callback<JsonObject> checkReservationCallback){
+        restRequest.checkReservation(userId, userName, date, startTime, endTime, context, participants, checkReservationCallback);
     }
 }

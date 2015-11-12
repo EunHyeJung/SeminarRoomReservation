@@ -1,7 +1,6 @@
 package kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation;
 
 import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -43,18 +42,16 @@ public class ReservationFormActivity extends AppCompatActivity implements Adapte
 
 
     private EditText Edittxt_reason;
-
     private Button button_makereservation;
 
     int year, month, day, hour, minute;
 
     Spinner spinner_room;
+    String msg;
     ArrayList<String> Roomlistarr;
     ArrayList<Integer> participantsId = new ArrayList<Integer>();
     ArrayList<Integer> participantsName = new ArrayList<Integer>();
     private TextView Show_userlist; //받아온 userlist 보여주기
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +97,8 @@ public class ReservationFormActivity extends AppCompatActivity implements Adapte
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                new TimePickerDialog(ReservationFormActivity.this, timeSetListener1, hour, minute, false).show();
+                //new TimePickerDialog(ReservationFormActivity.this, timeSetListener1, hour, minute, false).show();
+                new CustomTimePickerDialog(ReservationFormActivity.this, timeSetListener1, hour, minute, false).show();
 
             }
         });
@@ -108,10 +106,10 @@ public class ReservationFormActivity extends AppCompatActivity implements Adapte
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                new TimePickerDialog(ReservationFormActivity.this, timeSetListener2, hour, minute, false).show();
+                //new TimePickerDialog(ReservationFormActivity.this, timeSetListener2, hour, minute, false).show();
+                new CustomTimePickerDialog(ReservationFormActivity.this, timeSetListener2, hour, minute, false).show();
             }
         });
-
 
         // 회의 참여자 추가하기
         Invite.setOnClickListener(new View.OnClickListener() {
@@ -149,19 +147,21 @@ public class ReservationFormActivity extends AppCompatActivity implements Adapte
             TxtCheckInDate.setText(msg); //선택 날짜 띄워주기!
         }
     };
-    private TimePickerDialog.OnTimeSetListener timeSetListener1 = new TimePickerDialog.OnTimeSetListener() {
+    private CustomTimePickerDialog.OnTimeSetListener timeSetListener1 = new CustomTimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             // TODO Auto-generated method stub
+
             String msg = String.format("%02d:%02d:00", hourOfDay, minute);
             Toast.makeText(ReservationFormActivity.this, msg, Toast.LENGTH_SHORT).show();
             TxtCheckInTime.setText(msg);
         }
     };
-    private TimePickerDialog.OnTimeSetListener timeSetListener2 = new TimePickerDialog.OnTimeSetListener() {
+    private CustomTimePickerDialog.OnTimeSetListener timeSetListener2 = new CustomTimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             // TODO Auto-generated method stub
+
             String msg = String.format("%02d:%02d:00", hourOfDay, minute);
             Toast.makeText(ReservationFormActivity.this, msg, Toast.LENGTH_SHORT).show();
             TxtCheckOutTime.setText(msg);
@@ -169,7 +169,8 @@ public class ReservationFormActivity extends AppCompatActivity implements Adapte
     };
 
 
-/*
+
+    //intent 처리
     protected void onNewIntent(Intent intent) {
 
         ArrayList<ItemUser> Participants;
@@ -182,14 +183,13 @@ public class ReservationFormActivity extends AppCompatActivity implements Adapte
             participantsId.add(key);
         }
 
-        //msg = "참가자 : " + UserListActivity.selectedUsers.toString();
         String msg = participantsId.toString();
         Show_userlist.setText(msg);
 
         super.onNewIntent(intent);
     }
 
-*/
+
 
     //스피너 : 세미나실 목록
     public void SpinnerRoomList() {

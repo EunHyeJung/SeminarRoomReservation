@@ -17,7 +17,11 @@ import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Network.RestRequestHelper;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class UserListActivity extends AppCompatActivity {
 
@@ -72,7 +76,7 @@ public class UserListActivity extends AppCompatActivity {
 
     public void init(){
         // 서버로부터 사용자 리스트를 받아옴
-        /*int id=0;
+        int id=0;
         String userName=null;
         String userId=null;
         RestRequestHelper requestHelper = RestRequestHelper.newInstance();
@@ -87,8 +91,9 @@ public class UserListActivity extends AppCompatActivity {
             public void failure(RetrofitError error) {
 
             }
-        });*/
+        });
 
+        /*
         //임시 출력
         itemUser = new ItemUser(20113344, "홍주혜", "jh");
         mUsers.add(itemUser);
@@ -104,6 +109,7 @@ public class UserListActivity extends AppCompatActivity {
 
         userListAdapter = new UserListAdapter(mUsers);
         listViewUsers.setAdapter(userListAdapter);
+        */
 
 
 
