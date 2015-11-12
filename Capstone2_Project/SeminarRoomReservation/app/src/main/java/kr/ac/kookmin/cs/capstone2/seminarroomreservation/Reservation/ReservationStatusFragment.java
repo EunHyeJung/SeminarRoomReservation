@@ -148,26 +148,29 @@ public class ReservationStatusFragment extends Fragment {
                 JsonObject tmpObject = requestList.get(i).getAsJsonObject();
                 int mode = UserInfo.getUserMode();
 
+
                 //add 작업
                 if(mode == 1)//일반 사용자의 경우
                 {
                     String roomId = RoomInfo.getRoomName(tmpObject.getAsJsonPrimitive("roomId").getAsInt());
-                    reservationLVAdapter.addUser(UserInfo.getUserId());
-                    reservationLVAdapter.addRoom(roomId.replace("\"",""));
+                    reservationLVAdapter.add(tmpObject.getAsJsonPrimitive("reservationId").getAsInt(),
+                                             UserInfo.getUserId(),
+                                             roomId.replace("\"", ""),
+                                             tmpObject.getAsJsonPrimitive("startTime").getAsString(),
+                                             tmpObject.getAsJsonPrimitive("endTime").getAsString(),
+                                             tmpObject.getAsJsonPrimitive("date").getAsString(),
+                                             tmpObject.getAsJsonPrimitive("status").getAsInt());
                 }else{//관리자의 경우
-                    reservationLVAdapter.addUser(tmpObject.getAsJsonPrimitive("userId").getAsString());
-                    reservationLVAdapter.addRoom(tmpObject.getAsJsonPrimitive("roomId").getAsString());
+                    reservationLVAdapter.add(tmpObject.getAsJsonPrimitive("reservationId").getAsInt(),
+                            tmpObject.getAsJsonPrimitive("userId").getAsString(),
+                            tmpObject.getAsJsonPrimitive("roomId").getAsString(),
+                            tmpObject.getAsJsonPrimitive("startTime").getAsString(),
+                            tmpObject.getAsJsonPrimitive("endTime").getAsString(),
+                            tmpObject.getAsJsonPrimitive("date").getAsString(),
+                            tmpObject.getAsJsonPrimitive("status").getAsInt());
                 }
-
-                //공통 항목
-                reservationLVAdapter.addNum(tmpObject.getAsJsonPrimitive("reservationId").getAsInt());
-                reservationLVAdapter.addStartTime(tmpObject.getAsJsonPrimitive("startTime").getAsString());
-                reservationLVAdapter.addEndTime(tmpObject.getAsJsonPrimitive("endTime").getAsString());
-                reservationLVAdapter.addDate(tmpObject.getAsJsonPrimitive("date").getAsString());
             }
-
             reservationLVAdapter.notifyDataSetChanged();// 데이터 변경
-
         } catch (Exception e) {
             e.printStackTrace();
         }

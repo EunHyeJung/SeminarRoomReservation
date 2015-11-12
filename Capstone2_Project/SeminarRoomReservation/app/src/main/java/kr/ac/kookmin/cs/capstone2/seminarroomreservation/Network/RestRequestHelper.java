@@ -65,6 +65,7 @@ public class RestRequestHelper {
         @POST("/login")
         void login(@Field("id") String id,
                    @Field("password") String password,
+                   @Field("instanceId") String instanceId,
                    Callback<JsonObject> loginCallback
         );
 
@@ -120,17 +121,16 @@ public class RestRequestHelper {
         void getSmartKey(@Body TransmissionUserInfo info,
                          Callback<JsonObject> getSmartKeyCallback);
 
-<<<<<<< HEAD
+
         @FormUrlEncoded
         @POST("/userlist")
         void dayWatch(@Field("date") String date,
                       Callback<JsonObject> userlistCallback
         );
-=======
+
         @POST("/cancelmybooking")
         void cancelBooking(@Body TransmissionReservation info,
                             Callback<JsonObject> cancelBookingCallback);
->>>>>>> song
 
 
     }
@@ -138,8 +138,9 @@ public class RestRequestHelper {
         restRequest.signUp(id, password, name, phone, signUpCallback);
     }
 
-    public void login(String id, String password,  Callback<JsonObject> loginCallback){
-        restRequest.login(id, password, loginCallback);
+    // 로그인 시 호출
+    public void login(String id, String password, String instanceId,  Callback<JsonObject> loginCallback){
+        restRequest.login(id, password, instanceId, loginCallback);
     }
 
     public void makeReservation(String date, String start_time, String end_time ,String room_id,String context, Callback<Integer> makeReservationCallback){
@@ -182,12 +183,13 @@ public class RestRequestHelper {
         restRequest.getSmartKey(info, getSmartKeyCallback);
     }
 
-<<<<<<< HEAD
-    public void getUserList(String date, Callback<JsonObject> userlistCallback){
+
+    public void getUserList(String date, Callback<JsonObject> userlistCallback) {
         restRequest.dayWatch(date, userlistCallback);
-=======
+    }
+
     public void cancelBooking(TransmissionReservation info, Callback<JsonObject> cancelBookingCallback){
         restRequest.cancelBooking(info, cancelBookingCallback);
->>>>>>> song
+
     }
 }

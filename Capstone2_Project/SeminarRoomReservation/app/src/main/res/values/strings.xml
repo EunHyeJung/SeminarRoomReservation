@@ -33,4 +33,12 @@
     <string name="title_activity_select_room_dialog">SelectRoomDialogActivity</string>
     <string name="title_activity_reservation_content">ReservationContentActivity</string>
 
+    <string name="network_connection_error">네트워크 접속 오류</string>
+    <string name="wrong_user_info">잘못된 사용자 정보</string>
+    <string name="login_user_mode"> 로그인 성공, 사용자 모드</string>
+    <string name="login_admin_mode"> 로그인 성공, 관리자 모드</string>
+
+    <string name="status_reserved"> 예약</string>
+    <string name="status_standby">대기</string>
+
 </resources>
