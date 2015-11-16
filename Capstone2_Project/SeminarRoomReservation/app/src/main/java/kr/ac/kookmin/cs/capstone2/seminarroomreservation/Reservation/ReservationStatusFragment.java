@@ -159,7 +159,9 @@ public class ReservationStatusFragment extends Fragment {
                                              tmpObject.getAsJsonPrimitive("endTime").getAsString(),
                                              tmpObject.getAsJsonPrimitive("date").getAsString(),
                                              tmpObject.getAsJsonPrimitive("status").getAsInt());
-                }else{//관리자의 경우
+                }
+                else //관리자의 경우
+                {
                     reservationLVAdapter.add(tmpObject.getAsJsonPrimitive("reservationId").getAsInt(),
                             tmpObject.getAsJsonPrimitive("userId").getAsString(),
                             tmpObject.getAsJsonPrimitive("roomId").getAsString(),

@@ -27,15 +27,14 @@ import retrofit.client.Response;
  */
 public class CustomReservationLVAdapter extends BaseAdapter {
     Vector<Reservation> reservList;
-    String tmpSta;
 
     Button btnOkay;
     Button btnDeny;
     Button btnCancel;
     RestRequestHelper restRequestHelper;
 
-    static int RESERVATIONOKAY = 1;
-    static int RESERVATIONREJECT = 0;
+    static final int RESERVATIONOKAY = 1;
+    static final int RESERVATIONREJECT = 0;
 
     public CustomReservationLVAdapter() {
         restRequestHelper = RestRequestHelper.newInstance();
@@ -86,35 +85,16 @@ public class CustomReservationLVAdapter extends BaseAdapter {
         }
 
         //내용 설정
-        reservationViewHolder.position = position;
-        reservationViewHolder.reservationId = reservList.get(reservationViewHolder.position).reserveId;
-        reservationViewHolder.user.setText(reservList.get(reservationViewHolder.position).user);
-        reservationViewHolder.room.setText(reservList.get(reservationViewHolder.position).room);
-        reservationViewHolder.stime.setText(reservList.get(reservationViewHolder.position).stime);
-        reservationViewHolder.etime.setText(reservList.get(reservationViewHolder.position).etime);
-        reservationViewHolder.date.setText(reservList.get(reservationViewHolder.position).date);
-
-        if(reservList.get(position).status == 0)
-            tmpSta = "거절";
-        else if(reservList.get(position).status == 1)
-            tmpSta = "승인";
-        else
-            tmpSta = "대기";
-
-        reservationViewHolder.status.setText(tmpSta);
+        reservationViewHolder.setHolder(position, reservList);
 
         //리스트뷰 항목 클릭시
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
                 Intent intent = new Intent(context, ReservationFormActivity.class);
                 intent.putExtra("id", reservList.get(reservationViewHolder.position).reserveId); //사용자 고유 id 값을 보낸다.
                 intent.putExtra("request", 1);
-                context.startActivity(intent);*/
-                Log.d("RSF detail position", position+"");
-                Log.d("RSF detail pos", reservationViewHolder.position+"");
-                Log.d("RSF detail", reservList.get(position).user);
+                context.startActivity(intent);
             }
         });
 
@@ -122,26 +102,25 @@ public class CustomReservationLVAdapter extends BaseAdapter {
         btnOkay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                restRequestHelper.bookingFilter(reservList.get(reservationViewHolder.position).reserveId, RESERVATIONOKAY, new Callback<JsonObject>() {
+                restRequestHelper.bookingFilter(reservList.get(reservationViewHolder.getPosition()).reserveId, RESERVATIONOKAY, new Callback<JsonObject>() {
                     @Override
                     public void success(JsonObject jsonObject, Response response) {
                         int result = jsonObject.get("result").getAsInt();
 
                         switch (result) {
-                            case 1 :
-                                Toast.makeText(context, "승인되었습니다.", Toast.LENGTH_SHORT).show();
-                                btnOkay.setVisibility(View.GONE);
+                            case RESERVATIONOKAY :
+                                Toast.makeText(context, R.string.reservation_approval_okay, Toast.LENGTH_SHORT).show();
                                 break;
 
                             default ://0
-                                Toast.makeText(context, "승인에 실패하였습니다.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, R.string.reservation_approval_fail, Toast.LENGTH_SHORT).show();
                                 break;
                         }
                     }
 
                     @Override
                     public void failure(RetrofitError error) {
-                        Log.d("failure", error.toString());
+                        Log.d("CRL failure", error.toString());
                     }
                 });
             }
@@ -151,18 +130,20 @@ public class CustomReservationLVAdapter extends BaseAdapter {
         btnDeny.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                restRequestHelper.bookingFilter(reservList.get(reservationViewHolder.position).reserveId, RESERVATIONREJECT, new Callback<JsonObject>() {
+                restRequestHelper.bookingFilter(reservList.get(reservationViewHolder.getPosition()).reserveId, RESERVATIONREJECT, new Callback<JsonObject>() {
                     @Override
                     public void success(JsonObject jsonObject, Response response) {
                         int result = jsonObject.get("result").getAsInt();
 
                         switch (result) {
-                            case 1:
-                                Toast.makeText(context, "거절되었습니다.", Toast.LENGTH_SHORT).show();
+                            case RESERVATIONOKAY:
+                                Toast.makeText(context, R.string.reservation_deny_okay, Toast.LENGTH_SHORT).show();
+                                btnOkay.setVisibility(View.GONE);
+                                btnDeny.setVisibility(View.GONE);
                                 break;
 
                             default ://0
-                                Toast.makeText(context, "거절되지 않았습니다..", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, R.string.reservation_deny_fail, Toast.LENGTH_SHORT).show();
                                 break;
                         }
                     }
@@ -179,8 +160,7 @@ public class CustomReservationLVAdapter extends BaseAdapter {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //해당 부분의 값을 삭제한다.
-                TransmissionReservation transmissionReservation = new TransmissionReservation(reservList.get(reservationViewHolder.position).reserveId);
+                TransmissionReservation transmissionReservation = new TransmissionReservation(reservList.get(reservationViewHolder.getPosition()).reserveId);
 
                 restRequestHelper.cancelBooking(transmissionReservation, new Callback<JsonObject>() {
                     @Override
@@ -189,12 +169,13 @@ public class CustomReservationLVAdapter extends BaseAdapter {
                         int result = responseData.get("result").getAsInt();
 
                         switch (result) {
-                            case 1 :
-                                Toast.makeText(context, "예약이 취소되었습니다.",Toast.LENGTH_SHORT).show();
+                            case RESERVATIONOKAY :
+                                Toast.makeText(context, R.string.reservation_cancel_okay,Toast.LENGTH_SHORT).show();
+                                btnCancel.setVisibility(View.GONE);
                                 break;
 
                             default ://-1
-                                Toast.makeText(context, "예약이 취소되지 않았습니다.",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, R.string.reservation_cancel_fail,Toast.LENGTH_SHORT).show();
                                 break;
                         }
                     }
@@ -226,14 +207,9 @@ public class CustomReservationLVAdapter extends BaseAdapter {
         startTime.setText(reservList.get(position).stime);
         endTime.setText(reservList.get(position).etime);
         date.setText(reservList.get(position).date);
-        if(reservList.get(position).status == 0)
-            tmpSta = "거절";
-        else if(reservList.get(position).status == 1)
-            tmpSta = "승인";
-        else
-            tmpSta = "대기";
 
-        status.setText(tmpSta);
+        String tmp = setStatus(reservList.get(position).status);
+        status.setText(tmp);
 
         btnOkay = (Button)convertView.findViewById(R.id.item_reservokay_button);
         btnDeny = (Button)convertView.findViewById(R.id.item_reservation_deny_button);
@@ -254,40 +230,74 @@ public class CustomReservationLVAdapter extends BaseAdapter {
     //ReservationStatusFragment에서 추가
     public void add(int id, String user, String room, String stime, String etime, String date, int status){
         Reservation reservation = new Reservation();
-        reservation.reserveId = id;
-        reservation.user = user;
-        reservation.room = room;
-        reservation.stime = stime;
-        reservation.etime = etime;
-        reservation.date = date;
-        reservation.status = status;
-
+        reservation.add(id, user, room, stime, etime, date, status);//객체에 내용물 추가
         reservList.add(reservation); //벡터에 추가
 
-        Log.d("RSF name", user);
     }
 
-    //객체 파일
-    public class Reservation{
-        public int reserveId;
-        public String user;
-        public String room;
-        public String stime;
-        public String etime;
-        public String date;
-        public int status;
+    //벡터내 데이터 구성물
+    class Reservation{
+        int reserveId;
+        String user;
+        String room;
+        String stime;
+        String etime;
+        String date;
+        int status;
+
+        //객체에 값 설정
+        public void add(int id, String user, String room, String stime, String etime, String date, int status){
+            reserveId = id;
+            this.user = user;
+            this.room = room;
+            this.stime = stime;
+            this.etime = etime;
+            this.date = date;
+            this.status = status;
+        }
+
     }
 
     //뷰홀더
-    public class ReservationViewHolder{
-        public int position;
-        public int reservationId;
-        public TextView user;
-        public TextView room;
-        public TextView stime;
-        public TextView etime;
-        public TextView date;
-        public TextView status;
+    class ReservationViewHolder{
+        int position;
+        int reservationId;
+        TextView user;
+        TextView room;
+        TextView stime;
+        TextView etime;
+        TextView date;
+        TextView status;
+
+        //홀더 데이터 설정
+        public void setHolder(int pos, Vector<Reservation> reserv){
+            position = pos;
+
+            reservationId = reserv.get(pos).reserveId;
+            user.setText(reserv.get(pos).user);
+            room.setText(reserv.get(pos).room);
+            stime.setText(reserv.get(pos).stime);
+            etime.setText(reserv.get(pos).etime);
+            date.setText(reserv.get(pos).date);
+
+            String tmp = setStatus(reserv.get(pos).status);
+            status.setText(tmp);
+        }
+
+        //position 값 리턴
+        public int getPosition(){ return position; }
+    }
+
+    public String setStatus(int status){
+        String tmp="";
+        if(status == 0)
+            tmp = "거절";
+        else if(status == 1)
+            tmp = "승인";
+        else
+            tmp = "대기";
+
+        return tmp;
     }
 
 }

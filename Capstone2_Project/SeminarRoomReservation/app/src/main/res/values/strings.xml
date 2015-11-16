@@ -35,14 +35,20 @@
 
     <string name="network_connection_error">네트워크 접속 오류</string>
     <string name="wrong_user_info">잘못된 사용자 정보</string>
-    <string name="login_user_mode"> 로그인 성공, 사용자 모드</string>
+    <string name="login_user_mode"> 로그인 성공, 사용자모드</string>
     <string name="login_admin_mode"> 로그인 성공, 관리자 모드</string>
 
-    <string name="status_reserved"> 예약</string>
+    <string name="status_reserved">예약</string>
     <string name="status_standby">대기</string>
-<<<<<<< HEAD
     <string name="title_activity_user_list">UserLIstActivity</string>
-=======
->>>>>>> song
+
+    <string name = "reservation_cancel_okay">예약이 취소되었습니다.</string>
+    <string name = "reservation_cancel_fail">예약이 취소되지 않았습니다.</string>
+
+    <string name = "reservation_deny_okay">예약이 거절되었습니다.</string>
+    <string name = "reservation_deny_fail">예약이 거절되지않았습니다.</string>
+
+    <string name = "reservation_approval_okay">예약이 승인 되었습니다.</string>
+    <string name = "reservation_approval_fail">예약이 승인 되지 않았습니다.</string>
 
 </resources>
