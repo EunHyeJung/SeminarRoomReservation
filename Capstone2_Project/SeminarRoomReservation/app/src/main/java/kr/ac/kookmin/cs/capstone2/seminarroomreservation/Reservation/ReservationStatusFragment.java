@@ -106,7 +106,7 @@ public class ReservationStatusFragment extends Fragment {
         reservationListView.setAdapter(reservationLVAdapter);
 
         info = new TransmissionUserInfo(UserInfo.getId(), date);
-
+        Log.d("RSF", date);
         if(UserInfo.getUserMode() == 1){
             restRequestHelper.myBooking(info, new Callback<JsonObject>() {
                 @Override
@@ -143,11 +143,10 @@ public class ReservationStatusFragment extends Fragment {
         try {
             JsonObject responseData = jsonObject.getAsJsonObject("responseData");
             JsonArray requestList = responseData.getAsJsonArray("requestList");
-
+            Log.d("RSF", requestList.toString());
             for (int i = 0; i < requestList.size(); i++) {
                 JsonObject tmpObject = requestList.get(i).getAsJsonObject();
                 int mode = UserInfo.getUserMode();
-
 
                 //add 작업
                 if(mode == 1)//일반 사용자의 경우
@@ -171,6 +170,7 @@ public class ReservationStatusFragment extends Fragment {
                 }
             }
             reservationLVAdapter.notifyDataSetChanged();// 데이터 변경
+
         } catch (Exception e) {
             e.printStackTrace();
         }
