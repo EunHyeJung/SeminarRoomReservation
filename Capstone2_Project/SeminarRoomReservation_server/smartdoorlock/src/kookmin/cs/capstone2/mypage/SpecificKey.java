@@ -75,8 +75,8 @@ public class SpecificKey extends HttpServlet {
 			if(status != StaticVariables.SUCCESS)
 				return;
 			System.out.println("3");
-			//if(StaticMethods.checkTime(date, startTime, endTime) != StaticVariables.SUCCESS)
-				//return;
+			if(StaticMethods.checkTime(date, startTime, endTime) != StaticVariables.SUCCESS)
+				return;
 			System.out.println("4");
 			conn.setAutoCommit(false);// 오토커밋을 false로 지정하여 트랜잭션 조건을 맞춘다
 			sql = "update room set status=" + command + " where id=" + roomId + ";"; // 방 잠금 상태 변경
@@ -103,9 +103,9 @@ public class SpecificKey extends HttpServlet {
 				resultInfo.put("result", StaticVariables.FAIL);
 				conn.rollback();
 			}
-	//	} catch (ParseException pe){ // for StaticMethods.checkTime() 
-		//	pe.printStackTrace();
-		//	resultInfo.put("result", StaticVariables.FAIL);
+		} catch (ParseException pe){ // for StaticMethods.checkTime() 
+			pe.printStackTrace();
+			resultInfo.put("result", StaticVariables.FAIL);
 		} catch (SQLException e) { // for SQL ERROR
 			// TODO Auto-generated catch block
 			e.printStackTrace();

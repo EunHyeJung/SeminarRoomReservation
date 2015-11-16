@@ -35,7 +35,6 @@ public class UsingStatus extends HttpServlet {
 		
 		//RequestBody to String
 		String requestString = StaticMethods.getBody(request);
-		System.out.println(requestString);
 				
 		// request 파라미터에서 json 파싱
 		JSONObject requestObject = (JSONObject)JSONValue.parse(requestString);

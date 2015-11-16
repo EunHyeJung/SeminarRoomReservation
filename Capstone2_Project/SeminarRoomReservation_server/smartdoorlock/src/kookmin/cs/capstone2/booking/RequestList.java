@@ -36,12 +36,12 @@ public class RequestList extends HttpServlet {
 		
 		//RequestBody to String
 		String requestString = StaticMethods.getBody(request);
-		System.out.println(requestString);
 		
 		// request 파라미터에서 json 파싱
 		JSONObject requestObject = (JSONObject)JSONValue.parse(requestString);
+		
 		String date = requestObject.get("date").toString(); // get date
-		System.out.println("requestlist : " + requestObject + ", " + date);
+		System.out.println("requestlist : " + requestObject.toString());
 
 		Connection conn = null; //DB 연결을 위한 Connection 객체
 		Statement stmt = null; //ready for DB Query result
@@ -57,7 +57,7 @@ public class RequestList extends HttpServlet {
 		try {
 			conn = DriverManager.getConnection(StaticVariables.JOCL); //커넥션 풀에서 대기 상태인 커넥션을 얻는다
 			stmt = conn.createStatement(); //DB에 SQL문을 보내기 위한 Statement를 생성
-			String sql = "select reservationinfo.id, room.room_id, user.text_id, date, start_time, end_time, status "
+			String sql = "select reservationinfo.id, room.room_id, user.text_id, date, start_time, end_time, reservationinfo.status "
 					+ "from reservationinfo, user, room "
 					+ "where (reservationinfo.user_id=user.id) "
 					+ "and (reservationinfo.room_id=room.id)";
