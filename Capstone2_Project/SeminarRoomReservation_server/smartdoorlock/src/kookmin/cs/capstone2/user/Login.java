@@ -45,10 +45,10 @@ public class Login extends HttpServlet {
 		//for Json
 		JSONObject jsonObject = new JSONObject(); //최종 완성될 JSONObject 선언
 		JSONObject secondObject = new JSONObject();
-		JSONArray roomArray = new JSONArray(); //방 정보를 담을 jsonArray
+		JSONArray roomArray = new JSONArray(); //방 정보를 담을 JSONArray
 		JSONObject roomInfo = new JSONObject(); //방 정보 한 개의 정보가 들어갈 JSONObject
-		
-		//GcmSender gs = new GcmSender();
+		JSONArray userArray = new JSONArray(); //회원 정보를 담을 JSONArray
+		JSONObject userInfo = new JSONObject(); //한 회원 정보가 들어갈 JSONObject
 		
 		try {
 			//gs.sendPush();
@@ -65,7 +65,7 @@ public class Login extends HttpServlet {
 				secondObject.put("result", StaticVariables.FAIL); // 로그인 실패
 			} else{ // 로그인 성공
 				int userId = rs.getInt("id");
-				secondObject.put("result", StaticVariables.FAIL);
+				//secondObject.put("result", StaticVariables.FAIL);
 				secondObject.put("id", userId);
 				Boolean bAdmin = rs.getBoolean("b_admin");
 				if (bAdmin)
@@ -73,6 +73,7 @@ public class Login extends HttpServlet {
 				else 
 					secondObject.put("result", StaticVariables.SUCCESS); // 일반 사용자
 				
+				// gcm register id를 등록 또는 갱신한다
 				sql = "select * from gcmid where id=" + userId;
 				rs = stmt.executeQuery(sql); // SQL Query Result
 				if(!rs.next()){
@@ -93,8 +94,20 @@ public class Login extends HttpServlet {
 					roomInfo = new JSONObject();
 				}
 				
+				sql = "select id, text_id, name from user;";
+				rs = stmt.executeQuery(sql);
+				// 가입된 회원들의 아이디를 jsonArray에 담는다
+				while (rs.next()) {
+					userInfo = new JSONObject();
+					userInfo.put("id", rs.getString("id"));
+					userInfo.put("userId", rs.getString("text_id"));
+					userInfo.put("name", rs.getString("name"));
+					userArray.add(userInfo); // Array에 Object 추가
+				}
+				
 			}
 			secondObject.put("room", roomArray);
+			secondObject.put("user", userArray);
 			jsonObject.put("responseData", secondObject);
 			System.out.println(jsonObject);
 			pw.println(jsonObject);

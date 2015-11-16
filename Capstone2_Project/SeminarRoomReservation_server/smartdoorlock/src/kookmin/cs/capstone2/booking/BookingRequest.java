@@ -73,7 +73,6 @@ public class BookingRequest extends HttpServlet {
 		int result = -1;
 
 		try {
-
 			conn = DriverManager.getConnection(StaticVariables.JOCL); // 커넥션 풀에서 대기 상태인 커넥션을 얻는다
 			stmt = conn.createStatement(); // DB에 SQL문을 보내기 위한 Statement를 생성
 
