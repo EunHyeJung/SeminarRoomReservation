@@ -24,7 +24,11 @@ public class RestRequestHelper {
     private RestRequest restRequest;
 
 
+<<<<<<< HEAD
     private static final String url = "http://10.30.113.215:8081/smartdoorlock";
+=======
+    private static final String url = "http://10.30.113.107:8081/smartdoorlock";
+>>>>>>> song
 
     public static RestRequestHelper newInstance(){
         if(instance == null){
@@ -121,6 +125,10 @@ public class RestRequestHelper {
         void getSmartKey(@Body TransmissionUserInfo info,
                          Callback<JsonObject> getSmartKeyCallback);
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> song
         @FormUrlEncoded
         @POST("/userlist")
         void dayWatch(@Field("date") String date,
@@ -137,7 +145,11 @@ public class RestRequestHelper {
 
         @POST("/cancelmybooking")
         void cancelBooking(@Body TransmissionReservation info,
+<<<<<<< HEAD
                            Callback<JsonObject> cancelBookingCallback);
+=======
+                            Callback<JsonObject> cancelBookingCallback);
+>>>>>>> song
 
         @FormUrlEncoded
         @POST("/Reservationcheck")
@@ -212,11 +224,22 @@ public class RestRequestHelper {
         restRequest.getSmartKey(info, getSmartKeyCallback);
     }
 
+<<<<<<< HEAD
     public void getUserList(String date, Callback<JsonObject> userlistCallback){
         restRequest.dayWatch(date, userlistCallback);
     }
     public void cancelBooking(TransmissionReservation info, Callback<JsonObject> cancelBookingCallback){
         restRequest.cancelBooking(info, cancelBookingCallback);
+=======
+
+    public void getUserList(String date, Callback<JsonObject> userlistCallback) {
+        restRequest.dayWatch(date, userlistCallback);
+    }
+
+    public void cancelBooking(TransmissionReservation info, Callback<JsonObject> cancelBookingCallback){
+        restRequest.cancelBooking(info, cancelBookingCallback);
+
+>>>>>>> song
     }
     /////////////////////////////
     public void getUserList(int id, String userName, String userId, Callback<JsonObject> userListCallback){

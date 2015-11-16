@@ -115,8 +115,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void init() {
         if (SharedPreferenceClass.getValue("autoLogin", false)) {       // 자동로그인 설정일 경우, 아이디 저장도 같이 체크
-             autoLogin();
-             checkBoxId.setChecked(true);
+            autoLogin();
+            checkBoxId.setChecked(true);
         }
         if (SharedPreferenceClass.getValue("storeId", false)) {        // 아이디 저장이 되어 있는 상태이면
             String userId = SharedPreferenceClass.getValue("id", "input your Id");

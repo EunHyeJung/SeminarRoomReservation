@@ -40,6 +40,9 @@
 
     <string name="status_reserved"> 예약</string>
     <string name="status_standby">대기</string>
+<<<<<<< HEAD
     <string name="title_activity_user_list">UserLIstActivity</string>
+=======
+>>>>>>> song
 
 </resources>
