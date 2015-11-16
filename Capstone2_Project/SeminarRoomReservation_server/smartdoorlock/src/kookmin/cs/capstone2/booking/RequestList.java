@@ -57,7 +57,7 @@ public class RequestList extends HttpServlet {
 		try {
 			conn = DriverManager.getConnection(StaticVariables.JOCL); //커넥션 풀에서 대기 상태인 커넥션을 얻는다
 			stmt = conn.createStatement(); //DB에 SQL문을 보내기 위한 Statement를 생성
-			String sql = "select reservationinfo.id, room.room_id, user.text_id, date, start_time, end_time "
+			String sql = "select reservationinfo.id, room.room_id, user.text_id, date, start_time, end_time, status "
 					+ "from reservationinfo, user, room "
 					+ "where (reservationinfo.user_id=user.id) "
 					+ "and (reservationinfo.room_id=room.id)";
@@ -76,6 +76,7 @@ public class RequestList extends HttpServlet {
 				listInfo.put("date", rs.getString("date"));
 				listInfo.put("startTime", rs.getString("start_time"));
 				listInfo.put("endTime", rs.getString("end_time"));
+				listInfo.put("status", rs.getInt("status"));
 				
 				reqListArray.add(listInfo); //Array에 Object 추가
 			}

@@ -21,7 +21,6 @@ public class POST2GCM {
 
 	        // 1. URL
 	        URL url = new URL("https://android.googleapis.com/gcm/send");
-
 	        // 2. Open connection
 	        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 

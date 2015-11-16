@@ -65,8 +65,8 @@ public class BookingSpec extends HttpServlet {
 				specObject.put("room", rs.getString("room_id"));
 				specObject.put("user", rs.getString("user_id"));
 				specObject.put("date", rs.getString("date"));
-				specObject.put("start_time", rs.getString("start_time"));
-				specObject.put("end_time", rs.getString("end_time"));
+				specObject.put("startTime", rs.getString("start_time"));
+				specObject.put("endTime", rs.getString("end_time"));
 				specObject.put("context", rs.getString("context"));
 			}
 			

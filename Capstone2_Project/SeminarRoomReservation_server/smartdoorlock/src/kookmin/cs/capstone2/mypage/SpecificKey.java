@@ -63,9 +63,7 @@ public class SpecificKey extends HttpServlet {
 			rs = stmt.executeQuery(sql); //sql문 실행
 			String date = "", startTime = "", endTime = "";
 			int status = -1, roomId=-1;
-			
-			SQLException e = new SQLException(); // for SQLException
-			
+			System.out.println("1");
 			if (rs.next()) {
 				date = rs.getString("date");
 				startTime = rs.getString("start_time");
@@ -73,27 +71,30 @@ public class SpecificKey extends HttpServlet {
 				roomId = rs.getInt("room_id");
 				status = rs.getInt("status");
 			}
+			System.out.println("2");
 			if(status != StaticVariables.SUCCESS)
-				throw e;
-			if(StaticMethods.checkTime(date, startTime, endTime) != StaticVariables.SUCCESS)
-				throw e;
-			
+				return;
+			System.out.println("3");
+			//if(StaticMethods.checkTime(date, startTime, endTime) != StaticVariables.SUCCESS)
+				//return;
+			System.out.println("4");
 			conn.setAutoCommit(false);// 오토커밋을 false로 지정하여 트랜잭션 조건을 맞춘다
 			sql = "update room set status=" + command + " where id=" + roomId + ";"; // 방 잠금 상태 변경
 			int updateResult = stmt.executeUpdate(sql);// return the row count for SQL DML statements
 			if (updateResult != 1) { // update 실패했을 경우
 				conn.rollback(); // 방 잠금 상태 변경 취소
-				throw e;
+				return;
 			}
-			
+			System.out.println("5");
 			// 출입 기록 삽입
 			sql = "insert into roomhistory (room_id, user_id, command) values "
 					+ "(" + roomId + ", " + userId + ", " + command + ");";
 			int insertResult = stmt.executeUpdate(sql); // roomhistory에 기록 추가
 			if (insertResult != 1){
 				conn.rollback();
-				throw e;
+				return;
 			}
+			System.out.println("6");
 			int result = StaticMethods.rasberrySocket(command, roomId); // 라즈베리파이에 요청 보내기
 			if (result == StaticVariables.SUCCESS) {
 				resultInfo.put("result", StaticVariables.SUCCESS);
@@ -102,9 +103,9 @@ public class SpecificKey extends HttpServlet {
 				resultInfo.put("result", StaticVariables.FAIL);
 				conn.rollback();
 			}
-		} catch (ParseException pe){ // for StaticMethods.checkTime() 
-			pe.printStackTrace();
-			resultInfo.put("result", StaticVariables.FAIL);
+	//	} catch (ParseException pe){ // for StaticMethods.checkTime() 
+		//	pe.printStackTrace();
+		//	resultInfo.put("result", StaticVariables.FAIL);
 		} catch (SQLException e) { // for SQL ERROR
 			// TODO Auto-generated catch block
 			e.printStackTrace();
