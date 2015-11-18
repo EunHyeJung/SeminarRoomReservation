@@ -9,108 +9,131 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.Filter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Network.RestRequestHelper;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
 
-public class UserListAdapter extends BaseAdapter {
+public class UserListAdapter extends ArrayAdapter<ItemUser> {
 
-    ArrayList<String> UserIdArray;
-    ArrayList<String> UserNameArray;
+    Context context;
+    int resource, textViewResourceId;
+    ArrayList<ItemUser> items, tempItems, suggestions;
+    HashMap<Integer, Boolean> mCheck;
 
-    RestRequestHelper restRequestHelper;
 
-    //생성자
-    UserListAdapter(){
 
-        restRequestHelper = RestRequestHelper.newInstance();
-        UserIdArray = new ArrayList<String>();
-        UserNameArray = new ArrayList<String>();
+    public UserListAdapter(Context context, int resource, int textViewResourceId, ArrayList<ItemUser> items) {
+        super(context, 0, items);
+        this.context = context;
+        this.resource = resource;
+        this.textViewResourceId = textViewResourceId;
 
+        this.items = new ArrayList<ItemUser>();
+        this.items = items;
+
+        tempItems = new ArrayList<ItemUser>(items);
+        suggestions = new ArrayList<ItemUser>();
+
+        mCheck = new HashMap<Integer, Boolean>();
+        for (int i = 0; i < getCount(); i++) {
+            mCheck.put(i, false);
+        }
+    }
+
+    @Override
+    public ItemUser getItem(int position) {
+        return items.get(position);
     }
 
     @Override
     public int getCount() {
-        return UserIdArray.size();
+        return items.size();
     }
 
     @Override
-    public Object getItem(int position) {
-        return UserIdArray.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-
-        final Context context = parent.getContext();
-        UserListViewHolder userlistViewHolder;
-
-        if(convertView == null ){
-            LayoutInflater inflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView=inflater.inflate(R.layout.custom_listview_userlist, parent, false);
-
-            //초기 설정 부분
-            init(convertView, position);
-
-            //View holder 설정
-            userlistViewHolder = new UserListViewHolder();
-            userlistViewHolder.userId = (TextView)convertView.findViewById(R.id.list_userId);
-            userlistViewHolder.userName = (TextView)convertView.findViewById(R.id.list_userName);
-
-            convertView.setTag(userlistViewHolder);
-        }
-        else
-        {
-            userlistViewHolder = (UserListViewHolder) convertView.getTag();
+    public View  getView(final int position, View convertView, ViewGroup parent) {
+        if (convertView == null) {
+            LayoutInflater inflater =
+                    (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(R.layout.list_item_user, parent, false);
         }
 
-        userlistViewHolder.userId.setText(UserIdArray.get(position));
-        userlistViewHolder.userName.setText(UserNameArray.get(position));
+        final ItemUser itemUser = items.get(position);
+        if (itemUser != null) {
+            TextView textViewUserName = (TextView) convertView.findViewById(R.id.list_item_textView_userName);
+            textViewUserName.setText(itemUser.getUserName());
 
+            textViewUserName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ReservationFormActivity.selectedUsers.put(itemUser.getId(), itemUser.getUserName());
 
-        //내용 설정
+                   // textViewParticipants.append(itemUser.getUserName() + "(" + itemUser.getUserId() + ") ");
+                    Toast.makeText(context, itemUser.getUserName() + " 추가", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
         return convertView;
     }
 
-    //초기화 작업
-    public void init(View convertView, int position){
-        TextView userId = (TextView)convertView.findViewById(R.id.list_userId);
-        TextView userName = (TextView)convertView.findViewById(R.id.list_userName);
 
-        userId.setText(UserIdArray.get(position));
-        userName.setText(UserNameArray.get(position));
+    public void uiProcessing(){
 
     }
 
-    //날짜 추가
-    public void addUserId(String userid) {
-        UserIdArray.add(userid); }
 
 
-    //방 번호 추가
-    public void addUserName(String username) { UserNameArray.add(username); }
-
-
-
-    //초기화
-    public void clear(){
-        UserNameArray.clear();
-        UserIdArray.clear();
+    @Override
+    public Filter getFilter() {
+        return nameFilter;
     }
 
-    //View holder Class
-    public class UserListViewHolder{
-        public TextView userId;
-        public TextView userName;
-    }
+    Filter nameFilter = new Filter() {
+        @Override
+        public CharSequence convertResultToString(Object resultValue) {
+            String str = ((ItemUser) resultValue).getUserName();
+            return str;
+        }
+
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+            if (charSequence != null) {
+                suggestions.clear();
+                for (ItemUser itemUser : tempItems) {
+                    if (itemUser.getUserName().toLowerCase().contains(charSequence.toString().toLowerCase())) {
+                        suggestions.add(itemUser);
+                    }
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = suggestions;
+                filterResults.count = suggestions.size();
+                return filterResults;
+            } else {
+                return new FilterResults();
+            }
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            ArrayList<ItemUser> filterList = (ArrayList<ItemUser>) filterResults.values;
+            if (filterResults != null && filterResults.count > 0) {
+                clear();
+                for (ItemUser itemUser : filterList) {
+                    add(itemUser);
+                    notifyDataSetChanged();
+                }
+            }
+        }
+    };
+
+
 }

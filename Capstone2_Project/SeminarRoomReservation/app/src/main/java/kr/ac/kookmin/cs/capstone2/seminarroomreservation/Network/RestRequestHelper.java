@@ -23,7 +23,7 @@ public class RestRequestHelper {
     private RestRequest restRequest;
 
 
-    private static final String url = "http://10.30.36.11:8081/smartdoorlock";
+    private static final String url = "http://192.168.1.103:8081/smartdoorlock";
 
     public static RestRequestHelper newInstance(){
         if(instance == null){
@@ -100,7 +100,7 @@ public class RestRequestHelper {
         @POST("/requestlist")
         void requestList(@Field("date") String date ,
                          Callback<JsonObject> requestListCallback);*/
-
+         @FormUrlEncoded
         @POST("/requestlist")
         void requestList(@Field("info") TransmissionUserInfo info,
                          Callback<JsonObject> requestListCallback);
@@ -125,14 +125,10 @@ public class RestRequestHelper {
         void dayWatch(@Field("date") String date,
                       Callback<JsonObject> userlistCallback);
 
-        //////////////////////////////////////////
         @FormUrlEncoded
-        @POST("/userlist")
-        void getUserList(@Field("id") int id,
-                         @Field("name") String userName,
-                         @Field("userId") String userId,
-                      Callback<JsonObject> userListCallback
-        );
+        @POST("/bookingspec")
+        void getReservationInfo(@Field("reservationId") int reservationId,
+                      Callback<JsonObject> resrvationInfoCallback);
 
     }
 
@@ -155,6 +151,11 @@ public class RestRequestHelper {
     // 예약 현황 호출 시, 서버로 날짜를 전송 후 날짜에 해당하는 예약 내역 정보를 받아옴
     public void receiveUsingStatue(TransmissionData transmissionData, Callback<JsonObject> usingStatusCallback){
         restRequest.receiveUsingStatus(transmissionData, usingStatusCallback);
+    }
+
+    // 관리자모드의 경우, 예약대기, 확정 된 예약 상세내역을 받아볼 수 있음
+    public void getReservationInfo(int reservationId, Callback<JsonObject> reservationInfoCallback){
+        restRequest.getReservationInfo(reservationId, reservationInfoCallback);
     }
 
     public void roomList(String id,Callback<String> roomListCallback){
@@ -200,7 +201,5 @@ public class RestRequestHelper {
     }
 
     /////////////////////////////
-    public void getUserList(int id, String userName, String userId, Callback<JsonObject> userListCallback){
-        restRequest.getUserList(id, userName, userId, userListCallback);
-    }
+
 }

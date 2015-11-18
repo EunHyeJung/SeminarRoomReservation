@@ -26,6 +26,7 @@ public class TransmissionResInfo {
         this.context = context;
         this.participants = new ArrayList<Participants>();
         for(int i=0 ; i<participants.size() ; i++){
+            System.out.println("테스트 : "+participants.get(i));
             this.participants.add(new Participants(participants.get(i)));
         }
     }

@@ -7,8 +7,10 @@ public class ReservationsInfo {
     int startTime;
     int endTime;
     int reservationStatus;
+    int reservationId;
 
-    public void setReservationsInfo(int reservationStatus, int startTime, int endTime){
+    public void setReservationsInfo(int reservationId, int reservationStatus, int startTime, int endTime){
+        this.reservationId = reservationId;
         this.reservationStatus = reservationStatus;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -23,4 +25,5 @@ public class ReservationsInfo {
     public int getReservationStatus(){
         return reservationStatus;
     }
+    public int getReservationId() { return reservationId; }
 }

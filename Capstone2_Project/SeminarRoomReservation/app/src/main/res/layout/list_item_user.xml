@@ -3,20 +3,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
+    android:background="#80FFFFFF"
     android:descendantFocusability="blocksDescendants"
     >
     <TextView
         android:id="@+id/list_item_textView_userName"
         android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:textColor="#3e3e3e"
+        android:layout_height="30dp"
+        android:textColor="#FFFFFF"
+        android:layout_gravity="left"
+        android:paddingRight="150dp"
         android:gravity="center"
+        android:layout_marginBottom="0.5dp"
+        android:background="#70ff492f"
         />
-    <CheckBox
-        android:id="@+id/list_item_checkBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="4dp"
-        android:focusable="false"
-     />
 </LinearLayout>

@@ -9,6 +9,9 @@ public class ItemUser {
     String userName;
     boolean isChecked;
 
+    public ItemUser(){
+
+    }
     public ItemUser(int id, String userId, String userName){
         this.id = id;
         this.userId = userId;
