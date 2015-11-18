@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import kookmin.cs.capstone2.common.MyHttpServlet;
 import kookmin.cs.capstone2.common.StaticVariables;
 
 import org.json.simple.JSONArray;
@@ -22,7 +23,7 @@ import org.json.simple.JSONObject;
  * filename : RoomHistory.java
  * 기능 : 날짜 정보와 방이름을 받고 출입 기록 내역을 제공한다.
  */
-public class RoomHistory extends HttpServlet {
+public class RoomHistory extends MyHttpServlet {
 
 	/*
 	 * request : 날짜, 방이름
@@ -46,16 +47,7 @@ public class RoomHistory extends HttpServlet {
 		
 		System.out.println(date + " " + room);
 
-		Connection conn = null; // DB 연결을 위한 Connection 객체
-		Statement stmt = null; // ready for DB Query result
 		PrintWriter pw = response.getWriter();
-		ResultSet rs = null; //SQL Query 결과를 담을 테이블 형식의 객체
-
-		// for Json
-		JSONObject jsonObject = new JSONObject(); // 최종 완성될 JSONObject 선언
-		JSONObject arrayObject = new JSONObject(); //array 담을 JSONObject
-		JSONArray historyArray = new JSONArray(); // 예약 내역의 정보를 담을 Array
-		JSONObject historyInfo = new JSONObject(); // 예약 내역 한 개의 정보가 들어갈 JSONObject
 		
 		try {
 			conn = DriverManager.getConnection(StaticVariables.JOCL); //커넥션 풀에서 대기 상태인 커넥션을 얻는다
@@ -73,23 +65,23 @@ public class RoomHistory extends HttpServlet {
 			
 			rs = stmt.executeQuery(sql);
 			while (rs.next()) {
-				historyInfo = new JSONObject();
-				historyInfo.put("roomId", rs.getInt("room_id"));
-				historyInfo.put("textId", rs.getString("text_id"));
-				historyInfo.put("timeStamp", rs.getString("time_stamp"));
+				jsonArrayInfo = new JSONObject();
+				jsonArrayInfo.put("roomId", rs.getInt("room_id"));
+				jsonArrayInfo.put("textId", rs.getString("text_id"));
+				jsonArrayInfo.put("timeStamp", rs.getString("time_stamp"));
 				
 				if(rs.getBoolean("command"))
-					historyInfo.put("command", "open");
+					jsonArrayInfo.put("command", "open");
 				else
-					historyInfo.put("command", "close");
+					jsonArrayInfo.put("command", "close");
 				
-				historyArray.add(historyInfo); //Array에 Object 추가
+				jsonArray.add(jsonArrayInfo); //Array에 Object 추가
 			}
-			arrayObject.put("history", historyArray);
+			subJsonObj.put("history", jsonArray);
 			//전체의 JSONObejct에 history란 이름으로 JSON정보로 구성된 Array value 입력
-			jsonObject.put("responseData", arrayObject); 
-			pw.println(jsonObject);
-			System.out.println(jsonObject);
+			responseJsonObj.put("responseData", subJsonObj); 
+			pw.println(responseJsonObj);
+			System.out.println(responseJsonObj);
 		} catch (SQLException e) {
 			System.err.print("SQLException: ");
 			System.err.println(e.getMessage());

@@ -31,6 +31,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.simple.JSONObject;
 
 import sun.rmi.runtime.Log;
+import kookmin.cs.capstone2.common.MyHttpServlet;
 import kookmin.cs.capstone2.common.StaticMethods;
 import kookmin.cs.capstone2.common.StaticVariables;
 
@@ -38,7 +39,7 @@ import kookmin.cs.capstone2.common.StaticVariables;
  * filename : DoorControl.java
  * 기능 : 관리자가 요청할 때 세미나실 문을 열고 닫는다.
  */
-public class DoorControl extends HttpServlet { // 1.httpservlet 상속
+public class DoorControl extends MyHttpServlet { // 1.httpservlet 상속
 												// 2.drivermanager상속 두 가지 방법
 
 	String command = null;
@@ -60,10 +61,7 @@ public class DoorControl extends HttpServlet { // 1.httpservlet 상속
 		
 		System.out.println("doorControl : " + userId + " " + roomId + " " + command);
 
-		Connection conn = null; // DB 연결을 위한 Connection 객체
-		Statement stmt = null; // ready for DB Query result
 		PrintWriter pw = response.getWriter();
-		JSONObject jsonObject = new JSONObject();
 		
 		try {
 			conn = DriverManager.getConnection(StaticVariables.JOCL); // 커넥션 풀에서 대기상태인 커넥션을 얻는다
@@ -86,10 +84,10 @@ public class DoorControl extends HttpServlet { // 1.httpservlet 상속
 				if (insertResult == 1) {
 					int result = StaticMethods.rasberrySocket(command, roomId); // 라즈베리파이에 요청 보내기
 					if (result == StaticVariables.SUCCESS) {
-						jsonObject.put("result", StaticVariables.SUCCESS);
+						responseJsonObj.put("result", StaticVariables.SUCCESS);
 						conn.commit();
 					} else {
-						jsonObject.put("result", StaticVariables.FAIL);
+						responseJsonObj.put("result", StaticVariables.FAIL);
 						conn.rollback();
 					}
 				}
@@ -105,7 +103,7 @@ public class DoorControl extends HttpServlet { // 1.httpservlet 상속
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-			jsonObject.put("result", StaticVariables.ERROR_MYSQL);
+			responseJsonObj.put("result", StaticVariables.ERROR_MYSQL);
 		} finally {
 			try {
 				if (stmt != null)
@@ -114,9 +112,9 @@ public class DoorControl extends HttpServlet { // 1.httpservlet 상속
 					conn.close();
 			} catch (SQLException se) {
 				System.out.println(se.getMessage()); // 주로 커넥션 문제
-				jsonObject.put("result", StaticVariables.ERROR_MYSQL);
+				responseJsonObj.put("result", StaticVariables.ERROR_MYSQL);
 			}
-			pw.println(jsonObject);
+			pw.println(responseJsonObj);
 		}
 	}
 }

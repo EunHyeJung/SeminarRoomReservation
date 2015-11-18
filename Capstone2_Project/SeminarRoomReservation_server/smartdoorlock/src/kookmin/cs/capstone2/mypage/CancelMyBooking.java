@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import kookmin.cs.capstone2.common.MyHttpServlet;
 import kookmin.cs.capstone2.common.StaticMethods;
 import kookmin.cs.capstone2.common.StaticVariables;
 
@@ -20,7 +21,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
-public class CancelMyBooking extends HttpServlet {
+public class CancelMyBooking extends MyHttpServlet {
 	/*
 	 * request : mode(nothing or 날짜별) & (nothing or date(yyyy-MM-dd))
 	 * response : 대기 중인 예약 내역 중 시간이 지나지 않은 내역 또는 날짜별 내역을 보여준다
@@ -42,14 +43,7 @@ public class CancelMyBooking extends HttpServlet {
 		
 		System.out.println("CancelMyBooking : " + reservationId);
 
-		Connection conn = null; //DB 연결을 위한 Connection 객체
-		Statement stmt = null; //ready for DB Query result
 		PrintWriter pw = response.getWriter();
-		ResultSet rs = null; //SQL Query 결과를 담을 테이블 형식의 객체
-
-		//for Json
-		JSONObject jsonObject = new JSONObject(); //최종 완성될 JSONObject 선언
-		JSONObject resultJson = new JSONObject(); //예약 신청 내역 한 개의 정보가 들어갈 JSONObject
 		
 		try {
 			conn = DriverManager.getConnection(StaticVariables.JOCL); //커넥션 풀에서 대기 상태인 커넥션을 얻는다
@@ -59,15 +53,15 @@ public class CancelMyBooking extends HttpServlet {
 			int result = stmt.executeUpdate(sql);
 
 			if(result != 0)
-				resultJson.put("result", StaticVariables.SUCCESS);
+				subJsonObj.put("result", StaticVariables.SUCCESS);
 			else
-				resultJson.put("result", StaticVariables.FAIL);
+				subJsonObj.put("result", StaticVariables.FAIL);
 			
 			//전체의 JSONObejct에 responseData란 이름으로 sql문 결과 저장
-			jsonObject.put("responseData", resultJson);
-			pw.println(jsonObject.toString());
+			responseJsonObj.put("responseData", subJsonObj);
+			pw.println(responseJsonObj.toString());
 			
-			System.out.println("CancelMyBooking : " + jsonObject.toJSONString());
+			System.out.println("CancelMyBooking : " + responseJsonObj.toJSONString());
 		
 		} catch (SQLException e) {
 			System.err.print("SQLException: ");

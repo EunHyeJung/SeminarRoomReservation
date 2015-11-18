@@ -17,9 +17,10 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import kookmin.cs.capstone2.GCM.GcmSender;
+import kookmin.cs.capstone2.common.MyHttpServlet;
 import kookmin.cs.capstone2.common.StaticVariables;
 
-public class Login extends HttpServlet {
+public class Login extends MyHttpServlet {
 	/*
 	 * request : 아이디, 비밀번호 response : 로그인 성공 여부
 	 */
@@ -37,16 +38,9 @@ public class Login extends HttpServlet {
 		String password = request.getParameter("password");
 		String gcmRegId = request.getParameter("instanceId");
 
-		Connection conn = null; //DB 연결을 위한 Connection 객체
-		Statement stmt = null; //ready for DB Query result
 		PrintWriter pw = response.getWriter();
-		ResultSet rs = null; //SQL Query 결과를 담을 테이블 형식의 객체
 
 		//for Json
-		JSONObject jsonObject = new JSONObject(); //최종 완성될 JSONObject 선언
-		JSONObject secondObject = new JSONObject();
-		JSONArray roomArray = new JSONArray(); //방 정보를 담을 JSONArray
-		JSONObject roomInfo = new JSONObject(); //방 정보 한 개의 정보가 들어갈 JSONObject
 		JSONArray userArray = new JSONArray(); //회원 정보를 담을 JSONArray
 		JSONObject userInfo = new JSONObject(); //한 회원 정보가 들어갈 JSONObject
 		
@@ -62,16 +56,16 @@ public class Login extends HttpServlet {
 			
 			//id와 password가 일치하는 user가 있을 경우 b_admin column을 확인하여 관리자 여부를 가린다
 			if (!rs.next()) {
-				secondObject.put("result", StaticVariables.FAIL); // 로그인 실패
+				subJsonObj.put("result", StaticVariables.FAIL); // 로그인 실패
 			} else{ // 로그인 성공
 				int userId = rs.getInt("id");
-				//secondObject.put("result", StaticVariables.FAIL);
-				secondObject.put("id", userId);
+				//subJsonObj.put("result", StaticVariables.FAIL);
+				subJsonObj.put("id", userId);
 				Boolean bAdmin = rs.getBoolean("b_admin");
 				if (bAdmin)
-					secondObject.put("result", StaticVariables.ADMIN_SUCCESS); // 관리자 
+					subJsonObj.put("result", StaticVariables.ADMIN_SUCCESS); // 관리자 
 				else 
-					secondObject.put("result", StaticVariables.SUCCESS); // 일반 사용자
+					subJsonObj.put("result", StaticVariables.SUCCESS); // 일반 사용자
 				
 				// gcm register id를 등록 또는 갱신한다
 				sql = "select * from gcmid where id=" + userId;
@@ -88,10 +82,10 @@ public class Login extends HttpServlet {
 				sql = "select id, room_id from room;";
 				rs=stmt.executeQuery(sql);
 				while(rs.next()) {
-					roomInfo.put("roomId", rs.getString("id"));
-					roomInfo.put("roomName", rs.getString("room_id"));
-					roomArray.add(roomInfo);
-					roomInfo = new JSONObject();
+					jsonArrayInfo.put("roomId", rs.getString("id"));
+					jsonArrayInfo.put("roomName", rs.getString("room_id"));
+					jsonArray.add(jsonArrayInfo);
+					jsonArrayInfo = new JSONObject();
 				}
 				
 				sql = "select id, text_id, name from user;";
@@ -106,11 +100,11 @@ public class Login extends HttpServlet {
 				}
 				
 			}
-			secondObject.put("room", roomArray);
-			secondObject.put("user", userArray);
-			jsonObject.put("responseData", secondObject);
-			System.out.println(jsonObject);
-			pw.println(jsonObject);
+			subJsonObj.put("room", jsonArray);
+			subJsonObj.put("user", userArray);
+			responseJsonObj.put("responseData", subJsonObj);
+			System.out.println(responseJsonObj);
+			pw.println(responseJsonObj);
 			
 		} catch (SQLException e) {
 			System.err.print("SQLException: ");
