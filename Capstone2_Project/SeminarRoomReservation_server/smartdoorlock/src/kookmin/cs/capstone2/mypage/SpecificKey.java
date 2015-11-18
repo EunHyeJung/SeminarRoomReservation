@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import kookmin.cs.capstone2.common.MyHttpServlet;
 import kookmin.cs.capstone2.common.StaticMethods;
 import kookmin.cs.capstone2.common.StaticVariables;
 
@@ -24,7 +25,7 @@ import org.json.simple.JSONValue;
 
 // 특정 예약 내역에 대한 키 제어
 
-public class SpecificKey extends HttpServlet {
+public class SpecificKey extends MyHttpServlet {
 
 	@Override
 	protected void service(HttpServletRequest request,
@@ -44,14 +45,7 @@ public class SpecificKey extends HttpServlet {
 		String userId = jsonObject.get("userId").toString();
 		String command = jsonObject.get("command").toString();
 
-		Connection conn = null; // DB 연결을 위한 Connection 객체
-		Statement stmt = null; // ready for DB Query result
 		PrintWriter pw = response.getWriter();
-		ResultSet rs = null; // SQL Query 결과를 담을 테이블 형식의 객체
-
-		// Json for result
-		JSONObject resultObject = new JSONObject(); // 최종 완성될 JSONObject 선언
-		JSONObject resultInfo = new JSONObject(); // 서블릿 실행 결과 반환
 		
 		try {
 			conn = DriverManager.getConnection(StaticVariables.JOCL); //커넥션 풀에서 대기 상태인 커넥션을 얻는다
@@ -75,8 +69,8 @@ public class SpecificKey extends HttpServlet {
 			if(status != StaticVariables.SUCCESS)
 				return;
 			System.out.println("3");
-			//if(StaticMethods.checkTime(date, startTime, endTime) != StaticVariables.SUCCESS)
-				//return;
+			if(StaticMethods.checkTime(date, startTime, endTime) != StaticVariables.SUCCESS)
+				return;
 			System.out.println("4");
 			conn.setAutoCommit(false);// 오토커밋을 false로 지정하여 트랜잭션 조건을 맞춘다
 			sql = "update room set status=" + command + " where id=" + roomId + ";"; // 방 잠금 상태 변경
@@ -97,22 +91,22 @@ public class SpecificKey extends HttpServlet {
 			System.out.println("6");
 			int result = StaticMethods.rasberrySocket(command, roomId); // 라즈베리파이에 요청 보내기
 			if (result == StaticVariables.SUCCESS) {
-				resultInfo.put("result", StaticVariables.SUCCESS);
+				subJsonObj.put("result", StaticVariables.SUCCESS);
 				conn.commit();
 			} else {
-				resultInfo.put("result", StaticVariables.FAIL);
+				subJsonObj.put("result", StaticVariables.FAIL);
 				conn.rollback();
 			}
-	//	} catch (ParseException pe){ // for StaticMethods.checkTime() 
-		//	pe.printStackTrace();
-		//	resultInfo.put("result", StaticVariables.FAIL);
+		} catch (ParseException pe){ // for StaticMethods.checkTime() 
+			pe.printStackTrace();
+			subJsonObj.put("result", StaticVariables.FAIL);
 		} catch (SQLException e) { // for SQL ERROR
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			resultInfo.put("result", StaticVariables.ERROR_MYSQL);
+			subJsonObj.put("result", StaticVariables.ERROR_MYSQL);
 		} finally {
-			resultObject.put("responseData", resultInfo);
-			pw.println("SpecificKey : " + resultObject.toString());
+			responseJsonObj.put("responseData", subJsonObj);
+			pw.println("SpecificKey : " + responseJsonObj.toString());
 			try {
 				if (stmt != null) 
 					stmt.close();

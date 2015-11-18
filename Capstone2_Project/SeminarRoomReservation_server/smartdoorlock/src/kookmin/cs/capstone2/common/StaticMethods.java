@@ -120,12 +120,17 @@ public class StaticMethods {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); //날짜 형식
 		String strToday = sdf.format(today);
 		
-		System.out.println(strToday);
+		System.out.println("오늘 날짜 strToday : " + strToday);
 		
-		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+		String start = date + " " + startTime;
+		String end = date + " " + endTime;
+		SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date startT = null, endT = null;
-		startT = timeFormat.parse(startTime);
-		endT = timeFormat.parse(endTime);
+		startT = timeFormat.parse(start);
+		endT = timeFormat.parse(end);
+		
+		System.out.println("startT :" + startT.getTime() + ", endT : " + endT.getTime() + ", today.getTime :"
+				+ today.getTime()); 
 				
 		if(!strToday.equals(date))
 			return StaticVariables.FAIL;

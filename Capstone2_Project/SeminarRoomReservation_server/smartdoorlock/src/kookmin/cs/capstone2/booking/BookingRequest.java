@@ -24,12 +24,13 @@ import org.json.simple.parser.ParseException;
 import com.mysql.jdbc.ResultSetMetaData;
 
 import kookmin.cs.capstone2.GCM.GcmSender;
+import kookmin.cs.capstone2.common.MyHttpServlet;
 import kookmin.cs.capstone2.common.StaticVariables;
 import kookmin.cs.capstone2.common.StaticMethods;
 
 //관리자가 예약 신청 승인 또는 거절을 위해 내역을 받는다.
 
-public class BookingRequest extends HttpServlet {
+public class BookingRequest extends MyHttpServlet {
 
 	/*
 	 * request : 세미나실 id, 신청자 id, 날짜(yyyy-MM-dd), 시작시간, 끝시간, 예약 목적, 세미나 참석자 id
@@ -48,9 +49,9 @@ public class BookingRequest extends HttpServlet {
 		String requestString = StaticMethods.getBody(request);
 
 		// request 파라미터에서 json 파싱
-		//JSONObject jsonObject = (JSONObject) JSONValue.parse(requestString);
 		JSONObject requestJSON = (JSONObject) JSONValue.parse(requestString);
-
+		System.out.println(requestJSON.toString());
+		
 		String roomId = requestJSON.get("roomId").toString();
 		String userId = requestJSON.get("userId").toString();
 		String date = requestJSON.get("date").toString();
@@ -62,18 +63,11 @@ public class BookingRequest extends HttpServlet {
 		System.out.println(roomId + " " + userId + " " + date + " " + startTime
 				+ " " + endTime + " " + context);
 
-		// JSONObject for result
-		JSONObject resultJSON = new JSONObject();
-
-		Connection conn = null; // DB 연결을 위한 Connection 객체
-		Statement stmt = null; // ready for DB Query result
 		PrintWriter pw = response.getWriter();
-		ResultSet rs = null; // SQL Query 결과를 담을 테이블 형식의 객체
 		
 		int result = -1;
 
 		try {
-
 			conn = DriverManager.getConnection(StaticVariables.JOCL); // 커넥션 풀에서 대기 상태인 커넥션을 얻는다
 			stmt = conn.createStatement(); // DB에 SQL문을 보내기 위한 Statement를 생성
 
@@ -105,7 +99,7 @@ public class BookingRequest extends HttpServlet {
 			System.out.println(sql);
 			if(stmt.executeUpdate(sql) != 0){ // the row count for SQL DML stmt
 				conn.commit();
-				//resultJSON.put("status", StaticVariables.SUCCESS);
+				//responseJSONObj.put("status", StaticVariables.SUCCESS);
 				result = StaticVariables.SUCCESS;
 			}
 			
@@ -124,10 +118,10 @@ public class BookingRequest extends HttpServlet {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			//resultJSON.put("status", StaticVariables.ERROR_MYSQL);
+			//responseJSONObj.put("status", StaticVariables.ERROR_MYSQL);
 			result = StaticVariables.ERROR_MYSQL;
 		} finally {
-			//pw.println(resultJSON);
+			//pw.println(responseJSONObj);
 			pw.println(result);
 			pw.close();
 			try {

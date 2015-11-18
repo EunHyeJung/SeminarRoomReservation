@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.simple.JSONObject;
 
+import kookmin.cs.capstone2.common.MyHttpServlet;
 import kookmin.cs.capstone2.common.StaticVariables;
 
 /*
@@ -22,7 +23,7 @@ import kookmin.cs.capstone2.common.StaticVariables;
  * 기능 : 
  * 	세미나실이 선택되면 그 세미나실 잠금 장치의 잠김/풀림 상태 정보를 제공한다.
  */
-public class RoomStatus extends HttpServlet {
+public class RoomStatus extends MyHttpServlet {
 
 	@Override
 	protected void service(HttpServletRequest request,
@@ -36,12 +37,7 @@ public class RoomStatus extends HttpServlet {
 		String roomId = request.getParameter("id");
 		System.out.println(roomId);
 				
-		Connection conn = null; //DB 연결을 위한 Connection 객체
-		Statement stmt = null; //ready for DB Query result
 		PrintWriter pw = response.getWriter();
-		ResultSet rs = null; //SQL Query 결과를 담을 테이블 형식의 객체
-
-		JSONObject jsonObject = new JSONObject();
 		
 		try {
 			
@@ -51,14 +47,14 @@ public class RoomStatus extends HttpServlet {
 			rs = stmt.executeQuery(sql);
 			if (rs.next()) {
 				String status = rs.getString("status");
-				jsonObject.put("status", status);
+				responseJsonObj.put("status", status);
 			}
 			
 		} catch (SQLException e) {
 			System.err.print("SQLException: ");
 			System.err.println(e.getMessage());
 			e.printStackTrace();
-			jsonObject.put("status", StaticVariables.ERROR_MYSQL);
+			responseJsonObj.put("status", StaticVariables.ERROR_MYSQL);
 		} finally {
 			try {
 				if (stmt != null) 
@@ -69,12 +65,12 @@ public class RoomStatus extends HttpServlet {
 					conn.close();
 			} catch (SQLException se) {
 				System.out.println(se.getMessage());
-				jsonObject.put("status", StaticVariables.ERROR_MYSQL);
+				responseJsonObj.put("status", StaticVariables.ERROR_MYSQL);
 			}
 			
 			//response room status
-			pw.println(jsonObject);
-			System.out.println(jsonObject);
+			pw.println(responseJsonObj);
+			System.out.println(responseJsonObj);
 			pw.close();
 		}
 	}

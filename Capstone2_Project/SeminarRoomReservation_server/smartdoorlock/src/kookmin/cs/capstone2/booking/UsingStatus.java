@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import kookmin.cs.capstone2.common.MyHttpServlet;
 import kookmin.cs.capstone2.common.StaticMethods;
 import kookmin.cs.capstone2.common.StaticVariables;
 
@@ -20,7 +21,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
-public class UsingStatus extends HttpServlet {
+public class UsingStatus extends MyHttpServlet {
 	/*
 	 * request : date(yyyy-MM-dd) 
 	 * response : 예약 고유 id(id), 세미나실 id(roomId), 예약시작 시간(startTime), 예약 끝 시간(endTime), 예약 상태(status)
@@ -35,7 +36,6 @@ public class UsingStatus extends HttpServlet {
 		
 		//RequestBody to String
 		String requestString = StaticMethods.getBody(request);
-		System.out.println(requestString);
 				
 		// request 파라미터에서 json 파싱
 		JSONObject requestObject = (JSONObject)JSONValue.parse(requestString);
@@ -43,18 +43,8 @@ public class UsingStatus extends HttpServlet {
 		String date = requestObject.get("date").toString(); // get date
 		System.out.println(requestObject);
 		
-		Connection conn = null; //DB 연결을 위한 Connection 객체
-		Statement stmt = null; //ready for DB Query result
 		PrintWriter pw = response.getWriter();
-		ResultSet rs = null; //SQL Query 결과를 담을 테이블 형식의 객체
 
-		//for Json
-		JSONObject jsonObject = new JSONObject(); //최종 완성될 JSONObject 선언
-		JSONObject arrayObject = new JSONObject(); //배열을 담을 JSONObject
-		JSONArray statusArray = new JSONArray(); //예약 내역의 정보를 담을 Array
-		JSONObject statusInfo = new JSONObject(); //예약 내역 한 개의 정보가 들어갈 JSONObject
-		
-		//룸 아이디가 안들어오면 return한다
 		try {
 			conn = DriverManager.getConnection(StaticVariables.JOCL); //커넥션 풀에서 대기 상태인 커넥션을 얻는다
 			stmt = conn.createStatement(); //DB에 SQL문을 보내기 위한 Statement를 생성
@@ -77,29 +67,30 @@ public class UsingStatus extends HttpServlet {
 			}
 			if ( requestJSONArray.size() != 0 )
 				sql += " and room.id in (" + tempSql +") order by room.id asc;"; //room id가 없을 때 
-			System.out.println(sql);
+			System.out.println("usingStatus sql문 : " + sql);
 			
 			rs = stmt.executeQuery(sql);
 			if(!rs.next()){
-				jsonObject.put("responseData", null);
+				responseJsonObj.put("responseData", null);
 			}else {
 				rs.beforeFirst(); // sql결과의 커서를 맨 앞으로 옮긴다
 				while (rs.next()) {
-					statusInfo = new JSONObject();
-					statusInfo.put("reservationId", rs.getInt("id"));
-					statusInfo.put("roomId", rs.getInt("room_id"));
-					statusInfo.put("startTime", rs.getString("start_time"));
-					statusInfo.put("endTime", rs.getString("end_time"));
-					statusInfo.put("reservationStatus", rs.getString("status"));
+					jsonArrayInfo = new JSONObject();
+					jsonArrayInfo.put("reservationId", rs.getInt("id"));
+					System.out.println("reservaitonId : " + rs.getInt("id"));
+					jsonArrayInfo.put("roomId", rs.getInt("room_id"));
+					jsonArrayInfo.put("startTime", rs.getString("start_time"));
+					jsonArrayInfo.put("endTime", rs.getString("end_time"));
+					jsonArrayInfo.put("reservationStatus", rs.getString("status"));
 					
-					statusArray.add(statusInfo); //Array에 Object 추가
+					jsonArray.add(jsonArrayInfo); //Array에 Object 추가
 				}
-				arrayObject.put("reservation", statusArray);
+				subJsonObj.put("reservation", jsonArray);
 				
 				//전체의 JSONObejct에 status란 이름으로 JSON정보로 구성된 Array value 입력
-				jsonObject.put("responseData", arrayObject); 
+				responseJsonObj.put("responseData", subJsonObj); 
 			}
-			pw.println(jsonObject);
+			pw.println(responseJsonObj);
 		} catch (SQLException e) {
 			System.err.print("SQLException: ");
 			System.err.println(e.getMessage());

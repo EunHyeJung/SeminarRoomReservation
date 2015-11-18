@@ -17,6 +17,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
+import kookmin.cs.capstone2.common.MyHttpServlet;
 import kookmin.cs.capstone2.common.StaticMethods;
 import kookmin.cs.capstone2.common.StaticVariables;
 
@@ -24,7 +25,7 @@ import kookmin.cs.capstone2.common.StaticVariables;
  * filename : ReservationSpec.java
  * 기능 : 선택된 예약의 예약 신청 내역을 보여준다.
  */
-public class BookingSpec extends HttpServlet {
+public class BookingSpec extends MyHttpServlet {
 	/*
 	 * request : 예약 고유 id
 	 * response : 세미나실 id, 신청자 id, date, 예약 시작 시간, 예약 끝 시간, 예약 목적
@@ -38,23 +39,14 @@ public class BookingSpec extends HttpServlet {
 		response.setContentType("text/html;charset=utf-8");
 		
 		//RequestBody to String
-		String requestString = StaticMethods.getBody(request);
-		System.out.println(requestString);
+		//String requestString = StaticMethods.getBody(request);
 		
 		// request 파라미터에서 json 파싱
-		JSONObject requestObject = (JSONObject)JSONValue.parse(requestString);
-		String reservationId = requestObject.get("id").toString(); // get reservation id
-		
-		Connection conn = null; //DB 연결을 위한 Connection 객체
-		Statement stmt = null; //ready for DB Query result
+		//JSONObject requestObject = (JSONObject)JSONValue.parse(requestString);
+		//String reservationId = requestObject.get("id").toString(); // get reservation id
+		// request 파라미터로 전송된 값 얻기
+		String reservationId = request.getParameter("reservationId");
 		PrintWriter pw = response.getWriter();
-		ResultSet rs = null; //SQL Query 결과를 담을 테이블 형식의 객체
-		
-		// for Json
-		JSONObject jsonObject = new JSONObject(); // 최종 완성될 JSONObject 선언
-		JSONObject specObject = new JSONObject(); 
-		JSONArray memberArray = new JSONArray(); // 아이디가 들어갈 배열
-		JSONObject memberInfo = null; // 배열 정보 한 개가 들어갈 JSONObject
 		
 		try {
 			conn = DriverManager.getConnection(StaticVariables.JOCL); //커넥션 풀에서 대기 상태인 커넥션을 얻는다
@@ -62,12 +54,12 @@ public class BookingSpec extends HttpServlet {
 			String sql = "select * from reservationinfo where id='" + reservationId + "';";
 			rs = stmt.executeQuery(sql);
 			if (rs.next()) {
-				specObject.put("room", rs.getString("room_id"));
-				specObject.put("user", rs.getString("user_id"));
-				specObject.put("date", rs.getString("date"));
-				specObject.put("startTime", rs.getString("start_time"));
-				specObject.put("endTime", rs.getString("end_time"));
-				specObject.put("context", rs.getString("context"));
+				subJsonObj.put("room", rs.getString("room_id"));
+				subJsonObj.put("user", rs.getString("user_id"));
+				subJsonObj.put("date", rs.getString("date"));
+				subJsonObj.put("startTime", rs.getString("start_time"));
+				subJsonObj.put("endTime", rs.getString("end_time"));
+				subJsonObj.put("context", rs.getString("context"));
 			}
 			
 			// 회의 참석자 정보
@@ -76,20 +68,20 @@ public class BookingSpec extends HttpServlet {
 					+ " and (seminarmember.user_id=user.id);";
 			rs = stmt.executeQuery(sql);
 			while(rs.next()) {
-				memberInfo = new JSONObject();
-				memberInfo.put("member", rs.getString("text_id"));
-				memberArray.add(memberInfo);
+				jsonArrayInfo = new JSONObject();
+				jsonArrayInfo.put("member", rs.getString("text_id"));
+				jsonArray.add(jsonArrayInfo);
 			}
 			
-			specObject.put("memberList", memberArray);
-			jsonObject.put("responseData", specObject);
+			subJsonObj.put("memberList", jsonArray);
+			responseJsonObj.put("responseData", subJsonObj);
 			
 		} catch (SQLException e) {
 			System.err.print("SQLException: ");
 			System.err.println(e.getMessage());
 			e.printStackTrace();
-			specObject.put("result", StaticVariables.ERROR_MYSQL);
-			jsonObject.put("responseData", specObject);
+			subJsonObj.put("result", StaticVariables.ERROR_MYSQL);
+			responseJsonObj.put("responseData", subJsonObj);
 		} finally {
 			try {
 				if (stmt != null) 
@@ -98,7 +90,7 @@ public class BookingSpec extends HttpServlet {
 					rs.close();
 				if (conn != null)
 					conn.close();
-				pw.println(jsonObject.toJSONString());
+				pw.println(responseJsonObj.toJSONString());
 			} catch (SQLException se) {
 				System.out.println(se.getMessage());
 			}

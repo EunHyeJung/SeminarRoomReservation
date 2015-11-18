@@ -16,11 +16,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.simple.JSONObject;
 
 import kookmin.cs.capstone2.GCM.GcmSender;
+import kookmin.cs.capstone2.common.MyHttpServlet;
 import kookmin.cs.capstone2.common.StaticVariables;
 
 //관리자가 예약 내역을 승인 또는 거절 할 때 DB 업데이트 해준다
 
-public class BookingFilter extends HttpServlet {
+public class BookingFilter extends MyHttpServlet {
 	
 	/*
 	 * request : reservationId(id), command
@@ -44,12 +45,7 @@ public class BookingFilter extends HttpServlet {
 		else
 			message = "예약이 거절되었습니다.";
 		
-		Connection conn = null; //DB 연결을 위한 Connection 객체
-		Statement stmt = null; //ready for DB Query result
 		PrintWriter pw = response.getWriter();
-		ResultSet rs = null; //SQL Query 결과를 담을 테이블 형식의 객체
-
-		JSONObject jsonObject = new JSONObject();
 		
 		try {
 			
@@ -59,7 +55,7 @@ public class BookingFilter extends HttpServlet {
 			String sql = "update reservationinfo set status=" + command + " where id=" + reservationId +";";
 			int result = stmt.executeUpdate(sql);// return the row count for SQL DML statements
 			if(result > 0){
-				jsonObject.put("result", StaticVariables.SUCCESS);
+				responseJsonObj.put("result", StaticVariables.SUCCESS);
 				sql = " select reg_id from gcmid, reservationinfo "
 						+ "where gcmid.id=reservationinfo.user_id "
 						+ "and reservationinfo.id=" + reservationId;
@@ -70,13 +66,14 @@ public class BookingFilter extends HttpServlet {
 				}
 			}
 			else
-				jsonObject.put("result", StaticVariables.FAIL);
+				responseJsonObj.put("result", StaticVariables.FAIL);
 		}catch (SQLException e) {
 			System.err.print("SQLException: ");
 			System.err.println(e.getMessage());
 			e.printStackTrace();
-			jsonObject.put("result", StaticVariables.ERROR_MYSQL);
+			responseJsonObj.put("result", StaticVariables.ERROR_MYSQL);
 		} finally {
+			pw.println(responseJsonObj);
 			try {
 				if (stmt != null) 
 					stmt.close();
@@ -84,9 +81,10 @@ public class BookingFilter extends HttpServlet {
 					conn.close();
 			} catch (SQLException se) {
 				System.out.println(se.getMessage());
-				jsonObject.put("result", StaticVariables.ERROR_MYSQL);
+				// Statement와 Connection을 닫는 과정에서 SQLException이 발생할 수 는 있지만,
+				// 이미 위에 작성된 과정은 실행 된 후다.
+				//responseJsonObj.put("result", StaticVariables.ERROR_MYSQL);
 			}
-			pw.println(jsonObject);
 		}
 	}
 }
