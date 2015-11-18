@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
@@ -22,7 +23,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 
-import kr.ac.kookmin.cs.capstone2.seminarroomreservation.DefinedValues;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.DatabaseHelper;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Encryption.EncryptionClass;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Gcm.QuickstartPreferences;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Gcm.RegistrationIntentService;
@@ -30,6 +31,7 @@ import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Join.JoinActivity;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Manager.ManagerActivity;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Network.RestRequestHelper;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation.ItemUser;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.RoomInfo;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.SharedPreferenceClass;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.User.UserActivity;
@@ -54,6 +56,11 @@ public class MainActivity extends AppCompatActivity {
     CheckBox checkBoxAutoLogin;
     CheckBox checkBoxId;
 
+    //
+
+    DatabaseHelper databaseHelper;
+    SQLiteDatabase database;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +70,10 @@ public class MainActivity extends AppCompatActivity {
         registBroadcastReceiver();
         getInstanceIdToken();
         //
+
+        //
+
+        databaseHelper = new DatabaseHelper(MainActivity.this);
         sharedPreference = new SharedPreferenceClass(this);
 
         editTextId = (EditText) findViewById(R.id.editText_loginId);
@@ -115,11 +126,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void init() {
         if (SharedPreferenceClass.getValue("autoLogin", false)) {       // 자동로그인 설정일 경우, 아이디 저장도 같이 체크
-             autoLogin();
-             checkBoxId.setChecked(true);
-        }
-        if (SharedPreferenceClass.getValue("storeId", false)) {        // 아이디 저장이 되어 있는 상태이면
-            String userId = SharedPreferenceClass.getValue("id", "input your Id");
+            autoLogin();
+            checkBoxId.setChecked(true);
+            System.out.println("자동로그인 설정");
+        } else if (SharedPreferenceClass.getValue("storeId", false)) {        // 아이디 저장이 되어 있는 상태이면
+            String userId = SharedPreferenceClass.getValue("id", "false");
+            System.out.println("아이디 저장 "+SharedPreferenceClass.getValue("id","false"));
             editTextId.setText(userId);
         }
     }
@@ -137,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
     public void login(final boolean isAutoLogin) {
         final String id = editTextId.getText().toString();
         final String password;
-        final String instanceId = SharedPreferenceClass.getValue("instanceID","empty");
+        final String instanceId = SharedPreferenceClass.getValue("instanceID", "empty");
 
         if (isAutoLogin) {
             password = SharedPreferenceClass.getValue("password", "default");
@@ -169,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
     public void jsonParsing(JsonObject jsonObject) {
         JsonObject responseData = jsonObject.getAsJsonObject("responseData"); //2 레벨 제이슨 객체를 얻음
         int userMode = responseData.getAsJsonPrimitive("result").getAsInt();
-        if(userMode == WRONG_USER_INFO){
+        if (userMode == WRONG_USER_INFO) {
             loginProcess(userMode);
             return;
         }
@@ -177,33 +189,54 @@ public class MainActivity extends AppCompatActivity {
 
         UserInfo.setUserInfo(userId, userMode);
 
-            JsonArray roomNames = responseData.getAsJsonArray("room");
+        JsonArray roomNames = responseData.getAsJsonArray("room");
 
+        int roomId;
+        String roomName;
         for (int i = 0; i < roomNames.size(); i++) {
-            int roomId = roomNames.get(i).getAsJsonObject().getAsJsonPrimitive("roomId").getAsInt();
-            String roomName = roomNames.get(i).getAsJsonObject().getAsJsonPrimitive("roomName").toString();
+            roomId = roomNames.get(i).getAsJsonObject().getAsJsonPrimitive("roomId").getAsInt();
+            roomName = roomNames.get(i).getAsJsonObject().getAsJsonPrimitive("roomName").toString();
+            roomName = roomName.substring(1, 4);
             RoomInfo.setRoomInfo(roomId, roomName);
+            System.out.println("roomName : " + roomName);
+            RoomInfo.setRoomIfo(roomName, roomId);
         }
+
+
+        /// SQLite 에 사용자들의 정보를 저장
+        JsonArray userList = responseData.getAsJsonArray("user");
+        int id;
+        String memberId;
+        String memberName;
+        for (int i = 0; i < userList.size(); i++) {
+            id = userList.get(i).getAsJsonObject().getAsJsonPrimitive("id").getAsInt();
+            memberId = userList.get(i).getAsJsonObject().getAsJsonPrimitive("userId").getAsString();
+            memberName = userList.get(i).getAsJsonObject().getAsJsonPrimitive("name").getAsString();
+            ItemUser itemUser = new ItemUser(id, memberId, memberName);
+            databaseHelper.insertMember(itemUser);
+        }
+
         loginProcess(userMode);
     }
 
     public void loginProcess(int result) {
         switch (result) {
-            case WRONG_USER_INFO :         // 로그인 오류
+            case WRONG_USER_INFO:         // 로그인 오류
                 Toast.makeText(getApplicationContext(), getString(R.string.wrong_user_info), Toast.LENGTH_LONG).show();
                 break;
-            case USER_MODE :             // 일반 사용자
+            case USER_MODE:             // 일반 사용자
                 Toast.makeText(getApplicationContext(), getString(R.string.login_user_mode), Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(getApplicationContext(), UserActivity.class);
                 startActivity(intent);
                 break;
-            case ADMIN_MODE :             // 관리자 로그인
+            case ADMIN_MODE:             // 관리자 로그인
                 Toast.makeText(getApplicationContext(), getString(R.string.login_admin_mode), Toast.LENGTH_LONG).show();
                 intent = new Intent(getApplicationContext(), ManagerActivity.class);
                 startActivity(intent);
                 break;
         }
     }
+
 
     // InstanceId를 이용하여 디바이스 토큰을 가져오는 RegistrationIntentService를 실행한다.
     public void getInstanceIdToken() {
@@ -242,7 +275,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
         LocalBroadcastManager.getInstance(this).registerReceiver(registrationBroadcastReceiver,
                 new IntentFilter(QuickstartPreferences.REGISTRATION_READY));

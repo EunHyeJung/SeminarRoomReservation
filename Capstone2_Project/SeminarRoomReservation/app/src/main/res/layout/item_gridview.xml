@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
-
-    <TextView
-        android:id="@+id/textView_gridItem"
-        android:layout_width="match_parent"
-        android:layout_height="18dp"
-        android:textColor="#000000"
-        android:background="#60FFFFFF"
-        />
-</LinearLayout>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/textView_gridItem"
+    android:layout_width="match_parent"
+    android:layout_height="18dp"
+    android:background="#60FFFFFF"
+    android:gravity="center_horizontal"
+    android:textColor="#FFFFFF" />

@@ -3,11 +3,13 @@ package kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ListView;
@@ -32,6 +34,8 @@ import kr.ac.kookmin.cs.capstone2.seminarroomreservation.RoomInfo;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+
+import static kr.ac.kookmin.cs.capstone2.seminarroomreservation.DefinedValues.*;
 
 
 /**
@@ -80,7 +84,6 @@ public class UsingStatusFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_using_status, container, false);
-
 
         final Calendar calendar = Calendar.getInstance();
         year = calendar.get(Calendar.YEAR);
@@ -132,20 +135,26 @@ public class UsingStatusFragment extends Fragment {
             }
         });
 
+        // 통신없이 gridView선택시는 예약신청
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                // ((TextView) view).getText().toString())
+                Intent intent = new Intent(getActivity().getApplicationContext(), ReservationFormActivity.class);
+                intent.putExtra("viewMode", REQUEST_MODE);
+                getActivity().startActivity(intent);
+            }
+        });
 
         return rootView;
     }
-
     public void init(String date) throws JSONException {
-
         String[] inputTimeValues = {"09:00 - 09:30", "09:30 - 10:00", "10:00 - 10:30", "10:30 - 11:00",
                 "11:00 - 11:30", "11:30 - 12:00", "12:00 - 12:30", "12:30 - 13:00",
                 "13:00 - 13:30", "13:30 - 14:00", "14:00 - 14:30", "14:30 - 15:00",
                 "15:00 - 15:30", "15:30 - 16:00", "16:00 - 16:30", "16:30 - 17:00",
                 "17:00 - 17:30", "17:30 - 18:00", "18:00 - 18:30", "18:30 - 19:00",
                 "19:00 - 19:30", "19:30 - 20:00"};
-
-
         for (int i = 1; i < inputTimeValues.length; i++) {
             startTime.put(inputTimeValues[i - 1].substring(0, 5), i);
             endTime.put(inputTimeValues[i - 1].substring(8, 13), i);
@@ -154,8 +163,6 @@ public class UsingStatusFragment extends Fragment {
         for (int i = 0; i < roomIds.length; i++) {
             roomIds[i] = 5 * page + i + 1;
         }
-
-
         textViewRoom1.setText(getRoomName(roomIds[0]));
         textViewRoom2.setText(getRoomName(roomIds[1]));
         textViewRoom3.setText(getRoomName(roomIds[2]));
@@ -200,28 +207,23 @@ public class UsingStatusFragment extends Fragment {
     /*      Start Of jsonParsing         */
     public void jsonParsing(JsonObject responseData) {
         JsonArray reservations = responseData.getAsJsonArray("reservation");
-
         // 예약 현황 데이터를 받아와서, gridView에 set
         ReservationsInfo[] reservationsInfos = new ReservationsInfo[reservations.size()];
         for (int i = 0; i < reservations.size(); i++) {
             reservationsInfos[i] = new ReservationsInfo();
         }
-
-        // 이 부분을 gridViewAdapter에서 처리하고, 예약자 이름 셀에다 넣어줄것
-        /*
-        *       reservationInfo.
-        *       roomId, status, startTime, endTime
-        *      int (컬러값) = checkStatus(roomId, startTime, endTime)
-        *
+        System.out.println("reservation.sizE() : " + reservations.size());
+          /*
         * */
         for (int i = 0; i < reservations.size(); i++) {
             String tempStartTime = (reservations.get(i).getAsJsonObject().getAsJsonPrimitive("startTime").getAsString()).substring(0, 5);
             String tempEndTime = (reservations.get(i).getAsJsonObject().getAsJsonPrimitive("endTime").getAsString()).substring(0, 5);
             int reservationStatus = (reservations.get(i).getAsJsonObject().getAsJsonPrimitive("reservationStatus").getAsInt());
             int reservedRoomId = (reservations.get(i).getAsJsonObject().getAsJsonPrimitive("roomId").getAsInt());
+            int reservationId = (reservations.get(i).getAsJsonObject().getAsJsonPrimitive("reservationId").getAsInt());
             int cellStartPosition = (5 * (startTime.get(tempStartTime) - 1)) + (reservedRoomId % 5) - 1; // 셀 시작 위치
             int cellEndPosition = (5 * (endTime.get(tempEndTime) - 1)) + (reservedRoomId % 5) - 1; // 셀 종료 위치
-            reservationsInfos[i].setReservationsInfo(reservationStatus, cellStartPosition, cellEndPosition);
+            reservationsInfos[i].setReservationsInfo(reservationId, reservationStatus, cellStartPosition, cellEndPosition);
         }
 
         ArrayList<Integer> inputValues = new ArrayList<Integer>();
@@ -231,14 +233,29 @@ public class UsingStatusFragment extends Fragment {
         customGridAdapter = new CustomGridAdapter(getActivity(), inputValues, reservationsInfos);
         gridView.setAdapter(customGridAdapter);
         gridView.setVerticalScrollBarEnabled(false);
+
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                // ((TextView) view).getText().toString())
+                Intent intent = new Intent(getActivity().getApplicationContext(), ReservationFormActivity.class);
+                if (((TextView) view).getHint() == null) {  // 2 : 예약 신청 모드
+                    intent.putExtra("viewMode", REQUEST_MODE);
+                } else {     // getHint() == null
+                    int reservationId = Integer.parseInt(((TextView) view).getHint().toString());
+                    intent.putExtra("viewMode", VIEW_MODE);  // 1, 예약 조회 모드
+                    intent.putExtra("reservationId", reservationId);    // 예약 조회를 위한 예약ID
+                }
+
+                getActivity().startActivity(intent);
+            }
+        });
     }
 
 
     public String getRoomName(int i) {
-        String roomName="";
-        if(RoomInfo.getRoomName(i) != null)
-            roomName = RoomInfo.getRoomName(i).substring(1, 4);
-        return roomName;
+        String roomName = "";
+        return RoomInfo.getRoomName(i);
     }
 
     public void showCaldendarDialog() {

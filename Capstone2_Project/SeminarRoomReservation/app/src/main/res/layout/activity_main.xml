@@ -86,7 +86,7 @@
         android:text="LOGIN"
         android:textSize="12dp"
         android:textColor="#ff333333"
-        android:background="#50FFFFFF"
+        android:background="@drawable/button_selector"
         android:layout_gravity="center"
         android:layout_marginTop="15dp"
         android:layout_alignParentBottom="true"
@@ -99,7 +99,7 @@
         android:text="JOIN"
         android:textSize="12dp"
         android:textColor="#ff333333"
-        android:background="#50FFFFFF"
+        android:background="@drawable/button_selector"
         android:layout_gravity="center"
         android:layout_marginTop="5dp"
         />

@@ -5,7 +5,7 @@
     android:background="#EFEFEF"
     android:orientation="vertical"
     tools:context="kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation.UserListActivity">
-
+<!--
     <ListView
         android:id="@+id/listView_memberList"
         android:layout_width="wrap_content"
@@ -13,7 +13,19 @@
         android:layout_marginTop="20dp"
         android:clickable="false"
         android:focusable="false"
-        android:verticalSpacing="1dp"></ListView>
+        android:verticalSpacing="1dp"></ListView>-->
+
+    <AutoCompleteTextView
+        android:id="@+id/textView_userName"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:background="#3e3e3e"
+        android:textColor="#EFEFEF"
+        android:hint="Search user name"
+        android:completionThreshold="1"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        />
 
     <Button
         android:id="@+id/button_sample"
