@@ -2,6 +2,7 @@ package kr.ac.kookmin.cs.capstone2.seminarroomreservation.Network;
 
 import com.google.gson.JsonObject;
 
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Manager.TransmissionHistory;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation.TransmissionData;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation.TransmissionResInfo;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation.TransmissionReservation;
@@ -91,6 +92,10 @@ public class RestRequestHelper {
                       Callback<JsonObject> dayWatchCallback
         );
 
+        @POST("/roomhistory")
+        void roomHistory(@Body TransmissionHistory info,
+                         Callback<JsonObject> roomHistoryCallback);
+
         @POST("/requestlist")
         void requestList(@Body TransmissionUserInfo info,
                          Callback<JsonObject> requestListCallback);
@@ -172,16 +177,14 @@ public class RestRequestHelper {
     public void controlDoor(int id, String doorName, boolean status, Callback<JsonObject> controlDoorCallback ){
         restRequest.controlDoor(id, doorName, status, controlDoorCallback);
     }
-
+/*
     public void getHistory(String date, String roomName, Callback<JsonObject> dayWatchCallback){
         restRequest.dayWatch(date, roomName, dayWatchCallback);
-    }
-
-    //관리자 권한인지 아닌지를 이 함수에서 받고, mybooking과 함께 처리
-    //date, id
-/*    public void requestList(String date, Callback<JsonObject> requestCallback){
-        restRequest.requestList(date, requestCallback);
     }*/
+
+    public void getHistory(TransmissionHistory info, Callback<JsonObject> getHistoryCallback){
+        restRequest.roomHistory(info, getHistoryCallback);
+    }
 
     public void requestList(TransmissionUserInfo info,Callback<JsonObject> requestCallback){
         restRequest.requestList(info, requestCallback);
