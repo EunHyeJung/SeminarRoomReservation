@@ -26,11 +26,7 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-<<<<<<< HEAD
-        </activit>
-=======
         </activity>
->>>>>>> eh
 
         <activity
             android:name=".Manager.ManagerActivity"
@@ -42,10 +38,7 @@
             android:name=".Join.JoinActivity"
             android:label="@string/title_activity_join" />
         <activity android:name=".Reservation.ReservationFormActivity" >
-<<<<<<< HEAD
-=======
 
->>>>>>> eh
         </activity>
         <activity
             android:name=".Manager.ControlDialogActivity"

@@ -139,5 +139,23 @@
 		<servlet-name>kookmin.cs.capstone2.mypage.CancelMyBooking</servlet-name>
 		<url-pattern>/cancelmybooking</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>kookmin.cs.capstone2.booking.BookingSpec</servlet-name>
+		<servlet-class>kookmin.cs.capstone2.booking.BookingSpec</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>kookmin.cs.capstone2.booking.BookingSpec</servlet-name>
+		<url-pattern>/bookingspec</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>kookmin.cs.capstone2.mypage.SpecificKey</servlet-name>
+		<servlet-class>kookmin.cs.capstone2.mypage.SpecificKey</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>kookmin.cs.capstone2.mypage.SpecificKey</servlet-name>
+		<url-pattern>/specifickey</url-pattern>
+	</servlet-mapping>
 
 </web-app>

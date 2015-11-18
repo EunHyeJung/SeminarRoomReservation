@@ -17,6 +17,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
+import kookmin.cs.capstone2.common.MyHttpServlet;
 import kookmin.cs.capstone2.common.StaticMethods;
 import kookmin.cs.capstone2.common.StaticVariables;
 
@@ -27,7 +28,7 @@ import java.util.Date;
 /*
  * 일반 사용자의 예약 상황에 맞추어 스마트키 사용 여부를 알려준다.
  */
-public class SmartKey extends HttpServlet {
+public class SmartKey extends MyHttpServlet {
 
 	@Override
 	protected void service(HttpServletRequest request,
@@ -42,17 +43,10 @@ public class SmartKey extends HttpServlet {
 		System.out.println("smartkey: " + requestString);
 
 		// request 파라미터에서 json 파싱
-		JSONObject jsonObject = (JSONObject) JSONValue.parse(requestString);
-		String userId = jsonObject.get("Id").toString();
+		JSONObject requestJsonObj = (JSONObject) JSONValue.parse(requestString);
+		String userId = requestJsonObj.get("Id").toString();
 
-		Connection conn = null; // DB 연결을 위한 Connection 객체
-		Statement stmt = null; // ready for DB Query result
 		PrintWriter pw = response.getWriter();
-		ResultSet rs = null; // SQL Query 결과를 담을 테이블 형식의 객체
-
-		// Json for result
-		JSONObject resultObject = new JSONObject(); // 최종 완성될 JSONObject 선언
-		JSONObject keyInfo = new JSONObject(); // 특정 유저의 스마트키 권한 정보를 담을 JSONObject
 		
 		try {
 			conn = DriverManager.getConnection(StaticVariables.JOCL); //커넥션 풀에서 대기 상태인 커넥션을 얻는다
@@ -76,24 +70,27 @@ public class SmartKey extends HttpServlet {
 				
 				//현재 날짜와 DB에서 얻어온 Date/start_time을 같은 형식으로 맞춰주기
 				Date today = new Date(); //오늘 날짜
-				Date resultDate;
-				String strResultDate = date + " " + startTime;
-				resultDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(strResultDate);
+				Date resultStartDate, resultEndDate;
+				String strStartDate = date + " " + startTime;
+				String strEndDate = date + " " + endTime;
 				
-				keyInfo.put("roomId", rs.getInt("room_id"));
-				keyInfo.put("date", date);
-				keyInfo.put("startTime", startTime);
-				keyInfo.put("endTime",endTime);
+				resultStartDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(strStartDate);
+				resultEndDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(strEndDate);
 				
-				if(resultDate != null && resultDate.getTime() <= today.getTime())// 현재 시간이 예약 시간 사이일 때
-					keyInfo.put("key", StaticVariables.SUCCESS);
+				subJsonObj.put("roomId", rs.getInt("room_id"));
+				subJsonObj.put("date", date);
+				subJsonObj.put("startTime", startTime);
+				subJsonObj.put("endTime",endTime);
+				
+				if(resultStartDate.getTime() <= today.getTime() && resultEndDate.getTime() >= today.getTime())// 현재 시간이 예약 시간 사이일 때
+					subJsonObj.put("key", StaticVariables.SUCCESS);
 				else 
-					keyInfo.put("key", StaticVariables.RESERVATION);
+					subJsonObj.put("key", StaticVariables.RESERVATION);
 			} else { // 예약 내역이 없음
-				keyInfo.put("key", StaticVariables.FAIL);
+				subJsonObj.put("key", StaticVariables.FAIL);
 			}
-			resultObject.put("responseData", keyInfo);
-			System.out.println(resultObject.toJSONString());
+			responseJsonObj.put("responseData", subJsonObj);
+			System.out.println(responseJsonObj.toJSONString());
 			
 		} catch (SQLException e) {
 			System.err.print("SQLException: ");
@@ -103,7 +100,7 @@ public class SmartKey extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-			pw.println(resultObject.toString());
+			pw.println(responseJsonObj.toString());
 			try {
 				if (stmt != null) 
 					stmt.close();

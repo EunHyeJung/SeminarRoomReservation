@@ -15,14 +15,17 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 
+import kookmin.cs.capstone2.common.MyHttpServlet;
+import kookmin.cs.capstone2.common.StaticMethods;
 import kookmin.cs.capstone2.common.StaticVariables;
 
 /*
  * filename : ReservationSpec.java
  * 기능 : 선택된 예약의 예약 신청 내역을 보여준다.
  */
-public class BookingSpec extends HttpServlet {
+public class BookingSpec extends MyHttpServlet {
 	/*
 	 * request : 예약 고유 id
 	 * response : 세미나실 id, 신청자 id, date, 예약 시작 시간, 예약 끝 시간, 예약 목적
@@ -35,35 +38,50 @@ public class BookingSpec extends HttpServlet {
 		request.setCharacterEncoding("utf-8");
 		response.setContentType("text/html;charset=utf-8");
 		
-		// request 파라미터로 전송된 값 얻기
-		String id = request.getParameter("id");
+		//RequestBody to String
+		//String requestString = StaticMethods.getBody(request);
 		
-		Connection conn = null; //DB 연결을 위한 Connection 객체
-		Statement stmt = null; //ready for DB Query result
+		// request 파라미터에서 json 파싱
+		//JSONObject requestObject = (JSONObject)JSONValue.parse(requestString);
+		//String reservationId = requestObject.get("id").toString(); // get reservation id
+		// request 파라미터로 전송된 값 얻기
+		String reservationId = request.getParameter("reservationId");
 		PrintWriter pw = response.getWriter();
-		ResultSet rs = null; //SQL Query 결과를 담을 테이블 형식의 객체
 		
 		try {
 			conn = DriverManager.getConnection(StaticVariables.JOCL); //커넥션 풀에서 대기 상태인 커넥션을 얻는다
 			stmt = conn.createStatement(); //DB에 SQL문을 보내기 위한 Statement를 생성
-			String sql = "select * from reservationinfo where id='" + id + "';";
+			String sql = "select * from reservationinfo where id='" + reservationId + "';";
 			rs = stmt.executeQuery(sql);
 			if (rs.next()) {
-				String room = rs.getString("room_id");
-				String user = rs.getString("user_id");
-				String date = rs.getString("date");
-				String start = rs.getString("start_time");
-				String end = rs.getString("end_time");
-				String context = rs.getString("context");
-				//모임 참석자 정보도 제공해야 함
-				
-				pw.println("room_id=" + room + "&user_id=" + user + "&date=" + date + "&start_time=" + start
-						 + "&end_time=" + end +"&context=" + context);
+				subJsonObj.put("room", rs.getString("room_id"));
+				subJsonObj.put("user", rs.getString("user_id"));
+				subJsonObj.put("date", rs.getString("date"));
+				subJsonObj.put("startTime", rs.getString("start_time"));
+				subJsonObj.put("endTime", rs.getString("end_time"));
+				subJsonObj.put("context", rs.getString("context"));
 			}
+			
+			// 회의 참석자 정보
+			sql = "select user.text_id from seminarmember, user "
+					+ "where seminarmember.id = " + reservationId
+					+ " and (seminarmember.user_id=user.id);";
+			rs = stmt.executeQuery(sql);
+			while(rs.next()) {
+				jsonArrayInfo = new JSONObject();
+				jsonArrayInfo.put("member", rs.getString("text_id"));
+				jsonArray.add(jsonArrayInfo);
+			}
+			
+			subJsonObj.put("memberList", jsonArray);
+			responseJsonObj.put("responseData", subJsonObj);
+			
 		} catch (SQLException e) {
 			System.err.print("SQLException: ");
 			System.err.println(e.getMessage());
 			e.printStackTrace();
+			subJsonObj.put("result", StaticVariables.ERROR_MYSQL);
+			responseJsonObj.put("responseData", subJsonObj);
 		} finally {
 			try {
 				if (stmt != null) 
@@ -72,6 +90,7 @@ public class BookingSpec extends HttpServlet {
 					rs.close();
 				if (conn != null)
 					conn.close();
+				pw.println(responseJsonObj.toJSONString());
 			} catch (SQLException se) {
 				System.out.println(se.getMessage());
 			}

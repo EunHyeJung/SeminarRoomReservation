@@ -13,14 +13,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import kookmin.cs.capstone2.common.MyHttpServlet;
 import kookmin.cs.capstone2.common.StaticVariables;
-public class SignUp extends HttpServlet {
+public class SignUp extends MyHttpServlet {
 	
 	/*
 	 * request : 아이디, 비밀번호, 이름, 전화번호 
 	 * response : 회원 등록 성공 여부
 	 */
 
+	//JSON으로 변경
 	@Override
 	protected void service(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
@@ -35,8 +37,6 @@ public class SignUp extends HttpServlet {
 		String name = request.getParameter("name");
 		String phone = request.getParameter("phone");
 
-		Connection conn = null; //DB 연결을 위한 Connection 객체
-		Statement stmt = null; //ready for DB Query result
 		PrintWriter pw = response.getWriter(); 
 		
 		try {

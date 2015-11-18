@@ -107,32 +107,17 @@ public class ReservationStatusFragment extends Fragment {
 
         info = new TransmissionUserInfo(UserInfo.getId(), date);
 
-        if(UserInfo.getUserMode() == 1){
-            restRequestHelper.myBooking(info, new Callback<JsonObject>() {
-                @Override
-                public void success(JsonObject jsonObject, Response response) {
-                    addList(jsonObject);
-                }
+        restRequestHelper.requestList(info, new Callback<JsonObject>() {
+            @Override
+            public void success(JsonObject jsonObject, Response response) {
+                addList(jsonObject);
+            }
 
-                @Override
-                public void failure(RetrofitError error) {
-                    Log.e("RSF", error.toString());
-                }
-            });
-        }
-        else {
-            restRequestHelper.requestList(info, new Callback<JsonObject>() {
-                @Override
-                public void success(JsonObject jsonObject, Response response) {
-                    addList(jsonObject);
-                }
-
-                @Override
-                public void failure(RetrofitError error) {
-                    Log.e("RSF", error.toString());
-                }
-            });
-        }
+            @Override
+            public void failure(RetrofitError error) {
+                Log.e("Retrofit Error : ", error.toString());
+            }
+        });
 
     }
 
