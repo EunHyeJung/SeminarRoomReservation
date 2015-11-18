@@ -51,7 +51,7 @@ public class RestRequestHelper {
 
         @POST("/bookingrequest")
         void makeReservation(@Body TransmissionResInfo transmissionResInfo,
-                             Callback<Integer> makeReservationCallback);
+                Callback<Integer> makeReservationCallback);
 
 
 
@@ -73,7 +73,7 @@ public class RestRequestHelper {
         @FormUrlEncoded
         @POST("/roomstatus")
         void roomStatus(@Field("id") int id,
-                        @Field("roomName") String roomName,
+                        @Field("roomName")String roomName,
                         Callback<JsonObject> roomStatusCallback);
 
         @FormUrlEncoded
@@ -94,7 +94,7 @@ public class RestRequestHelper {
         void dayWatch(@Field("date") String date,
                       @Field("room") String roomName,
                       Callback<JsonObject> dayWatchCallback
-        );
+                      );
 
      /*   @FormUrlEncoded
         @POST("/requestlist")
@@ -128,7 +128,7 @@ public class RestRequestHelper {
         @FormUrlEncoded
         @POST("/bookingspec")
         void getReservationInfo(@Field("reservationId") int reservationId,
-                                Callback<JsonObject> resrvationInfoCallback);
+                      Callback<JsonObject> resrvationInfoCallback);
 
     }
 

@@ -112,9 +112,7 @@ public class AccessHistoryFragment extends Fragment implements AdapterView.OnIte
         LogViewAdapter = new CustomHistoryLVAdapter();
         SeminarLogView.setAdapter(LogViewAdapter);
 
-        TransmissionHistory transmissionHistory = new TransmissionHistory(roomName, date);
-
-        restRequest.getHistory(transmissionHistory, new Callback<JsonObject>() {
+        restRequest.getHistory(date, roomName, new Callback<JsonObject>() {
             @Override
             public void success(JsonObject jsonObject, Response response) {
                 Log.d("JSON Object : ", jsonObject.toString());

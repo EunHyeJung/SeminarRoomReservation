@@ -117,7 +117,7 @@
                 android:id="@+id/check_out_time" />
 
             <TextView
-                android:id="@+id/selectedcheckOutTime"
+                android:id="@+id/selectedcheckoutTime"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:layout_width="163dp"

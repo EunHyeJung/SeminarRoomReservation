@@ -17,8 +17,4 @@ public class TransmissionUserInfo {
         this.Id = id;
         this.date = date;
     }
-
-    public void setDate(String date){
-        this.date = date;
-    }
 }
