@@ -95,31 +95,6 @@ public class CustomGridAdapter extends BaseAdapter {
                 }
             }
 
-              /*  textViewGridItem.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(mContext, ReservationFormActivity.class);        //
-                    Bundle extras = new Bundle();
-
-                    if (textViewGridItem.getHint() != null){
-                        extras.putInt("viewMode", REQUEST_MODE);
-                        intent.putExtras(extras);
-                        int reservationId = Integer.parseInt(textViewGridItem.getHint().toString());
-                        System.out.println("예약 아이디 확인 : "+reservationId);
-                      //  intent.putExtra("viewMode", REQUEST_MODE);  // 2, 예약 신청 모드
-                        //intent.putExtra("reservationId", position);
-                    } else{
-                      *//*  extras.putInt("viewMode", VIEW_MODE);
-                        intent.putExtras(extras);*//*
-                        intent.putExtra("viewMode", VIEW_MODE);  // 1, 예약 조회 모드
-                    }
-
-                    mContext.startActivity(intent);
-
-                }
-            });*/
-
-
         }
         return convertView;
     }

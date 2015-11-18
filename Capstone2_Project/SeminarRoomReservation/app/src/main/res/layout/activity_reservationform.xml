@@ -129,7 +129,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:autoText="false"
-                android:focusable="false"
                 android:ems="10"
                 android:inputType="time|text" />
         </LinearLayout>
@@ -186,7 +185,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginTop="13dp"
                     android:hint="  없음"
-                    android:textColor="#FFFFFF" />
+                    android:textColor="#70FFFFFF" />
 
                 <AutoCompleteTextView
                     android:id="@+id/textView_userName"
@@ -197,7 +196,6 @@
                     android:background="#903e3e3e"
                     android:completionThreshold="1"
                     android:hint="  Search user name"
-                    android:focusable="false"
                     android:textColor="#EFEFEF"
                     android:textSize="14dp" />
             </LinearLayout>
@@ -212,10 +210,8 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="35dp"
         android:background="#1D4A4F"
-        android:onClick="onClickedMakeReservation"
         android:text="예약하기"
         android:textColor="#FFFFFF" />
-
 
 </LinearLayout>
 

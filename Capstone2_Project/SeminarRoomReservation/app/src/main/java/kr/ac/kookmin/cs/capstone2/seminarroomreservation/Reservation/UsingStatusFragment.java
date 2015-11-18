@@ -135,20 +135,26 @@ public class UsingStatusFragment extends Fragment {
             }
         });
 
+        // 통신없이 gridView선택시는 예약신청
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                // ((TextView) view).getText().toString())
+                Intent intent = new Intent(getActivity().getApplicationContext(), ReservationFormActivity.class);
+                intent.putExtra("viewMode", REQUEST_MODE);
+                getActivity().startActivity(intent);
+            }
+        });
 
         return rootView;
     }
-
     public void init(String date) throws JSONException {
-
         String[] inputTimeValues = {"09:00 - 09:30", "09:30 - 10:00", "10:00 - 10:30", "10:30 - 11:00",
                 "11:00 - 11:30", "11:30 - 12:00", "12:00 - 12:30", "12:30 - 13:00",
                 "13:00 - 13:30", "13:30 - 14:00", "14:00 - 14:30", "14:30 - 15:00",
                 "15:00 - 15:30", "15:30 - 16:00", "16:00 - 16:30", "16:30 - 17:00",
                 "17:00 - 17:30", "17:30 - 18:00", "18:00 - 18:30", "18:30 - 19:00",
                 "19:00 - 19:30", "19:30 - 20:00"};
-
-
         for (int i = 1; i < inputTimeValues.length; i++) {
             startTime.put(inputTimeValues[i - 1].substring(0, 5), i);
             endTime.put(inputTimeValues[i - 1].substring(8, 13), i);
@@ -157,8 +163,6 @@ public class UsingStatusFragment extends Fragment {
         for (int i = 0; i < roomIds.length; i++) {
             roomIds[i] = 5 * page + i + 1;
         }
-
-
         textViewRoom1.setText(getRoomName(roomIds[0]));
         textViewRoom2.setText(getRoomName(roomIds[1]));
         textViewRoom3.setText(getRoomName(roomIds[2]));
@@ -177,7 +181,7 @@ public class UsingStatusFragment extends Fragment {
         requestHelper.receiveUsingStatue(transmissionData, new Callback<JsonObject>() {
             @Override
             public void success(JsonObject usingStatusCallback, Response response) {
-               JsonElement element = usingStatusCallback.get("responseData");
+                JsonElement element = usingStatusCallback.get("responseData");
                 if (!(element instanceof JsonNull)) {
                     JsonObject responseData = (JsonObject) element;
                     jsonParsing(responseData);
@@ -191,7 +195,6 @@ public class UsingStatusFragment extends Fragment {
                     gridView.setVerticalScrollBarEnabled(false);
                 }
             }
-
             @Override
             public void failure(RetrofitError error) {
                 error.printStackTrace();
@@ -209,7 +212,7 @@ public class UsingStatusFragment extends Fragment {
         for (int i = 0; i < reservations.size(); i++) {
             reservationsInfos[i] = new ReservationsInfo();
         }
-            System.out.println("reservation.sizE() : "+reservations.size());
+        System.out.println("reservation.sizE() : " + reservations.size());
           /*
         * */
         for (int i = 0; i < reservations.size(); i++) {
@@ -236,7 +239,6 @@ public class UsingStatusFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 // ((TextView) view).getText().toString())
                 Intent intent = new Intent(getActivity().getApplicationContext(), ReservationFormActivity.class);
-
                 if (((TextView) view).getHint() == null) {  // 2 : 예약 신청 모드
                     intent.putExtra("viewMode", REQUEST_MODE);
                 } else {     // getHint() == null
@@ -244,6 +246,7 @@ public class UsingStatusFragment extends Fragment {
                     intent.putExtra("viewMode", VIEW_MODE);  // 1, 예약 조회 모드
                     intent.putExtra("reservationId", reservationId);    // 예약 조회를 위한 예약ID
                 }
+
                 getActivity().startActivity(intent);
             }
         });
@@ -252,9 +255,7 @@ public class UsingStatusFragment extends Fragment {
 
     public String getRoomName(int i) {
         String roomName = "";
-        if (RoomInfo.getRoomName(i) != null)
-            roomName = RoomInfo.getRoomName(i).substring(1, 4);
-        return roomName;
+        return RoomInfo.getRoomName(i);
     }
 
     public void showCaldendarDialog() {

@@ -49,19 +49,16 @@ import retrofit.client.Response;
 
 import static kr.ac.kookmin.cs.capstone2.seminarroomreservation.DefinedValues.*;
 
-public class ReservationFormActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class ReservationFormActivity extends AppCompatActivity {
 
     // 출력모드 / 1 - 예약 내역 출력  /  2 - 예약 신청
-    private int mode = 1;
+    private int mode;
 
     private TextView textViewFormTitle;
     private TextView textViewCheckInDate;
     private TextView textViewCheckInTime;
     private TextView textViewCheckOutTime;
     private TextView textViewParticipants;
-    private Button buttonAddMember;
-
-
     private EditText editTextContent;
 
     private Button buttonMakeReservation;
@@ -69,10 +66,7 @@ public class ReservationFormActivity extends AppCompatActivity implements Adapte
     int year, month, day, hour, minute;
 
     Spinner spinnerRoom;
-    ArrayList<String> Roomlistarr;
 
-
-    // 세미나실 이용 참가자 부분
     AutoCompleteTextView autoTextViewMember;
     UserListAdapter userListAdapter;
     private ArrayList<ItemUser> mUsers;
@@ -81,21 +75,15 @@ public class ReservationFormActivity extends AppCompatActivity implements Adapte
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reservationform);
 
         findViewsById();
 
 
-
-        Intent  intent = getIntent();
+        Intent intent = getIntent();
         mode = intent.getExtras().getInt("viewMode", -1);
-        init(mode);     // 예약 신청, 조회 모드에 따른 초기화
-
-
-        //*********************  spinner ***********************
-        SpinnerRoomList();
+        initView(mode);
 
         //*********************  calendar ***********************
         GregorianCalendar calendar = new GregorianCalendar();
@@ -105,26 +93,199 @@ public class ReservationFormActivity extends AppCompatActivity implements Adapte
         hour = calendar.get(Calendar.HOUR_OF_DAY);
         minute = calendar.get(Calendar.MINUTE);
 
-
+        // 사용자리스트 받아오기
         mUsers = new ArrayList<ItemUser>();
         ReservationFormActivity.selectedUsers.clear();
-        tempInit();
+        setUserList();
+    }
+    /*  End of OnCreateView()   */
 
 
-        //예약하기 함수 호출
-        buttonMakeReservation.setOnClickListener(new View.OnClickListener() {
+    private void findViewsById() {
+        textViewFormTitle = (TextView) findViewById(R.id.textView_form_title);
+        textViewCheckInDate = (TextView) findViewById(R.id.textView_checkInDate);
+        textViewCheckInTime = (TextView) findViewById(R.id.textView_checkInTime);
+        textViewCheckOutTime = (TextView) findViewById(R.id.textView_checkOutTime);
+        editTextContent = (EditText) findViewById(R.id.editText_content);
+        buttonMakeReservation = (Button) findViewById(R.id.button_makereservation);
+
+        autoTextViewMember = (AutoCompleteTextView) findViewById(R.id.textView_userName);
+        autoTextViewMember.setThreshold(1);
+        textViewParticipants = (TextView) findViewById(R.id.textView_participants);
+        selectedUsers = new HashMap<Integer, String>();
+    }
+
+    public void setUsableTextView(TextView textView, boolean usable) {
+        textView.setFocusableInTouchMode(usable);
+        textView.setFocusable(usable);
+        textView.setClickable(usable);
+    }
+
+    public void setUsableEditText(EditText editText, boolean usable) {
+        editText.setFocusableInTouchMode(usable);
+        editText.setFocusable(usable);
+        editText.setClickable(usable);
+    }
+
+    public void setTextView(TextView textView, String text) {
+        textView.setText(text);
+    }
+
+
+    /*  Start Of InitView   */
+    public void initView(int mode) {
+        switch (mode) {
+            case VIEW_MODE:     // 예약 조회 모드
+                setTextView(textViewFormTitle, getString(R.string.reservation_inquiry));
+                setUsableTextView(textViewCheckInDate, false);
+                setUsableTextView(textViewCheckInTime, false);
+                setUsableTextView(textViewCheckOutTime, false);
+                setUsableEditText(editTextContent, false);
+                buttonMakeReservation.setVisibility(View.INVISIBLE); // 예약하기 버튼 감추기기
+                getReservationInfo();       // 초기 설정을 마친 뒤 서버로 예약 데이터 요청
+                break;
+            case REQUEST_MODE:  // 예약 신청 모드
+                textViewCheckInDate.setOnClickListener(clickListener);
+                textViewCheckInTime.setOnClickListener(clickListener);
+                textViewCheckOutTime.setOnClickListener(clickListener);
+                buttonMakeReservation.setOnClickListener(clickListener);
+                setUsableEditText(editTextContent, true);
+                setSpinnerRoom();
+                break;
+        }
+    }
+    /*  End Of InitView   */
+
+    /*  Start Of Reservation Information View Mode  */
+    // 서버로부터 예약 데이터를 받아옴
+    public void getReservationInfo() {
+        Intent intent = getIntent();
+        int reservationId = intent.getExtras().getInt("reservationId");
+
+        RestRequestHelper requestHelper = RestRequestHelper.newInstance();
+        requestHelper.getReservationInfo(reservationId, new Callback<JsonObject>() {
             @Override
-            public void onClick(View v) {
-                makeReservation();
+            public void success(JsonObject jsonObject, Response response) {
+                jsonParsing(jsonObject);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                error.printStackTrace();
+            }
+        });
+    }
+
+    // 서버로부터 받은 Json형식의 데이터(예약 내역)를 파싱하는 함수
+    public void jsonParsing(JsonObject jsonObject) {
+        JsonObject responseData = jsonObject.getAsJsonObject("responseData");
+        int userId = responseData.getAsJsonPrimitive("user").getAsInt();
+        int roomID = responseData.getAsJsonPrimitive("room").getAsInt();
+        String checkInDate = responseData.getAsJsonPrimitive("date").getAsString();
+        String checkInTime = responseData.getAsJsonPrimitive("startTime").getAsString();
+        String checkOutTime = responseData.getAsJsonPrimitive("endTime").getAsString();
+        String content = responseData.getAsJsonPrimitive("context").getAsString();
+        JsonArray memberList = responseData.getAsJsonArray("memberList");
+
+        ArrayList<String> participant = new ArrayList<String>();
+        for (int i = 0; i < memberList.size(); i++) {
+            participant.add(memberList.get(i).getAsJsonObject().getAsJsonPrimitive("member").getAsString());
+        }
+
+        setReservationInfo(userId, roomID, checkInDate, checkInTime, checkOutTime, content, participant);
+    }
+
+    // 서버에서 받은 예약데이터를 set
+    public void setReservationInfo(int userId, int roomId, String checkInDate, String checkInTime, String checkOutTime,
+                                   String content, ArrayList<String> participant) {
+        textViewCheckInDate.setText(checkInDate);
+        textViewCheckInTime.setText(checkInTime);
+        textViewCheckOutTime.setText(checkOutTime);
+        editTextContent.setText(content);
+        for (int i = 0; i < participant.size() && participant.get(i) != null; i++) {
+            textViewParticipants.append(participant.get(i));
+        }
+    }
+    /*  End Of Reservation Information View Mode  */
+
+    /*  Start Of Reservation Request Mode  */
+    private View.OnClickListener clickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()) {
+                case R.id.button_makereservation:
+                    System.out.println("예약 신청 버튼 클릭 ? ");
+                    requestReservation();
+                    break;
+                case R.id.textView_checkInDate:
+                    new DatePickerDialog(ReservationFormActivity.this, dateSetListener, year, month, day).show();
+                    break;
+                case R.id.textView_checkInTime:
+                    new CustomTimePickerDialog(ReservationFormActivity.this, timeSetListener1, hour, minute, false).show();
+                    break;
+                case R.id.textView_checkOutTime:
+                    new CustomTimePickerDialog(ReservationFormActivity.this, timeSetListener2, hour, minute, false).show();
+                    break;
+            }
+        }
+    };
+
+
+    public void setSpinnerRoom() {
+        ArrayList<String> roomNames = new ArrayList<String>();
+        roomNames = RoomInfo.getRoomNames();
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, roomNames);
+        spinnerRoom = (Spinner) findViewById(R.id.spinner_roomList);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerRoom.setAdapter(adapter);
+        spinnerRoom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
+    }
+
+    public void requestReservation() {
+        String date = textViewCheckInDate.getText().toString();
+        String startTime = textViewCheckInTime.getText().toString();
+        String endTime = textViewCheckOutTime.getText().toString();
+        String context = editTextContent.getText().toString();
+        int roomId = RoomInfo.getRoomId((String) spinnerRoom.getSelectedItem());
+        ArrayList<Integer> participants = new ArrayList<Integer>();
+
+        System.out.println("roomId : "+roomId);
+        Iterator<Integer> iterator = selectedUsers.keySet().iterator();
+        while (iterator.hasNext()) {
+            int key = (Integer) iterator.next();
+            participants.add(key);      // 참가자 고유 ID값을 얻음
+        }
+        int userId = SharedPreferenceClass.getValue("_id", 0);
+
+        final TransmissionResInfo transmissionResInfo =
+                new TransmissionResInfo(roomId, userId, date, startTime, endTime, context, participants);
+
+        RestRequestHelper requestHelper = RestRequestHelper.newInstance();
+        requestHelper.makeReservation(transmissionResInfo, new Callback<Integer>() {
+            @Override
+            public void success(Integer integer, Response response) {
+                Toast.makeText(getApplicationContext(), "예약 신청 완료", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getApplicationContext(), UserActivity.class);
+                startActivity(intent);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                error.printStackTrace();
             }
         });
 
     }
 
-    /*  End of OnCreateView()   */
-
-    /////////////////////////////////////////////////// 임시, 삭제할 것
-    void tempInit() {
+    public void setUserList() {
         // Sqlite DataBase로부터 사용자 리스트를 받아 올 것
         SQLiteDatabase database;
         DatabaseHelper databaseHelper = new DatabaseHelper(ReservationFormActivity.this);
@@ -144,147 +305,13 @@ public class ReservationFormActivity extends AppCompatActivity implements Adapte
             System.out.println("error in FromActivity : " + e);
             //Log.d("StartActivityyyy", "error in init : " + e.toString());
         }
-                userListAdapter = new UserListAdapter(this, R.layout.activity_user_list, R.id.list_item_textView_userName, mUsers);
+        userListAdapter = new UserListAdapter(this, R.layout.activity_user_list, R.id.list_item_textView_userName, mUsers);
         autoTextViewMember.setAdapter(userListAdapter);
     }
-
-    /////////////////////////////////////////////////////
-    private void findViewsById() {
-        textViewFormTitle = (TextView) findViewById(R.id.textView_form_title);
-        textViewCheckInDate = (TextView) findViewById(R.id.textView_checkInDate);
-        textViewCheckInTime = (TextView) findViewById(R.id.textView_checkInTime);
-        textViewCheckOutTime = (TextView) findViewById(R.id.textView_checkOutTime);
-        editTextContent = (EditText) findViewById(R.id.editText_content);
-        buttonMakeReservation = (Button) findViewById(R.id.button_makereservation);
-        autoTextViewMember = (AutoCompleteTextView) findViewById(R.id.textView_userName);
-        autoTextViewMember.setThreshold(1);
-
-        textViewParticipants = (TextView) findViewById(R.id.textView_participants);
-        selectedUsers = new HashMap<Integer, String>();
-    }
-/*
-
-    public final static int VIEW_MODE = 1;
-    public final static int REQUEST_MODE = 2;
-*/
-
-    private void init(int mode) {
-        switch (mode) {
-            case VIEW_MODE:        // 예약 내역 조회 모드
-                showReservationInfo();
-                break;
-            case REQUEST_MODE:       // 예약 신청 모드
-                reservationRequest();
-                break;
-        }
-    }
+    /*  End Of Reservation Request Mode  */
 
 
-    // 예약 신청(예약 생성) 일 때
-    private void reservationRequest() {
-        System.out.println("mode : 예약 신청 모드");
-
-        //각 선택기로부터 값을 조사
-        textViewCheckInDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                // 버튼 클릭시 DatePicker로부터 값을 읽어와서 Toast메시지로 보여준다
-                new DatePickerDialog(ReservationFormActivity.this, dateSetListener, year, month, day).show();
-            }
-
-
-        });
-        textViewCheckInTime.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                new TimePickerDialog(ReservationFormActivity.this, timeSetListener1, hour, minute, false).show();
-
-            }
-        });
-        textViewCheckOutTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                new TimePickerDialog(ReservationFormActivity.this, timeSetListener2, hour, minute, false).show();
-            }
-        });
-
-    }
-
-
-    // 예약 내역 조회 모드
-    private void showReservationInfo() {
-        System.out.println("mode : 예약 조회 모드");
-        textViewFormTitle.setText("예약 조회");
-        textViewCheckInDate.setFocusableInTouchMode(false);
-        textViewCheckInDate.setFocusable(false);
-        textViewCheckInDate.setClickable(false);
-        textViewCheckInTime.setClickable(false);
-        textViewCheckInTime.setFocusable(false);
-        textViewCheckOutTime.setClickable(false);
-        textViewCheckOutTime.setFocusable(false);
-        editTextContent.setClickable(false);
-        editTextContent.setFocusable(false);
-
-//        spinnerRoom.setVisibility(View.GONE);
-        buttonMakeReservation.setVisibility(View.GONE); // 예약하기 버튼 감추기기
-
-
-        // 예약 ID를 서버로 전송하고, 해당 예약 데이터를 받아옴
-        Intent intent = getIntent();
-        int reservationId = intent.getExtras().getInt("reservationId");
-
-        RestRequestHelper requestHelper = RestRequestHelper.newInstance();
-        requestHelper.getReservationInfo(reservationId, new Callback<JsonObject>() {
-            @Override
-            public void success(JsonObject jsonObject, Response response) {
-                jsonParsing(jsonObject);
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                error.printStackTrace();
-            }
-        });
-    }
-
-    public void jsonParsing(JsonObject jsonObject) {
-        JsonObject responseData = jsonObject.getAsJsonObject("responseData");
-        int userId = responseData.getAsJsonPrimitive("user").getAsInt();
-        int roomID = responseData.getAsJsonPrimitive("room").getAsInt();
-        String checkInDate = responseData.getAsJsonPrimitive("date").getAsString();
-        String checkInTime = responseData.getAsJsonPrimitive("startTime").getAsString();
-        String checkOutTime = responseData.getAsJsonPrimitive("endTime").getAsString();
-        String content = responseData.getAsJsonPrimitive("context").getAsString();
-        JsonArray memberList = responseData.getAsJsonArray("memberList");
-
-        ArrayList<String> participant = new ArrayList<String>();
-        for (int i = 0; i < memberList.size(); i++) {
-            participant.add(memberList.get(i).getAsJsonObject().getAsJsonPrimitive("member").getAsString());
-        }
-
-        setContent(userId, roomID, checkInDate, checkInTime, checkOutTime, content, participant);
-    }
-
-
-    public void setContent(int userId, int roomId, String checkInDate, String checkInTime, String checkOutTime,
-                            String content, ArrayList<String> participant) {
-        textViewCheckInDate.setText(checkInDate);
-        textViewCheckInTime.setText(checkInTime);
-        textViewCheckOutTime.setText(checkOutTime);
-        editTextContent.setText(content);
-        for (int i = 0; i < participant.size() && participant.get(i) != null; i++) {
-            textViewParticipants.append(participant.get(i));
-        }
-
-    }
-
-
-
-    //날짜, 시간 설정
+    /*  DatePickerDialog  */
     private DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -293,7 +320,10 @@ public class ReservationFormActivity extends AppCompatActivity implements Adapte
             textViewCheckInDate.setText(msg); //선택 날짜 띄워주기!
         }
     };
-    private TimePickerDialog.OnTimeSetListener timeSetListener1 = new TimePickerDialog.OnTimeSetListener() {
+
+
+    /*  CustomTimePickerDialog  */
+    private CustomTimePickerDialog.OnTimeSetListener timeSetListener1 = new CustomTimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             // TODO Auto-generated method stub
@@ -302,7 +332,7 @@ public class ReservationFormActivity extends AppCompatActivity implements Adapte
             textViewCheckInTime.setText(msg);
         }
     };
-    private TimePickerDialog.OnTimeSetListener timeSetListener2 = new TimePickerDialog.OnTimeSetListener() {
+    private CustomTimePickerDialog.OnTimeSetListener timeSetListener2 = new CustomTimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             // TODO Auto-generated method stub
@@ -311,103 +341,5 @@ public class ReservationFormActivity extends AppCompatActivity implements Adapte
             textViewCheckOutTime.setText(msg);
         }
     };
-
-
-    //스피너 : 세미나실 목록
-    public void SpinnerRoomList() {
-
-        String[] strRoomList = new String[RoomInfo.roomNamesSize()];
-        for (int i = 1; i < strRoomList.length; i++) {
-            strRoomList[i] = RoomInfo.getRoomName(i);
-        }
-
-        Roomlistarr = new ArrayList<String>();
-        for (int i = 1; i < RoomInfo.roomNamesSize(); i++) {
-            Roomlistarr.add(strRoomList[i]);
-        }
-
-        ArrayAdapter<String> adapter;
-
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, Roomlistarr);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerRoom = (Spinner) findViewById(R.id.spinner_roomList);
-        spinnerRoom.setAdapter(adapter);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_user, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    //예약함수
-    public void makeReservation() {
-
-        String date = textViewCheckInDate.getText().toString();
-        String startTime = textViewCheckInTime.getText().toString();
-        String endTime = textViewCheckOutTime.getText().toString();
-        String roomId = spinnerRoom.toString(); // room number 불러오기
-        String context = editTextContent.getText().toString();
-        ArrayList<Integer> participants = new ArrayList<Integer>();
-
-        Iterator<Integer> iterator = selectedUsers.keySet().iterator();
-        while (iterator.hasNext()) {
-            int key = (Integer) iterator.next();
-            participants.add(key);      // 참가자 고유 ID값을 얻음
-        /*   System.out.print("key=" + key);
-            System.out.println(" value=" + selectedUsers.get(key));  */
-        }
-        int userId = SharedPreferenceClass.getValue("id", 0);
-        System.out.println("sharedPreference.getValue(id) : " + userId);
-
-        final TransmissionResInfo transmissionResInfo =
-                new TransmissionResInfo(601, userId, date, startTime, endTime, context, participants);
-
-        RestRequestHelper requestHelper = RestRequestHelper.newInstance();
-        requestHelper.makeReservation(transmissionResInfo, new Callback<Integer>() {
-            @Override
-            public void success(Integer integer, Response response) {
-                Toast.makeText(getApplicationContext(), "예약 신청 완료", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(getApplicationContext(), UserActivity.class);
-                startActivity(intent);
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                error.printStackTrace();
-            }
-        });
-
-    }
-
-    //Spinner
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        TextView myText = (TextView) view;
-        Toast.makeText(ReservationFormActivity.this, "Room " + myText.getText() + " selected", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
-
 
 }

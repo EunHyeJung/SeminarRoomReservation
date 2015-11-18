@@ -128,8 +128,10 @@ public class MainActivity extends AppCompatActivity {
         if (SharedPreferenceClass.getValue("autoLogin", false)) {       // 자동로그인 설정일 경우, 아이디 저장도 같이 체크
             autoLogin();
             checkBoxId.setChecked(true);
+            System.out.println("자동로그인 설정");
         } else if (SharedPreferenceClass.getValue("storeId", false)) {        // 아이디 저장이 되어 있는 상태이면
-            String userId = SharedPreferenceClass.getValue("id", "input your Id");
+            String userId = SharedPreferenceClass.getValue("id", "false");
+            System.out.println("아이디 저장 "+SharedPreferenceClass.getValue("id","false"));
             editTextId.setText(userId);
         }
     }
@@ -191,10 +193,13 @@ public class MainActivity extends AppCompatActivity {
 
         int roomId;
         String roomName;
-        for (int i=0; i < roomNames.size(); i++) {
+        for (int i = 0; i < roomNames.size(); i++) {
             roomId = roomNames.get(i).getAsJsonObject().getAsJsonPrimitive("roomId").getAsInt();
             roomName = roomNames.get(i).getAsJsonObject().getAsJsonPrimitive("roomName").toString();
+            roomName = roomName.substring(1, 4);
             RoomInfo.setRoomInfo(roomId, roomName);
+            System.out.println("roomName : " + roomName);
+            RoomInfo.setRoomIfo(roomName, roomId);
         }
 
 
@@ -203,11 +208,10 @@ public class MainActivity extends AppCompatActivity {
         int id;
         String memberId;
         String memberName;
-        for(int i=0 ; i<userList.size() ; i++){
-             id = userList.get(i).getAsJsonObject().getAsJsonPrimitive("id").getAsInt();
+        for (int i = 0; i < userList.size(); i++) {
+            id = userList.get(i).getAsJsonObject().getAsJsonPrimitive("id").getAsInt();
             memberId = userList.get(i).getAsJsonObject().getAsJsonPrimitive("userId").getAsString();
             memberName = userList.get(i).getAsJsonObject().getAsJsonPrimitive("name").getAsString();
-      //      System.out.println("id : "+id+" / userId : "+memberId+" / name : "+memberName);
             ItemUser itemUser = new ItemUser(id, memberId, memberName);
             databaseHelper.insertMember(itemUser);
         }
@@ -232,7 +236,6 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
     }
-
 
 
     // InstanceId를 이용하여 디바이스 토큰을 가져오는 RegistrationIntentService를 실행한다.

@@ -42,4 +42,6 @@
     <string name="status_standby">대기</string>
     <string name="title_activity_user_list">UserLIstActivity</string>
 
+    <string name="reservation_request">예약 신청</string>
+    <string name="reservation_inquiry">예약 조회</string>
 </resources>
