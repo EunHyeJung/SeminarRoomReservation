@@ -106,7 +106,7 @@ public class ReservationStatusFragment extends Fragment {
         reservationListView.setAdapter(reservationLVAdapter);
 
         info = new TransmissionUserInfo(UserInfo.getId(), date);
-
+        Log.d("RSF", date);
         if(UserInfo.getUserMode() == 1){
             restRequestHelper.myBooking(info, new Callback<JsonObject>() {
                 @Override
@@ -143,7 +143,7 @@ public class ReservationStatusFragment extends Fragment {
         try {
             JsonObject responseData = jsonObject.getAsJsonObject("responseData");
             JsonArray requestList = responseData.getAsJsonArray("requestList");
-
+            Log.d("RSF", requestList.toString());
             for (int i = 0; i < requestList.size(); i++) {
                 JsonObject tmpObject = requestList.get(i).getAsJsonObject();
                 int mode = UserInfo.getUserMode();
@@ -152,20 +152,25 @@ public class ReservationStatusFragment extends Fragment {
                 if(mode == 1)//일반 사용자의 경우
                 {
                     String roomId = RoomInfo.getRoomName(tmpObject.getAsJsonPrimitive("roomId").getAsInt());
-                    reservationLVAdapter.addUser(UserInfo.getUserId());
-                    reservationLVAdapter.addRoom(roomId.replace("\"",""));
-                }else{//관리자의 경우
-                    reservationLVAdapter.addUser(tmpObject.getAsJsonPrimitive("userId").getAsString());
-                    reservationLVAdapter.addRoom(tmpObject.getAsJsonPrimitive("roomId").getAsString());
+                    reservationLVAdapter.add(tmpObject.getAsJsonPrimitive("reservationId").getAsInt(),
+                                             UserInfo.getUserId(),
+                                             roomId.replace("\"", ""),
+                                             tmpObject.getAsJsonPrimitive("startTime").getAsString(),
+                                             tmpObject.getAsJsonPrimitive("endTime").getAsString(),
+                                             tmpObject.getAsJsonPrimitive("date").getAsString(),
+                                             tmpObject.getAsJsonPrimitive("status").getAsInt());
                 }
-
-                //공통 항목
-                reservationLVAdapter.addNum(tmpObject.getAsJsonPrimitive("reservationId").getAsInt());
-                reservationLVAdapter.addStartTime(tmpObject.getAsJsonPrimitive("startTime").getAsString());
-                reservationLVAdapter.addEndTime(tmpObject.getAsJsonPrimitive("endTime").getAsString());
-                reservationLVAdapter.addDate(tmpObject.getAsJsonPrimitive("date").getAsString());
+                else //관리자의 경우
+                {
+                    reservationLVAdapter.add(tmpObject.getAsJsonPrimitive("reservationId").getAsInt(),
+                            tmpObject.getAsJsonPrimitive("userId").getAsString(),
+                            tmpObject.getAsJsonPrimitive("roomId").getAsString(),
+                            tmpObject.getAsJsonPrimitive("startTime").getAsString(),
+                            tmpObject.getAsJsonPrimitive("endTime").getAsString(),
+                            tmpObject.getAsJsonPrimitive("date").getAsString(),
+                            tmpObject.getAsJsonPrimitive("status").getAsInt());
+                }
             }
-
             reservationLVAdapter.notifyDataSetChanged();// 데이터 변경
 
         } catch (Exception e) {

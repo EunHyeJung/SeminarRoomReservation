@@ -24,7 +24,7 @@ public class RestRequestHelper {
     private RestRequest restRequest;
 
 
-    private static final String url = "http://10.30.113.215:8081/smartdoorlock";
+    private static final String url = "http://10.30.113.107:8081/smartdoorlock";
 
     public static RestRequestHelper newInstance(){
         if(instance == null){
@@ -72,12 +72,6 @@ public class RestRequestHelper {
         );
 
         @FormUrlEncoded
-        @POST("/roomstatus")
-        void roomStatus(@Field("id") int id,
-                        @Field("roomName")String roomName,
-                        Callback<JsonObject> roomStatusCallback);
-
-        @FormUrlEncoded
         @POST("/doorcontrol")
         void controlDoor(@Field("id") int id,
                          @Field("roomName") String roomName,
@@ -97,13 +91,8 @@ public class RestRequestHelper {
                       Callback<JsonObject> dayWatchCallback
         );
 
-     /*   @FormUrlEncoded
         @POST("/requestlist")
-        void requestList(@Field("date") String date ,
-                         Callback<JsonObject> requestListCallback);*/
-
-        @POST("/requestlist")
-        void requestList(@Field("info") TransmissionUserInfo info,
+        void requestList(@Body TransmissionUserInfo info,
                          Callback<JsonObject> requestListCallback);
 
         //@FormUrlEncoded
@@ -126,7 +115,7 @@ public class RestRequestHelper {
         void dayWatch(@Field("date") String date,
                       Callback<JsonObject> userlistCallback);
 
-        //////////////////////////////////////////
+        //////////////////////////////////////////////////////////
         @FormUrlEncoded
         @POST("/userlist")
         void getUserList(@Field("id") int id,
@@ -134,6 +123,7 @@ public class RestRequestHelper {
                          @Field("userId") String userId,
                          Callback<JsonObject> userListCallback
         );
+
 
         @POST("/cancelmybooking")
         void cancelBooking(@Body TransmissionReservation info,
@@ -178,9 +168,6 @@ public class RestRequestHelper {
         restRequest.roomList(id, roomListCallback);
     }
 
-    public void roomStatus(int id, String roomName, Callback<JsonObject> roomStatusCallback){
-        restRequest.roomStatus(id, roomName, roomStatusCallback);
-    }
 
     public void controlDoor(int id, String doorName, boolean status, Callback<JsonObject> controlDoorCallback ){
         restRequest.controlDoor(id, doorName, status, controlDoorCallback);
@@ -212,17 +199,22 @@ public class RestRequestHelper {
         restRequest.getSmartKey(info, getSmartKeyCallback);
     }
 
+
     public void getUserList(String date, Callback<JsonObject> userlistCallback){
         restRequest.dayWatch(date, userlistCallback);
     }
-    public void cancelBooking(TransmissionReservation info, Callback<JsonObject> cancelBookingCallback){
-        restRequest.cancelBooking(info, cancelBookingCallback);
-    }
+
     /////////////////////////////
     public void getUserList(int id, String userName, String userId, Callback<JsonObject> userListCallback){
         restRequest.getUserList(id, userName, userId, userListCallback);
     }
+
+    public void cancelBooking(TransmissionReservation info, Callback<JsonObject> cancelBookingCallback) {
+        restRequest.cancelBooking(info, cancelBookingCallback);
+    }
+
     public void checkReservation(int userId, String userName, String date, String startTime, String endTime, String context, String participants,  Callback<JsonObject> checkReservationCallback){
         restRequest.checkReservation(userId, userName, date, startTime, endTime, context, participants, checkReservationCallback);
     }
 }
+

@@ -19,10 +19,15 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/Theme.AppCompat.NoActionBar" >
-        <activit
+        <activity
             android:name=".Authentication.MainActivity"
             android:label="@string/app_name" >
-        </activit>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <activity
             android:name=".Manager.ManagerActivity"
@@ -34,11 +39,7 @@
             android:name=".Join.JoinActivity"
             android:label="@string/title_activity_join" />
         <activity android:name=".Reservation.ReservationFormActivity" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".Manager.ControlDialogActivity"
