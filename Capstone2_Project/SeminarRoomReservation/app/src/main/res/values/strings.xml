@@ -1,0 +1,47 @@
+<resources>
+    <string name="app_name">오픈잇</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_manager">ManagerActivity</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">This is Network Error.</string>
+    <string name="title_activity_management">ManagementActivity</string>
+
+    <string name="title_activity_temp">temp</string>
+    <string name="title_activity_user">UserActivity</string>
+    <string name="title_activity_seminar_info">SeminarInfoActivity</string>
+    <string name="title_activity_seminar_log">SeminarLogActivity</string>
+
+    <string name="title_activity_join">JoinActivity</string>
+    <string name="title_activity_reservation_status">ReservationStatusActivity</string>
+
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+    <string name="title_activity_control_dialog">Doorlock Control</string>
+
+    <string name="text_door_status_close">Door Status : Close</string>
+    <string name="text_door_status_open">Door Status : Open</string>
+    <string name="text_ok">OK</string>
+    <string name="btn_control_dialog_open">Open</string>
+    <string name="btn_control_dialog_close">Close</string>
+    <string name="btn_control_dialog_cancel">Cancel</string>
+    <string name="text_seminar_log">Seminar Room Log</string>
+    <string name="title_activity_calendar">CalendarActivity</string>
+    <string name="title_activity_select_room_dialog">SelectRoomDialogActivity</string>
+    <string name="title_activity_reservation_content">ReservationContentActivity</string>
+
+    <string name="network_connection_error">네트워크 접속 오류</string>
+    <string name="wrong_user_info">잘못된 사용자 정보</string>
+    <string name="login_user_mode"> 로그인 성공, 사용자 모드</string>
+    <string name="login_admin_mode"> 로그인 성공, 관리자 모드</string>
+
+    <string name="status_reserved"> 예약</string>
+    <string name="status_standby">대기</string>
+    <string name="title_activity_user_list">UserLIstActivity</string>
+
+    <string name="reservation_request">예약 신청</string>
+    <string name="reservation_inquiry">예약 조회</string>
+</resources>
