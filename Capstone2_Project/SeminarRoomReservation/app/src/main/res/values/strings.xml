@@ -44,4 +44,13 @@
 
     <string name="reservation_request">예약 신청</string>
     <string name="reservation_inquiry">예약 조회</string>
+
+    <string name = "reservation_cancel_okay">예약이 취소되었습니다.</string>
+    <string name = "reservation_cancel_fail">예약이 취소되지 않았습니다.</string>
+
+    <string name = "reservation_deny_okay">예약이 거절되었습니다.</string>
+    <string name = "reservation_deny_fail">예약이 거절되지않았습니다.</string>
+
+    <string name = "reservation_approval_okay">예약이 승인 되었습니다.</string>
+    <string name = "reservation_approval_fail">예약이 승인 되지 않았습니다.</string>
 </resources>

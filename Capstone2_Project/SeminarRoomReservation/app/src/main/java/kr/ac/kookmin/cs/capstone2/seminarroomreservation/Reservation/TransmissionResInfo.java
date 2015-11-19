@@ -17,7 +17,7 @@ public class TransmissionResInfo {
     public ArrayList<Participants> participants;
 
     public TransmissionResInfo(int roomId, int userId, String date,
-                               String startTime, String endTime, String context, ArrayList<Integer> participants){
+                               String startTime, String endTime, String context, ArrayList<Integer> tempParticipants){
         this.userId = userId;
         this.roomId = roomId;
         this.date = date;
@@ -25,10 +25,10 @@ public class TransmissionResInfo {
         this.endTime = endTime;
         this.context = context;
         this.participants = new ArrayList<Participants>();
-        for(int i=0 ; i<participants.size() ; i++){
-            System.out.println("테스트 : "+participants.get(i));
-            this.participants.add(new Participants(participants.get(i)));
+        for(int i=0 ; i<tempParticipants.size() ; i++){
+            this.participants.add(new Participants(tempParticipants.get(i)));
         }
+
     }
 
     public class Participants{
@@ -36,6 +36,7 @@ public class TransmissionResInfo {
         public Participants(int ids){
             id = ids;
         }
+
     }
 
 }

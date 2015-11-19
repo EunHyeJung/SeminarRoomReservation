@@ -212,9 +212,6 @@ public class UsingStatusFragment extends Fragment {
         for (int i = 0; i < reservations.size(); i++) {
             reservationsInfos[i] = new ReservationsInfo();
         }
-        System.out.println("reservation.sizE() : " + reservations.size());
-          /*
-        * */
         for (int i = 0; i < reservations.size(); i++) {
             String tempStartTime = (reservations.get(i).getAsJsonObject().getAsJsonPrimitive("startTime").getAsString()).substring(0, 5);
             String tempEndTime = (reservations.get(i).getAsJsonObject().getAsJsonPrimitive("endTime").getAsString()).substring(0, 5);
@@ -268,6 +265,7 @@ public class UsingStatusFragment extends Fragment {
     public void onResume() {
         super.onResume();
         try {
+            page = 0;
             init(date);
         } catch (JSONException e) {
             e.printStackTrace();

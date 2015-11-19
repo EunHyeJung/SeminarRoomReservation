@@ -2,8 +2,10 @@ package kr.ac.kookmin.cs.capstone2.seminarroomreservation.Network;
 
 import com.google.gson.JsonObject;
 
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Manager.TransmissionHistory;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation.TransmissionData;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation.TransmissionResInfo;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation.TransmissionReservation;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation.TransmissionUserInfo;
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -79,7 +81,7 @@ public class RestRequestHelper {
         @FormUrlEncoded
         @POST("/doorcontrol")
         void controlDoor(@Field("id") int id,
-                         @Field("roomName") String roomName,
+                         @Field("roomName") int roomId,
                          @Field("command") boolean status,
                          Callback<JsonObject> doorControllCallback
         );
@@ -89,20 +91,14 @@ public class RestRequestHelper {
         void roomList(@Field("id") String id,
                       Callback<String> roomListCallback);
 
-        @FormUrlEncoded
-        @POST("/roomhistory")
-        void dayWatch(@Field("date") String date,
-                      @Field("room") String roomName,
-                      Callback<JsonObject> dayWatchCallback
-                      );
 
-     /*   @FormUrlEncoded
+        @POST("/roomhistory")
+        void roomHistory(@Body TransmissionHistory info,
+                         Callback<JsonObject> roomHistoryCallback);
+
+
         @POST("/requestlist")
-        void requestList(@Field("date") String date ,
-                         Callback<JsonObject> requestListCallback);*/
-         @FormUrlEncoded
-        @POST("/requestlist")
-        void requestList(@Field("info") TransmissionUserInfo info,
+        void requestList(@Body TransmissionUserInfo info,
                          Callback<JsonObject> requestListCallback);
 
         //@FormUrlEncoded
@@ -129,6 +125,10 @@ public class RestRequestHelper {
         @POST("/bookingspec")
         void getReservationInfo(@Field("reservationId") int reservationId,
                       Callback<JsonObject> resrvationInfoCallback);
+
+        @POST("/cancelmybooking")
+        void cancelBooking(@Body TransmissionReservation info,
+                           Callback<JsonObject> cancelBookingCallback);
 
     }
 
@@ -166,22 +166,17 @@ public class RestRequestHelper {
         restRequest.roomStatus(id, roomName, roomStatusCallback);
     }
 
-    public void controlDoor(int id, String doorName, boolean status, Callback<JsonObject> controlDoorCallback ){
-        restRequest.controlDoor(id, doorName, status, controlDoorCallback);
+    public void controlDoor(int id, int doorId, boolean status, Callback<JsonObject> controlDoorCallback ){
+        restRequest.controlDoor(id, doorId, status, controlDoorCallback);
     }
 
-    public void getHistory(String date, String roomName, Callback<JsonObject> dayWatchCallback){
-        restRequest.dayWatch(date, roomName, dayWatchCallback);
+    public void getHistory(TransmissionHistory info, Callback<JsonObject> getHistoryCallback){
+        restRequest.roomHistory(info, getHistoryCallback);
     }
 
-    //관리자 권한인지 아닌지를 이 함수에서 받고, mybooking과 함께 처리
-    //date, id
-/*    public void requestList(String date, Callback<JsonObject> requestCallback){
-        restRequest.requestList(date, requestCallback);
-    }*/
 
-    public void requestList(TransmissionUserInfo info,Callback<JsonObject> requestCallback){
-        restRequest.requestList(info, requestCallback);
+    public void requestList(TransmissionUserInfo requestDate,Callback<JsonObject> requestCallback){
+        restRequest.requestList(requestDate, requestCallback);
     }
 
     public void bookingFilter(int id, int command, Callback<JsonObject> bookingFilterCallback){
@@ -199,7 +194,13 @@ public class RestRequestHelper {
     public void getUserList(String date, Callback<JsonObject> userlistCallback){
         restRequest.dayWatch(date, userlistCallback);
     }
+    public void cancelBooking(TransmissionReservation info, Callback<JsonObject> cancelBookingCallback) {
+        restRequest.cancelBooking(info, cancelBookingCallback);
+    }
+
 
     /////////////////////////////
+
+
 
 }

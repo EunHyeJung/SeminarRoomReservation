@@ -93,7 +93,7 @@ public class KeyFragment extends Fragment implements View.OnClickListener {
         btnSmartKey.setEnabled(false); //키는 비활성화
 
         textDate.setText("Network error!"); //서버 연결이 안되어 있음.
-        info = new TransmissionUserInfo(UserInfo.getId(), "ALL");
+       // info = new TransmissionUserInfo(UserInfo.getId(), "ALL");
     }
 
     @Override

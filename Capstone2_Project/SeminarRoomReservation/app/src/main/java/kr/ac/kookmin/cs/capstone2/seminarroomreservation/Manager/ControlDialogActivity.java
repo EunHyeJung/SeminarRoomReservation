@@ -19,13 +19,13 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class    ControlDialogActivity extends AppCompatActivity {
+public class ControlDialogActivity extends AppCompatActivity {
     Button OpenBtn;
     Button CloseBtn;
     TextView DoorStatusText;
 
-    String RoomName="";
-    int id = 0;
+    int roomId = 0;
+    int userId = 0;
 
     RestRequestHelper requestHelper;
 
@@ -36,13 +36,12 @@ public class    ControlDialogActivity extends AppCompatActivity {
 
         //기본적인 설정들을 처리
         init();
-
         //열기 버튼을 눌렀을 때
         OpenBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //문을 컨트롤하기 위한 함수를 부른다.
-                requestHelper.controlDoor(id, RoomName, true, new Callback<JsonObject>() {
+                requestHelper.controlDoor(userId, roomId, true, new Callback<JsonObject>() {
                     @Override
                     public void success(JsonObject jsonObject, Response response) {
                         int result = jsonObject.get("result").getAsInt();
@@ -61,7 +60,7 @@ public class    ControlDialogActivity extends AppCompatActivity {
 
                     @Override
                     public void failure(RetrofitError error) {
-                        Log.d("Message Error : ",error.toString());
+                        Log.d("Message Error : ", error.toString());
                     }
                 });
             }
@@ -71,13 +70,13 @@ public class    ControlDialogActivity extends AppCompatActivity {
         CloseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                requestHelper.controlDoor(id, RoomName, false, new Callback<JsonObject>() {
+                requestHelper.controlDoor(userId, roomId, false, new Callback<JsonObject>() {
                     @Override
                     public void success(JsonObject jsonObject, Response response) {
                         int result = jsonObject.get("result").getAsInt();
-                        switch (result){
+                        switch (result) {
                             //문 닫기 실패
-                            case 0 :
+                            case 0:
                                 //Toast.makeText(getApplicationContext(),"네트워크 사정으로 문을 닫을 수 없습니다.",Toast.LENGTH_SHORT).show();
                                 break;
                             //문 닫기 성공
@@ -98,19 +97,20 @@ public class    ControlDialogActivity extends AppCompatActivity {
     }
 
     //초기화 하기 위한 함수
-    public void init(){
-        requestHelper=RestRequestHelper.newInstance();
+    public void init() {
+        requestHelper = RestRequestHelper.newInstance();
 
         //클릭한 세미나방 이름, id 가져오기
-        Intent intent=getIntent();
-        RoomName=intent.getExtras().getString("Room");
-        id = intent.getExtras().getInt("id");
+        Intent intent = getIntent();
+        roomId = intent.getExtras().getInt("roomId");
+        userId = intent.getExtras().getInt("userId");
+        System.out.println("ControlDialogActivity : "+roomId+" / id : "+userId);
 
         //매핑하기
-        OpenBtn=(Button)findViewById(R.id.btn_DoorOpen);
-        CloseBtn=(Button)findViewById(R.id.btn_DoorClose);
-        DoorStatusText=(TextView)findViewById(R.id.text_DoorStatus);
+        OpenBtn = (Button) findViewById(R.id.btn_DoorOpen);
+        CloseBtn = (Button) findViewById(R.id.btn_DoorClose);
+        DoorStatusText = (TextView) findViewById(R.id.text_DoorStatus);
 
-        Log.d("Controld Dialog ID", id+"");
+        Log.d("Controld Dialog ID", userId + "");
     }
 }

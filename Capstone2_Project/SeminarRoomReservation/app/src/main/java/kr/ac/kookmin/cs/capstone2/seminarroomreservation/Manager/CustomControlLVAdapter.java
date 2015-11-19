@@ -13,6 +13,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.RoomInfo;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.UserInfo;
 
 /**
  * Created by song on 2015-09-09.
@@ -83,8 +85,8 @@ public class CustomControlLVAdapter extends BaseAdapter {
                 //holder에 가진 값으로 보내주지 않으면
                 //새로 캐시된 값이 보내지기 때문에 값이 오류가 난다.
                 Intent intent = new Intent(context, ControlDialogActivity.class);
-                intent.putExtra("Room", holder.controlTxt.toString()); //방 이름을 보낸다.
-                intent.putExtra("id", holder.id); //방  id를 보낸다.
+                intent.putExtra("roomId", RoomInfo.getRoomId(holder.controlTxt.getText().toString())); //방 ID을 보낸다.
+                intent.putExtra("userId", UserInfo.getUserId()); //사용자  id를 보낸다.
 
                 context.startActivity(intent);
             }

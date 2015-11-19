@@ -1,7 +1,9 @@
 package kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -141,6 +143,8 @@ public class ReservationFormActivity extends AppCompatActivity {
                 setUsableTextView(textViewCheckInTime, false);
                 setUsableTextView(textViewCheckOutTime, false);
                 setUsableEditText(editTextContent, false);
+                //setUsableEditText(autoTextViewMember, false);
+                autoTextViewMember.setHint(" ");
                 buttonMakeReservation.setVisibility(View.INVISIBLE); // 예약하기 버튼 감추기기
                 getReservationInfo();       // 초기 설정을 마친 뒤 서버로 예약 데이터 요청
                 break;
@@ -214,7 +218,6 @@ public class ReservationFormActivity extends AppCompatActivity {
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.button_makereservation:
-                    System.out.println("예약 신청 버튼 클릭 ? ");
                     requestReservation();
                     break;
                 case R.id.textView_checkInDate:
@@ -255,9 +258,10 @@ public class ReservationFormActivity extends AppCompatActivity {
         String endTime = textViewCheckOutTime.getText().toString();
         String context = editTextContent.getText().toString();
         int roomId = RoomInfo.getRoomId((String) spinnerRoom.getSelectedItem());
+        System.out.println("roomId : "+roomId);
         ArrayList<Integer> participants = new ArrayList<Integer>();
 
-        System.out.println("roomId : "+roomId);
+
         Iterator<Integer> iterator = selectedUsers.keySet().iterator();
         while (iterator.hasNext()) {
             int key = (Integer) iterator.next();
@@ -265,6 +269,7 @@ public class ReservationFormActivity extends AppCompatActivity {
         }
         int userId = SharedPreferenceClass.getValue("_id", 0);
 
+        System.out.println("참가자 : "+participants);
         final TransmissionResInfo transmissionResInfo =
                 new TransmissionResInfo(roomId, userId, date, startTime, endTime, context, participants);
 
@@ -302,8 +307,7 @@ public class ReservationFormActivity extends AppCompatActivity {
                 mUsers.add(itemUser);
             }
         } catch (Exception e) {
-            System.out.println("error in FromActivity : " + e);
-            //Log.d("StartActivityyyy", "error in init : " + e.toString());
+           Log.d("ReservationFormActivity", "error : " + e.toString());
         }
         userListAdapter = new UserListAdapter(this, R.layout.activity_user_list, R.id.list_item_textView_userName, mUsers);
         autoTextViewMember.setAdapter(userListAdapter);
@@ -329,6 +333,9 @@ public class ReservationFormActivity extends AppCompatActivity {
             // TODO Auto-generated method stub
             String msg = String.format("%02d:%02d:00", hourOfDay, minute);
             Toast.makeText(ReservationFormActivity.this, msg, Toast.LENGTH_SHORT).show();
+            /////
+
+            ////
             textViewCheckInTime.setText(msg);
         }
     };
