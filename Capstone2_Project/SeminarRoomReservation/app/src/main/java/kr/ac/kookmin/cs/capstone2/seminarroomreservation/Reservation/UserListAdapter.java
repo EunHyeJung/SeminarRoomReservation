@@ -28,6 +28,7 @@ public class UserListAdapter extends ArrayAdapter<ItemUser> {
     ArrayList<ItemUser> items, tempItems, suggestions;
     HashMap<Integer, Boolean> mCheck;
 
+    AccidentListener accidentListener;
 
 
     public UserListAdapter(Context context, int resource, int textViewResourceId, ArrayList<ItemUser> items) {
@@ -75,7 +76,7 @@ public class UserListAdapter extends ArrayAdapter<ItemUser> {
                 @Override
                 public void onClick(View view) {
                     ReservationFormActivity.selectedUsers.put(itemUser.getId(), itemUser.getUserName());
-
+                    accidentListener.upLoadTextView(itemUser.getUserId());
                    // textViewParticipants.append(itemUser.getUserName() + "(" + itemUser.getUserId() + ") ");
                     Toast.makeText(context, itemUser.getUserName() + " 추가", Toast.LENGTH_SHORT).show();
                 }
@@ -134,6 +135,10 @@ public class UserListAdapter extends ArrayAdapter<ItemUser> {
             }
         }
     };
+
+    public interface AccidentListener {
+        void upLoadTextView(String addedMemeberId);
+    }
 
 
 }

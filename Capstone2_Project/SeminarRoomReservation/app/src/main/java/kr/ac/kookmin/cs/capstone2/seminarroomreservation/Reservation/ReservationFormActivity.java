@@ -41,6 +41,7 @@ import kr.ac.kookmin.cs.capstone2.seminarroomreservation.DatabaseHelper;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Manager.ManagerActivity;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Network.RestRequestHelper;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation.UserListAdapter.AccidentListener;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.RoomInfo;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.SharedPreferenceClass;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.User.UserActivity;
@@ -51,7 +52,7 @@ import retrofit.client.Response;
 
 import static kr.ac.kookmin.cs.capstone2.seminarroomreservation.DefinedValues.*;
 
-public class ReservationFormActivity extends AppCompatActivity {
+public class ReservationFormActivity extends AppCompatActivity implements UserListAdapter.AccidentListener{
 
     // 출력모드 / 1 - 예약 내역 출력  /  2 - 예약 신청
     private int mode;
@@ -73,8 +74,7 @@ public class ReservationFormActivity extends AppCompatActivity {
     UserListAdapter userListAdapter;
     private ArrayList<ItemUser> mUsers;
     public static HashMap<Integer, String> selectedUsers;
-
-
+    public static int addedMember=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,12 +82,10 @@ public class ReservationFormActivity extends AppCompatActivity {
 
         findViewsById();
 
-
         Intent intent = getIntent();
         mode = intent.getExtras().getInt("viewMode", -1);
         initView(mode);
 
-        //*********************  calendar ***********************
         GregorianCalendar calendar = new GregorianCalendar();
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH);
@@ -100,8 +98,6 @@ public class ReservationFormActivity extends AppCompatActivity {
         ReservationFormActivity.selectedUsers.clear();
         setUserList();
     }
-    /*  End of OnCreateView()   */
-
 
     private void findViewsById() {
         textViewFormTitle = (TextView) findViewById(R.id.textView_form_title);
@@ -134,7 +130,7 @@ public class ReservationFormActivity extends AppCompatActivity {
     }
 
 
-    /*  Start Of InitView   */
+    /*  초기 화면 설정   */
     public void initView(int mode) {
         switch (mode) {
             case VIEW_MODE:     // 예약 조회 모드
@@ -158,9 +154,9 @@ public class ReservationFormActivity extends AppCompatActivity {
                 break;
         }
     }
-    /*  End Of InitView   */
 
-    /*  Start Of Reservation Information View Mode  */
+
+    /*  예약 내역 조회 모드  */
     // 서버로부터 예약 데이터를 받아옴
     public void getReservationInfo() {
         Intent intent = getIntent();
@@ -199,7 +195,7 @@ public class ReservationFormActivity extends AppCompatActivity {
         setReservationInfo(userId, roomID, checkInDate, checkInTime, checkOutTime, content, participant);
     }
 
-    // 서버에서 받은 예약데이터를 set
+    /* 서버에서 받은 예약 내역 설정 */
     public void setReservationInfo(int userId, int roomId, String checkInDate, String checkInTime, String checkOutTime,
                                    String content, ArrayList<String> participant) {
         textViewCheckInDate.setText(checkInDate);
@@ -210,9 +206,8 @@ public class ReservationFormActivity extends AppCompatActivity {
             textViewParticipants.append(participant.get(i));
         }
     }
-    /*  End Of Reservation Information View Mode  */
 
-    /*  Start Of Reservation Request Mode  */
+    /*  예약 신청 모드   */
     private View.OnClickListener clickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -245,7 +240,6 @@ public class ReservationFormActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
             }
@@ -258,30 +252,29 @@ public class ReservationFormActivity extends AppCompatActivity {
         String endTime = textViewCheckOutTime.getText().toString();
         String context = editTextContent.getText().toString();
         int roomId = RoomInfo.getRoomId((String) spinnerRoom.getSelectedItem());
-        System.out.println("roomId : "+roomId);
         ArrayList<Integer> participants = new ArrayList<Integer>();
 
 
         Iterator<Integer> iterator = selectedUsers.keySet().iterator();
         while (iterator.hasNext()) {
             int key = (Integer) iterator.next();
-            participants.add(key);      // 참가자 고유 ID값을 얻음
+            participants.add(key);
         }
         int userId = SharedPreferenceClass.getValue("_id", 0);
 
-        System.out.println("참가자 : "+participants);
+        // 서버로 전송할 예약 내역 데이터
         final TransmissionResInfo transmissionResInfo =
                 new TransmissionResInfo(roomId, userId, date, startTime, endTime, context, participants);
 
+        // 서버로 예약 내역 데이터 전송
         RestRequestHelper requestHelper = RestRequestHelper.newInstance();
         requestHelper.makeReservation(transmissionResInfo, new Callback<Integer>() {
             @Override
             public void success(Integer integer, Response response) {
-                Toast.makeText(getApplicationContext(), "예약 신청 완료", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.reservation_request_completed), Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(getApplicationContext(), UserActivity.class);
                 startActivity(intent);
             }
-
             @Override
             public void failure(RetrofitError error) {
                 error.printStackTrace();
@@ -290,8 +283,8 @@ public class ReservationFormActivity extends AppCompatActivity {
 
     }
 
+    /* SQLite로부터 멤버리스트를 받아옴 */
     public void setUserList() {
-        // Sqlite DataBase로부터 사용자 리스트를 받아 올 것
         SQLiteDatabase database;
         DatabaseHelper databaseHelper = new DatabaseHelper(ReservationFormActivity.this);
         database = databaseHelper.getReadableDatabase();
@@ -321,7 +314,7 @@ public class ReservationFormActivity extends AppCompatActivity {
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
             // TODO Auto-generated method stub
             String msg = String.format("%04d-%02d-%02d", year, monthOfYear + 1, dayOfMonth);
-            textViewCheckInDate.setText(msg); //선택 날짜 띄워주기!
+            textViewCheckInDate.setText(msg); //선택 날짜 띄워주기
         }
     };
 
@@ -333,9 +326,6 @@ public class ReservationFormActivity extends AppCompatActivity {
             // TODO Auto-generated method stub
             String msg = String.format("%02d:%02d:00", hourOfDay, minute);
             Toast.makeText(ReservationFormActivity.this, msg, Toast.LENGTH_SHORT).show();
-            /////
-
-            ////
             textViewCheckInTime.setText(msg);
         }
     };
@@ -349,4 +339,14 @@ public class ReservationFormActivity extends AppCompatActivity {
         }
     };
 
+
+    @Override
+    public void upLoadTextView(final String addedMemeberId) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                textViewParticipants.append(" "+addedMemeberId);
+            }
+        });
+    }
 }

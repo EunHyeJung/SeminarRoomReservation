@@ -112,6 +112,18 @@ public class AccessHistoryFragment extends Fragment implements AdapterView.OnIte
         LogViewAdapter = new CustomHistoryLVAdapter();
         SeminarLogView.setAdapter(LogViewAdapter);
 
+        HashMap room = RoomInfo.roomNames;
+        Iterator<Integer> iterator = room.keySet().iterator();//이터레이터로 받아온다.
+
+        while(iterator.hasNext())
+        {
+            int key = iterator.next();
+            if(room.get(key).toString().replace("\"","") == roomName) {
+                roomName = key + "";
+                break;
+            }
+        }
+
         TransmissionHistory transmissionHistory = new TransmissionHistory(roomName, date);
 
         restRequest.getHistory(transmissionHistory, new Callback<JsonObject>() {
