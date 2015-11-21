@@ -1,17 +1,12 @@
 package kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation;
 
 import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,7 +14,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -28,26 +22,32 @@ import android.widget.Toast;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import kr.ac.kookmin.cs.capstone2.seminarroomreservation.DatabaseHelper;
-import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Manager.ManagerActivity;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Model.DatabaseHelper;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Network.RestRequestHelper;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
-import kr.ac.kookmin.cs.capstone2.seminarroomreservation.RoomInfo;
-import kr.ac.kookmin.cs.capstone2.seminarroomreservation.SharedPreferenceClass;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Model.RoomInfo;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Model.SharedPreferenceClass;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.User.UserActivity;
-import kr.ac.kookmin.cs.capstone2.seminarroomreservation.UserInfo;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-import static kr.ac.kookmin.cs.capstone2.seminarroomreservation.DefinedValues.*;
+import static kr.ac.kookmin.cs.capstone2.seminarroomreservation.Model.DefinedValues.*;
+import static kr.ac.kookmin.cs.capstone2.seminarroomreservation.UpdateView.*;
+
+
+/**
+ * ResrvationFormActivity :
+ * There are 2 view types.
+ * 1) user can see the reservation information if selected room and time is reserved.
+ * 2) user can make a reservation if selected room and time is available.
+ */
 
 public class ReservationFormActivity extends AppCompatActivity {
 
@@ -80,12 +80,10 @@ public class ReservationFormActivity extends AppCompatActivity {
 
         findViewsById();
 
-
         Intent intent = getIntent();
         mode = intent.getExtras().getInt("viewMode", -1);
         initView(mode);
 
-        //*********************  calendar ***********************
         GregorianCalendar calendar = new GregorianCalendar();
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH);
@@ -93,13 +91,11 @@ public class ReservationFormActivity extends AppCompatActivity {
         hour = calendar.get(Calendar.HOUR_OF_DAY);
         minute = calendar.get(Calendar.MINUTE);
 
-        // 사용자리스트 받아오기
+        // receive user list
         mUsers = new ArrayList<ItemUser>();
         ReservationFormActivity.selectedUsers.clear();
         setUserList();
     }
-    /*  End of OnCreateView()   */
-
 
     private void findViewsById() {
         textViewFormTitle = (TextView) findViewById(R.id.textView_form_title);
@@ -115,36 +111,19 @@ public class ReservationFormActivity extends AppCompatActivity {
         selectedUsers = new HashMap<Integer, String>();
     }
 
-    public void setUsableTextView(TextView textView, boolean usable) {
-        textView.setFocusableInTouchMode(usable);
-        textView.setFocusable(usable);
-        textView.setClickable(usable);
-    }
 
-    public void setUsableEditText(EditText editText, boolean usable) {
-        editText.setFocusableInTouchMode(usable);
-        editText.setFocusable(usable);
-        editText.setClickable(usable);
-    }
-
-    public void setTextView(TextView textView, String text) {
-        textView.setText(text);
-    }
-
-
-    /*  Start Of InitView   */
     public void initView(int mode) {
         switch (mode) {
-            case VIEW_MODE:     // 예약 조회 모드
+            case VIEW_MODE:
                 setTextView(textViewFormTitle, getString(R.string.reservation_inquiry));
                 setUsableTextView(textViewCheckInDate, false);
                 setUsableTextView(textViewCheckInTime, false);
                 setUsableTextView(textViewCheckOutTime, false);
                 setUsableEditText(editTextContent, false);
-                buttonMakeReservation.setVisibility(View.INVISIBLE); // 예약하기 버튼 감추기기
+                buttonMakeReservation.setVisibility(View.INVISIBLE);
                 getReservationInfo();       // 초기 설정을 마친 뒤 서버로 예약 데이터 요청
                 break;
-            case REQUEST_MODE:  // 예약 신청 모드
+            case REQUEST_MODE:
                 textViewCheckInDate.setOnClickListener(clickListener);
                 textViewCheckInTime.setOnClickListener(clickListener);
                 textViewCheckOutTime.setOnClickListener(clickListener);
@@ -154,10 +133,8 @@ public class ReservationFormActivity extends AppCompatActivity {
                 break;
         }
     }
-    /*  End Of InitView   */
 
-    /*  Start Of Reservation Information View Mode  */
-    // 서버로부터 예약 데이터를 받아옴
+    // receive reservation data from server
     public void getReservationInfo() {
         Intent intent = getIntent();
         int reservationId = intent.getExtras().getInt("reservationId");
@@ -176,7 +153,6 @@ public class ReservationFormActivity extends AppCompatActivity {
         });
     }
 
-    // 서버로부터 받은 Json형식의 데이터(예약 내역)를 파싱하는 함수
     public void jsonParsing(JsonObject jsonObject) {
         JsonObject responseData = jsonObject.getAsJsonObject("responseData");
         int userId = responseData.getAsJsonPrimitive("user").getAsInt();
@@ -195,7 +171,7 @@ public class ReservationFormActivity extends AppCompatActivity {
         setReservationInfo(userId, roomID, checkInDate, checkInTime, checkOutTime, content, participant);
     }
 
-    // 서버에서 받은 예약데이터를 set
+    // set reservation data received from server
     public void setReservationInfo(int userId, int roomId, String checkInDate, String checkInTime, String checkOutTime,
                                    String content, ArrayList<String> participant) {
         textViewCheckInDate.setText(checkInDate);
@@ -206,15 +182,13 @@ public class ReservationFormActivity extends AppCompatActivity {
             textViewParticipants.append(participant.get(i));
         }
     }
-    /*  End Of Reservation Information View Mode  */
 
-    /*  Start Of Reservation Request Mode  */
+
     private View.OnClickListener clickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.button_makereservation:
-                    System.out.println("예약 신청 버튼 클릭 ? ");
                     requestReservation();
                     break;
                 case R.id.textView_checkInDate:
@@ -257,7 +231,7 @@ public class ReservationFormActivity extends AppCompatActivity {
         int roomId = RoomInfo.getRoomId((String) spinnerRoom.getSelectedItem());
         ArrayList<Integer> participants = new ArrayList<Integer>();
 
-        System.out.println("roomId : "+roomId);
+        System.out.println("roomId : " + roomId);
         Iterator<Integer> iterator = selectedUsers.keySet().iterator();
         while (iterator.hasNext()) {
             int key = (Integer) iterator.next();
@@ -272,7 +246,7 @@ public class ReservationFormActivity extends AppCompatActivity {
         requestHelper.makeReservation(transmissionResInfo, new Callback<Integer>() {
             @Override
             public void success(Integer integer, Response response) {
-                Toast.makeText(getApplicationContext(), "예약 신청 완료", Toast.LENGTH_LONG).show();
+                makeToast(getApplicationContext(), "예약 신청 완료");
                 Intent intent = new Intent(getApplicationContext(), UserActivity.class);
                 startActivity(intent);
             }
@@ -285,8 +259,8 @@ public class ReservationFormActivity extends AppCompatActivity {
 
     }
 
+    // Receive user list from SQLite.
     public void setUserList() {
-        // Sqlite DataBase로부터 사용자 리스트를 받아 올 것
         SQLiteDatabase database;
         DatabaseHelper databaseHelper = new DatabaseHelper(ReservationFormActivity.this);
         database = databaseHelper.getReadableDatabase();
@@ -302,14 +276,11 @@ public class ReservationFormActivity extends AppCompatActivity {
                 mUsers.add(itemUser);
             }
         } catch (Exception e) {
-            System.out.println("error in FromActivity : " + e);
-            //Log.d("StartActivityyyy", "error in init : " + e.toString());
+            Log.d("ReservationFormActivity", "error in setUserList : " + e.toString());
         }
         userListAdapter = new UserListAdapter(this, R.layout.activity_user_list, R.id.list_item_textView_userName, mUsers);
         autoTextViewMember.setAdapter(userListAdapter);
     }
-    /*  End Of Reservation Request Mode  */
-
 
     /*  DatePickerDialog  */
     private DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
@@ -329,7 +300,7 @@ public class ReservationFormActivity extends AppCompatActivity {
             // TODO Auto-generated method stub
             String msg = String.format("%02d:%02d:00", hourOfDay, minute);
             Toast.makeText(ReservationFormActivity.this, msg, Toast.LENGTH_SHORT).show();
-            textViewCheckInTime.setText(msg);
+            setTextView(textViewCheckInDate, msg);
         }
     };
     private CustomTimePickerDialog.OnTimeSetListener timeSetListener2 = new CustomTimePickerDialog.OnTimeSetListener() {
@@ -338,7 +309,7 @@ public class ReservationFormActivity extends AppCompatActivity {
             // TODO Auto-generated method stub
             String msg = String.format("%02d:%02d:00", hourOfDay, minute);
             Toast.makeText(ReservationFormActivity.this, msg, Toast.LENGTH_SHORT).show();
-            textViewCheckOutTime.setText(msg);
+            setTextView(textViewCheckOutTime, msg);
         }
     };
 

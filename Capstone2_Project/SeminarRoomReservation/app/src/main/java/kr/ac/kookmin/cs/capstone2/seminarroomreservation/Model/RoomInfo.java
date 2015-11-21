@@ -1,4 +1,4 @@
-package kr.ac.kookmin.cs.capstone2.seminarroomreservation;
+package kr.ac.kookmin.cs.capstone2.seminarroomreservation.Model;
 
 import java.util.ArrayList;
 import java.util.HashMap;

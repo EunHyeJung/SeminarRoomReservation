@@ -18,12 +18,11 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 
-import kr.ac.kookmin.cs.capstone2.seminarroomreservation.DatabaseHelper;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Model.DatabaseHelper;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Encryption.EncryptionClass;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Gcm.QuickstartPreferences;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Gcm.RegistrationIntentService;
@@ -32,15 +31,16 @@ import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Manager.ManagerActivity
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Network.RestRequestHelper;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation.ItemUser;
-import kr.ac.kookmin.cs.capstone2.seminarroomreservation.RoomInfo;
-import kr.ac.kookmin.cs.capstone2.seminarroomreservation.SharedPreferenceClass;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Model.RoomInfo;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Model.SharedPreferenceClass;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.User.UserActivity;
-import kr.ac.kookmin.cs.capstone2.seminarroomreservation.UserInfo;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Model.UserInfo;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-import static kr.ac.kookmin.cs.capstone2.seminarroomreservation.DefinedValues.*;
+import static kr.ac.kookmin.cs.capstone2.seminarroomreservation.Model.DefinedValues.*;
+import static kr.ac.kookmin.cs.capstone2.seminarroomreservation.UpdateView.*;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -69,9 +69,6 @@ public class MainActivity extends AppCompatActivity {
         // GCM
         registBroadcastReceiver();
         getInstanceIdToken();
-        //
-
-        //
 
         databaseHelper = new DatabaseHelper(MainActivity.this);
         sharedPreference = new SharedPreferenceClass(this);
@@ -122,16 +119,13 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    /* End Of onCreateView */
 
     public void init() {
         if (SharedPreferenceClass.getValue("autoLogin", false)) {       // 자동로그인 설정일 경우, 아이디 저장도 같이 체크
             autoLogin();
             checkBoxId.setChecked(true);
-            System.out.println("자동로그인 설정");
         } else if (SharedPreferenceClass.getValue("storeId", false)) {        // 아이디 저장이 되어 있는 상태이면
             String userId = SharedPreferenceClass.getValue("id", "false");
-            System.out.println("아이디 저장 "+SharedPreferenceClass.getValue("id","false"));
             editTextId.setText(userId);
         }
     }
@@ -144,7 +138,6 @@ public class MainActivity extends AppCompatActivity {
         login(true);
     }
 
-    /*  Start Of Login  */
 
     public void login(final boolean isAutoLogin) {
         final String id = editTextId.getText().toString();
@@ -157,7 +150,6 @@ public class MainActivity extends AppCompatActivity {
             password = EncryptionClass.encryptSHA256(editTextPassword.getText().toString());
         }
 
-         /* -------------------------  Retrofit 통신  -------------------------  */
         RestRequestHelper requestHelper = RestRequestHelper.newInstance();
         requestHelper.login(id, password, instanceId, new Callback<JsonObject>() {
             @Override
@@ -168,20 +160,16 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void failure(RetrofitError error) {
-                Toast.makeText(getApplicationContext(), getString(R.string.network_connection_error), Toast.LENGTH_SHORT).show();
+                makeToast(getApplicationContext(), getString(R.string.network_connection_error));
                 error.printStackTrace();
             }
         });
     }
 
-    /*  End Of Login   */
-
-
-    /*  Start Of jsonParsing */
     public void jsonParsing(JsonObject jsonObject) {
-        JsonObject responseData = jsonObject.getAsJsonObject("responseData"); //2 레벨 제이슨 객체를 얻음
+        JsonObject responseData = jsonObject.getAsJsonObject("responseData");
         int userMode = responseData.getAsJsonPrimitive("result").getAsInt();
-        if (userMode == WRONG_USER_INFO) {
+        if (userMode == WRONG_VALUE) {
             loginProcess(userMode);
             return;
         }
@@ -198,13 +186,17 @@ public class MainActivity extends AppCompatActivity {
             roomName = roomNames.get(i).getAsJsonObject().getAsJsonPrimitive("roomName").toString();
             roomName = roomName.substring(1, 4);
             RoomInfo.setRoomInfo(roomId, roomName);
-            System.out.println("roomName : " + roomName);
             RoomInfo.setRoomIfo(roomName, roomId);
         }
 
 
-        /// SQLite 에 사용자들의 정보를 저장
+        // store users info into SQLite
         JsonArray userList = responseData.getAsJsonArray("user");
+        storeUsersInfo(userList);
+        loginProcess(userMode);
+    }
+
+    public void storeUsersInfo(JsonArray userList){
         int id;
         String memberId;
         String memberName;
@@ -215,22 +207,20 @@ public class MainActivity extends AppCompatActivity {
             ItemUser itemUser = new ItemUser(id, memberId, memberName);
             databaseHelper.insertMember(itemUser);
         }
-
-        loginProcess(userMode);
     }
 
     public void loginProcess(int result) {
         switch (result) {
-            case WRONG_USER_INFO:         // 로그인 오류
-                Toast.makeText(getApplicationContext(), getString(R.string.wrong_user_info), Toast.LENGTH_LONG).show();
+            case WRONG_VALUE:         // login error
+                makeToast(getApplicationContext(), getString(R.string.wrong_user_info));
                 break;
-            case USER_MODE:             // 일반 사용자
-                Toast.makeText(getApplicationContext(), getString(R.string.login_user_mode), Toast.LENGTH_LONG).show();
+            case USER_MODE:             // general user
+                makeToast(getApplicationContext(), getString(R.string.login_user_mode));
                 Intent intent = new Intent(getApplicationContext(), UserActivity.class);
                 startActivity(intent);
                 break;
-            case ADMIN_MODE:             // 관리자 로그인
-                Toast.makeText(getApplicationContext(), getString(R.string.login_admin_mode), Toast.LENGTH_LONG).show();
+            case ADMIN_MODE:             // administrator
+                makeToast(getApplicationContext(), getString(R.string.login_admin_mode));
                 intent = new Intent(getApplicationContext(), ManagerActivity.class);
                 startActivity(intent);
                 break;
@@ -246,10 +236,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    /*
-        LocaBroadcast 리시버를 정의한다.
-        토큰을 획득하기 위한 READY, GENERATING, COMPLETE 액션에 따라 UI에 변화를 준다.
-    */
+    // Define Local Broad Cast Receiver
+    // According to READY, GENEREATING, COMPLETE action, change UI for acquiring token.
     public void registBroadcastReceiver() {
         registrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
@@ -258,7 +246,7 @@ public class MainActivity extends AppCompatActivity {
         };
     }
 
-    // Googe Play Service를 사용할 수 있는 환경인지를 체크한다.
+    // Check whether the environment, which can be used for the Google Play Service.
     private boolean checkPlayServices() {
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
         if (resultCode != ConnectionResult.SUCCESS) {
@@ -285,9 +273,8 @@ public class MainActivity extends AppCompatActivity {
                 new IntentFilter(QuickstartPreferences.REGISTRATION_COMPLETE));
     }
 
-    /**
-     * 앱이 화면에서 사라지면 등록된 LocalBoardcast를 모두 삭제한다.
-     */
+
+    // If app disappears from screen, delete all registered LocalBroadcast.
     @Override
     protected void onPause() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(registrationBroadcastReceiver);

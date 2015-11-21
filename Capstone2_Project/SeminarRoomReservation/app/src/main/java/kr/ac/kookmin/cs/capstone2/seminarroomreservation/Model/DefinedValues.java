@@ -1,10 +1,10 @@
-package kr.ac.kookmin.cs.capstone2.seminarroomreservation;
+package kr.ac.kookmin.cs.capstone2.seminarroomreservation.Model;
 
 /**
  * Created by eunhye on 2015-11-01.
  */
 public class DefinedValues {
-    public final static int WRONG_USER_INFO = -1;
+    public final static int WRONG_VALUE = -1;
     public final static int USER_MODE = 1;
     public final static int ADMIN_MODE = 2;
 

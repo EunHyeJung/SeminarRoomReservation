@@ -13,7 +13,7 @@ import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Authentication.MainActi
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Encryption.EncryptionClass;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Network.RestRequestHelper;
-import kr.ac.kookmin.cs.capstone2.seminarroomreservation.SharedPreferenceClass;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Model.SharedPreferenceClass;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 

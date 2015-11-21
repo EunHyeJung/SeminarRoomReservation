@@ -11,19 +11,17 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Manager.AccessHistoryFragment;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Network.RestRequestHelper;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
-import kr.ac.kookmin.cs.capstone2.seminarroomreservation.RoomInfo;
-import kr.ac.kookmin.cs.capstone2.seminarroomreservation.UserInfo;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Model.RoomInfo;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Model.UserInfo;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
-
-
+import static kr.ac.kookmin.cs.capstone2.seminarroomreservation.UpdateView.*;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -75,14 +73,12 @@ public class ReservationStatusFragment extends Fragment {
                     public void onDismiss(DialogInterface dialog) {
                         calendarDialog.dismiss();
                         date = AccessHistoryFragment.date;
-                        btnDate.setText(date);
+                        setTextView(btnDate, date);
                         getReservationData();
                     }
                 });
             }
         });
-
-
         //뷰를 리턴한다.
         return view;
     }

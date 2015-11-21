@@ -1,23 +1,19 @@
 package kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import org.xml.sax.Parser;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
-import kr.ac.kookmin.cs.capstone2.seminarroomreservation.ReservationsInfo;
-import static kr.ac.kookmin.cs.capstone2.seminarroomreservation.DefinedValues.*;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Model.ReservationsInfo;
+import static kr.ac.kookmin.cs.capstone2.seminarroomreservation.Model.DefinedValues.*;
 
 /**
  * Created by - on 2015-10-13.

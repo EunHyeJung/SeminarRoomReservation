@@ -7,10 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
-import kr.ac.kookmin.cs.capstone2.seminarroomreservation.SharedPreferenceClass;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Model.SharedPreferenceClass;
 
 /**
  * A simple {@link Fragment} subclass.
