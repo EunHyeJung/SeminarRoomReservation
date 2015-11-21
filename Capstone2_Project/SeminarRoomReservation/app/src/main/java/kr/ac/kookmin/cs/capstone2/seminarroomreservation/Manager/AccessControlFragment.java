@@ -3,7 +3,6 @@ package kr.ac.kookmin.cs.capstone2.seminarroomreservation.Manager;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +13,7 @@ import java.util.Iterator;
 
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Network.RestRequestHelper;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
-import kr.ac.kookmin.cs.capstone2.seminarroomreservation.RoomInfo;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Model.RoomInfo;
 
 
 /**

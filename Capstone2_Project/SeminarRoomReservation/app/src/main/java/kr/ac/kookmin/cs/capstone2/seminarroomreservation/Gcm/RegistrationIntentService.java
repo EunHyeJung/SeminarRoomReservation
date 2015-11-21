@@ -10,9 +10,8 @@ import com.google.android.gms.iid.InstanceID;
 
 import java.io.IOException;
 
-import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Authentication.MainActivity;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
-import kr.ac.kookmin.cs.capstone2.seminarroomreservation.SharedPreferenceClass;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Model.SharedPreferenceClass;
 
 /**
  * Created by eunhye on 2015-11-03.

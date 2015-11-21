@@ -13,8 +13,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
-import kr.ac.kookmin.cs.capstone2.seminarroomreservation.RoomInfo;
-import kr.ac.kookmin.cs.capstone2.seminarroomreservation.UserInfo;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Model.RoomInfo;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Model.UserInfo;
 
 /**
  * Created by song on 2015-09-09.

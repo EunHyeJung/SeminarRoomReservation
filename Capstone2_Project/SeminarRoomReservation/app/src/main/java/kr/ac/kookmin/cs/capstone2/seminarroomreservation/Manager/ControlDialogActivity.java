@@ -15,7 +15,7 @@ import com.google.gson.JsonObject;
 
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Network.RestRequestHelper;
-import kr.ac.kookmin.cs.capstone2.seminarroomreservation.UserInfo;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Model.UserInfo;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -50,7 +50,6 @@ public class ControlDialogActivity extends AppCompatActivity {
                         switch (result) {
                             //문 관리 실패
                             case 0:
-                                //Toast.makeText(getApplicationContext(),"네트워크 사정으로 문을 열 수 없습니다.",Toast.LENGTH_SHORT).show();
                                 break;
                             //문 열기 가능
                             case 1:
@@ -78,8 +77,7 @@ public class ControlDialogActivity extends AppCompatActivity {
                         switch (result) {
                             //문 닫기 실패
                             case 0:
-                                //Toast.makeText(getApplicationContext(),"네트워크 사정으로 문을 닫을 수 없습니다.",Toast.LENGTH_SHORT).show();
-                                break;
+                               break;
                             //문 닫기 성공
                             case 1:
                                 DoorStatusText.setText("Door Status : Close");

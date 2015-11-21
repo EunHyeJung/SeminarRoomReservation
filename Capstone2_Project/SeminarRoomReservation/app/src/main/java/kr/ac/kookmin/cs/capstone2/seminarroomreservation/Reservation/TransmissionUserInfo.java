@@ -1,7 +1,6 @@
 package kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation;
 
-import com.google.gson.JsonObject;
-import kr.ac.kookmin.cs.capstone2.seminarroomreservation.UserInfo;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Model.UserInfo;
 
 /**
  * Created by song on 2015-10-26.

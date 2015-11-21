@@ -1,9 +1,4 @@
-package kr.ac.kookmin.cs.capstone2.seminarroomreservation;
-
-import android.app.Activity;
-import android.content.Context;
-
-import kr.ac.kookmin.cs.capstone2.seminarroomreservation.SharedPreferenceClass;
+package kr.ac.kookmin.cs.capstone2.seminarroomreservation.Model;
 
 /**
  *  UserInfo : 사용자 정보를 담는 클래스

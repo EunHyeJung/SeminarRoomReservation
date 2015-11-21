@@ -1,4 +1,4 @@
-package kr.ac.kookmin.cs.capstone2.seminarroomreservation;
+package kr.ac.kookmin.cs.capstone2.seminarroomreservation.Model;
 
 /**
  * 예약 정보 : 세미나실 사용 시작 시간, 사용 종료 시간

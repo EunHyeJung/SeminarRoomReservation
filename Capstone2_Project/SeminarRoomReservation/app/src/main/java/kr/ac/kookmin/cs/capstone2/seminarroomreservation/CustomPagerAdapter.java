@@ -10,6 +10,7 @@ import java.util.Map;
 
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Manager.AccessControlFragment;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Manager.AccessHistoryFragment;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Model.UserInfo;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation.ReservationStatusFragment;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation.UsingStatusFragment;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.User.KeyFragment;

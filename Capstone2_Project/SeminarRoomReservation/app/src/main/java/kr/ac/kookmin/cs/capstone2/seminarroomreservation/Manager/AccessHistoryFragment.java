@@ -25,7 +25,7 @@ import java.util.Iterator;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Network.RestRequestHelper;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation.CalendarDialog;
-import kr.ac.kookmin.cs.capstone2.seminarroomreservation.RoomInfo;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Model.RoomInfo;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
