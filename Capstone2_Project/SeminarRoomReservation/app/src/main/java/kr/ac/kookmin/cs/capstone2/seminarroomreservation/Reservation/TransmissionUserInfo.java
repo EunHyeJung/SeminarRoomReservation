@@ -15,9 +15,9 @@ public class TransmissionUserInfo {
     public String date; // 날짜
 
     //생성자
-    public TransmissionUserInfo(int id, String date){
+    public TransmissionUserInfo(String date){
         mode = UserInfo.getUserMode();
-        this.Id = id;
+        this.Id = UserInfo.getId();
         this.date = date;
     }
 

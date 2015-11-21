@@ -105,13 +105,14 @@ public class ReservationStatusFragment extends Fragment {
         reservationListView.setAdapter(reservationLVAdapter);
 
 
-        requestDate = new TransmissionUserInfo(UserInfo.getId(), date);
+        requestDate = new TransmissionUserInfo(date);
 
         Log.d("RSF", date);
         if(UserInfo.getUserMode() == 1){
             restRequestHelper.myBooking(requestDate, new Callback<JsonObject>() {
                 @Override
                 public void success(JsonObject jsonObject, Response response) {
+                    System.out.println("송미송미 : "+jsonObject);
                     addList(jsonObject);
                 }
 
@@ -141,10 +142,12 @@ public class ReservationStatusFragment extends Fragment {
      * ListView에 예약 현황을 추가하는 함수
      * */
     public void addList(JsonObject jsonObject) {
+        System.out.println(jsonObject);
         try {
             JsonObject responseData = jsonObject.getAsJsonObject("responseData");
             JsonArray requestList = responseData.getAsJsonArray("requestList");
             Log.d("RSF", requestList.toString());
+
             for (int i = 0; i < requestList.size(); i++) {
                 JsonObject tmpObject = requestList.get(i).getAsJsonObject();
                 int mode = UserInfo.getUserMode();
@@ -153,13 +156,14 @@ public class ReservationStatusFragment extends Fragment {
                 if(mode == 1)//일반 사용자의 경우
                 {
                     String roomId = RoomInfo.getRoomName(tmpObject.getAsJsonPrimitive("roomId").getAsInt());
-                    reservationLVAdapter.add(tmpObject.getAsJsonPrimitive("reservationId").getAsInt(),
+                  reservationLVAdapter.add(tmpObject.getAsJsonPrimitive("reservationId").getAsInt(),
                             UserInfo.getUserId(),
                             roomId.replace("\"", ""),
                             tmpObject.getAsJsonPrimitive("startTime").getAsString(),
                             tmpObject.getAsJsonPrimitive("endTime").getAsString(),
                             tmpObject.getAsJsonPrimitive("date").getAsString(),
                             tmpObject.getAsJsonPrimitive("status").getAsInt());
+
                 }
                 else //관리자의 경우
                 {

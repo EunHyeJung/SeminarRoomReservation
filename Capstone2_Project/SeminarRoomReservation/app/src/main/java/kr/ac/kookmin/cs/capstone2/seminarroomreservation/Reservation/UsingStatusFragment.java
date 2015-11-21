@@ -52,7 +52,7 @@ public class UsingStatusFragment extends Fragment {
     TextView textViewRoom4;
     TextView textViewRoom5;
 
-    CustomGridAdapter customGridAdapter;    // 커스텀 그리드뷰 사용을 위함.
+    CustomGridAdapter customGridAdapter;    // 커스텀 그리드뷰 사용을 위한 어댑터
 
     TextView textViewDate;
     Button buttonDate;
@@ -220,6 +220,7 @@ public class UsingStatusFragment extends Fragment {
             int reservationId = (reservations.get(i).getAsJsonObject().getAsJsonPrimitive("reservationId").getAsInt());
             int cellStartPosition = (5 * (startTime.get(tempStartTime) - 1)) + (reservedRoomId % 5) - 1; // 셀 시작 위치
             int cellEndPosition = (5 * (endTime.get(tempEndTime) - 1)) + (reservedRoomId % 5) - 1; // 셀 종료 위치
+
             reservationsInfos[i].setReservationsInfo(reservationId, reservationStatus, cellStartPosition, cellEndPosition);
         }
 

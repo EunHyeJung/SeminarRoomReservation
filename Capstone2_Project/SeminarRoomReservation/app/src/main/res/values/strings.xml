@@ -54,5 +54,6 @@
     <string name = "reservation_approval_okay">예약이 승인 되었습니다.</string>
     <string name = "reservation_approval_fail">예약이 승인 되지 않았습니다.</string>
 
-    <string name="reservation_request_completed">예약 신청 완료</string>
+    <string name="reservation_request_completed">예약신청 완료</string>
+    <string name="reservation_request_refusal">예약신청 실패</string>
 </resources>

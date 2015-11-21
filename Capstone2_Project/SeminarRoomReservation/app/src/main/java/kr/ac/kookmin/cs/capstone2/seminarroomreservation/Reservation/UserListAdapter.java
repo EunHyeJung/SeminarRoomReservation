@@ -5,10 +5,12 @@ package kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation;
  */
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
@@ -28,8 +30,6 @@ public class UserListAdapter extends ArrayAdapter<ItemUser> {
     ArrayList<ItemUser> items, tempItems, suggestions;
     HashMap<Integer, Boolean> mCheck;
 
-    AccidentListener accidentListener;
-
 
     public UserListAdapter(Context context, int resource, int textViewResourceId, ArrayList<ItemUser> items) {
         super(context, 0, items);
@@ -47,7 +47,11 @@ public class UserListAdapter extends ArrayAdapter<ItemUser> {
         for (int i = 0; i < getCount(); i++) {
             mCheck.put(i, false);
         }
+
+
     }
+
+
 
     @Override
     public ItemUser getItem(int position) {
@@ -69,28 +73,22 @@ public class UserListAdapter extends ArrayAdapter<ItemUser> {
 
         final ItemUser itemUser = items.get(position);
         if (itemUser != null) {
-            TextView textViewUserName = (TextView) convertView.findViewById(R.id.list_item_textView_userName);
+            final TextView textViewUserName = (TextView) convertView.findViewById(R.id.list_item_textView_userName);
             textViewUserName.setText(itemUser.getUserName());
 
-            textViewUserName.setOnClickListener(new View.OnClickListener() {
+           /* textViewUserName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     ReservationFormActivity.selectedUsers.put(itemUser.getId(), itemUser.getUserName());
-                    accidentListener.upLoadTextView(itemUser.getUserId());
-                   // textViewParticipants.append(itemUser.getUserName() + "(" + itemUser.getUserId() + ") ");
+                    accidentListener.upLoadTextView(itemUser.getUserName());
                     Toast.makeText(context, itemUser.getUserName() + " 추가", Toast.LENGTH_SHORT).show();
+                    //
+
                 }
-            });
+            });*/
         }
         return convertView;
     }
-
-
-    public void uiProcessing(){
-
-    }
-
-
 
     @Override
     public Filter getFilter() {
@@ -136,9 +134,6 @@ public class UserListAdapter extends ArrayAdapter<ItemUser> {
         }
     };
 
-    public interface AccidentListener {
-        void upLoadTextView(String addedMemeberId);
-    }
 
 
 }

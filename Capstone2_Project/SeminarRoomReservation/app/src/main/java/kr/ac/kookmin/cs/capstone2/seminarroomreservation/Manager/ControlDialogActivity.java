@@ -15,6 +15,7 @@ import com.google.gson.JsonObject;
 
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Network.RestRequestHelper;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.UserInfo;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -103,7 +104,7 @@ public class ControlDialogActivity extends AppCompatActivity {
         //클릭한 세미나방 이름, id 가져오기
         Intent intent = getIntent();
         roomId = intent.getExtras().getInt("roomId");
-        userId = intent.getExtras().getInt("userId");
+        userId = UserInfo.getId();
         System.out.println("ControlDialogActivity : "+roomId+" / id : "+userId);
 
         //매핑하기

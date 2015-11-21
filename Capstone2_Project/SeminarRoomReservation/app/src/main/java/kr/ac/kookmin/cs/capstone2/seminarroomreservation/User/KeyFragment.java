@@ -43,6 +43,7 @@ public class KeyFragment extends Fragment implements View.OnClickListener {
 
         btnSmartKey.setOnClickListener(this);
 
+
         restRequestHelper.getSmartKey(info, new Callback<JsonObject>() {
             @Override
             public void success(JsonObject jsonObject, Response response) {
@@ -83,6 +84,8 @@ public class KeyFragment extends Fragment implements View.OnClickListener {
     }
 
     public void init(View view){
+        info = new TransmissionUserInfo("null");
+
         btnSmartKey = (ImageButton)view.findViewById(R.id.button_smartkey);
         textDate = (TextView)view.findViewById(R.id.text_key_date);
         textStime = (TextView)view.findViewById(R.id.text_key_stime);
@@ -93,8 +96,8 @@ public class KeyFragment extends Fragment implements View.OnClickListener {
         btnSmartKey.setEnabled(false); //키는 비활성화
 
         textDate.setText("Network error!"); //서버 연결이 안되어 있음.
-       // info = new TransmissionUserInfo(UserInfo.getId(), "ALL");
-    }
+           // info = new TransmissionUserInfo(UserInfo.getId(), "ALL");
+        }
 
     @Override
     public void onClick(View v) {

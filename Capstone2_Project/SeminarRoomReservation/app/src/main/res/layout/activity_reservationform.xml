@@ -178,6 +178,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+
                 <TextView
                     android:id="@+id/textView_participants"
                     android:layout_width="150dp"

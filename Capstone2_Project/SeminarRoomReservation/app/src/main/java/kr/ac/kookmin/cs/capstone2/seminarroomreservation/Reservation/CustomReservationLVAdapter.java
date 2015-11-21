@@ -92,8 +92,8 @@ public class CustomReservationLVAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, ReservationFormActivity.class);
-                intent.putExtra("id", reservList.get(reservationViewHolder.position).reserveId); //사용자 고유 id 값을 보낸다.
-                intent.putExtra("request", 1);
+                intent.putExtra("reservationId", reservList.get(reservationViewHolder.position).reserveId); //사용자 고유 id 값을 보낸다.
+                intent.putExtra("viewMode", 1);
                 context.startActivity(intent);
             }
         });

@@ -133,7 +133,6 @@ public class AccessHistoryFragment extends Fragment implements AdapterView.OnIte
                 try {
                     JsonObject responseData = jsonObject.getAsJsonObject("responseData");// 1레벨 추출
                     JsonArray history = responseData.getAsJsonArray("history");//2레벨 추출
-
                     //Array 내용을 추출해서 담는다.
                     for (int i = 0; i < history.size(); i++) {
                         JsonObject tmpObject = history.get(i).getAsJsonObject();

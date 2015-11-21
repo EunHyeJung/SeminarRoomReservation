@@ -3,6 +3,7 @@ package kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -15,6 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -41,7 +43,6 @@ import kr.ac.kookmin.cs.capstone2.seminarroomreservation.DatabaseHelper;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Manager.ManagerActivity;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Network.RestRequestHelper;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
-import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation.UserListAdapter.AccidentListener;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.RoomInfo;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.SharedPreferenceClass;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.User.UserActivity;
@@ -52,7 +53,7 @@ import retrofit.client.Response;
 
 import static kr.ac.kookmin.cs.capstone2.seminarroomreservation.DefinedValues.*;
 
-public class ReservationFormActivity extends AppCompatActivity implements UserListAdapter.AccidentListener{
+public class ReservationFormActivity extends AppCompatActivity {
 
     // 출력모드 / 1 - 예약 내역 출력  /  2 - 예약 신청
     private int mode;
@@ -74,7 +75,8 @@ public class ReservationFormActivity extends AppCompatActivity implements UserLi
     UserListAdapter userListAdapter;
     private ArrayList<ItemUser> mUsers;
     public static HashMap<Integer, String> selectedUsers;
-    public static int addedMember=0;
+    public static int addedMember = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -161,7 +163,6 @@ public class ReservationFormActivity extends AppCompatActivity implements UserLi
     public void getReservationInfo() {
         Intent intent = getIntent();
         int reservationId = intent.getExtras().getInt("reservationId");
-
         RestRequestHelper requestHelper = RestRequestHelper.newInstance();
         requestHelper.getReservationInfo(reservationId, new Callback<JsonObject>() {
             @Override
@@ -208,7 +209,7 @@ public class ReservationFormActivity extends AppCompatActivity implements UserLi
     }
 
     /*  예약 신청 모드   */
-    private View.OnClickListener clickListener = new View.OnClickListener() {
+        private View.OnClickListener clickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             switch (view.getId()) {
@@ -236,14 +237,6 @@ public class ReservationFormActivity extends AppCompatActivity implements UserLi
         spinnerRoom = (Spinner) findViewById(R.id.spinner_roomList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerRoom.setAdapter(adapter);
-        spinnerRoom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-            }
-        });
     }
 
     public void requestReservation() {
@@ -270,11 +263,23 @@ public class ReservationFormActivity extends AppCompatActivity implements UserLi
         RestRequestHelper requestHelper = RestRequestHelper.newInstance();
         requestHelper.makeReservation(transmissionResInfo, new Callback<Integer>() {
             @Override
-            public void success(Integer integer, Response response) {
-                Toast.makeText(getApplicationContext(), getString(R.string.reservation_request_completed), Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(getApplicationContext(), UserActivity.class);
-                startActivity(intent);
+            public void success(Integer requestResponse, Response response) {
+                System.out.println("예약 신청 응답 : " + requestResponse);
+                switch (requestResponse){
+                    case 1: // 예약 성공
+                        Toast.makeText(getApplicationContext(), getString(R.string.reservation_request_completed), Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(getApplicationContext(), UserActivity.class);
+                        startActivity(intent);
+                        break;
+                    case 3: // sql error
+                        Toast.makeText(getApplicationContext(), getString(R.string.reservation_request_refusal), Toast.LENGTH_LONG).show();
+                        break;
+                    case 4: // 예약 중복
+                        Toast.makeText(getApplicationContext(), getString(R.string.reservation_request_refusal), Toast.LENGTH_LONG).show();
+                        break;
+                }
             }
+
             @Override
             public void failure(RetrofitError error) {
                 error.printStackTrace();
@@ -300,10 +305,19 @@ public class ReservationFormActivity extends AppCompatActivity implements UserLi
                 mUsers.add(itemUser);
             }
         } catch (Exception e) {
-           Log.d("ReservationFormActivity", "error : " + e.toString());
+            Log.d("ReservationFormActivity", "error : " + e.toString());
         }
         userListAdapter = new UserListAdapter(this, R.layout.activity_user_list, R.id.list_item_textView_userName, mUsers);
         autoTextViewMember.setAdapter(userListAdapter);
+        autoTextViewMember.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                ReservationFormActivity.selectedUsers.put(mUsers.get(position).getId(), mUsers.get(position).getUserName());
+                upLoadTextView(mUsers.get(position).getUserName());
+                Toast.makeText(getApplicationContext(), mUsers.get(position).getUserName() + " 추가", Toast.LENGTH_SHORT).show();
+
+            }
+        });
     }
     /*  End Of Reservation Request Mode  */
 
@@ -339,13 +353,12 @@ public class ReservationFormActivity extends AppCompatActivity implements UserLi
         }
     };
 
-
-    @Override
     public void upLoadTextView(final String addedMemeberId) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                textViewParticipants.append(" "+addedMemeberId);
+                autoTextViewMember.setText("");
+                textViewParticipants.append(" " + addedMemeberId);
             }
         });
     }
