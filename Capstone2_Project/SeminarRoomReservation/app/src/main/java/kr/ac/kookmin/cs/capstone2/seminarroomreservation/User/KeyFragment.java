@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,8 +23,9 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 
-public class KeyFragment extends Fragment implements View.OnClickListener {
-    ImageButton btnSmartKey;
+public class KeyFragment extends Fragment{
+    Button btnSmartKeyOpen;
+    Button btnSmartKeyClose;
     TextView textDate;
     TextView textStime;
     TextView textEtime;
@@ -34,6 +36,7 @@ public class KeyFragment extends Fragment implements View.OnClickListener {
     int roomId;
 
     final int open = 1;
+    final int close = 0;
 
     public KeyFragment() {
         // Required empty public constructor
@@ -46,7 +49,62 @@ public class KeyFragment extends Fragment implements View.OnClickListener {
         restRequestHelper = RestRequestHelper.newInstance(); //네트워크 초기화
         init(view); //이외의 부분 초기화
 
-        btnSmartKey.setOnClickListener(this);
+        btnSmartKeyOpen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                restRequestHelper.controlDoor(UserInfo.getId(), roomId, open, new Callback<JsonObject>() {
+                    @Override
+                    public void success(JsonObject jsonObject, Response response) {
+                        int result = jsonObject.get("result").getAsInt();
+
+                        switch (result) {
+                            //문 관리 실패
+                            case 0:
+                                Toast.makeText(getContext(), "거절 되었습니다.", Toast.LENGTH_SHORT).show();
+                                break;
+                            //문 열기 가능
+                            case 1:
+                                Toast.makeText(getContext(), "문이 열렸습니다.", Toast.LENGTH_SHORT).show();
+                                break;
+                        }
+
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+
+                    }
+                });
+            }
+        });
+
+        btnSmartKeyClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                restRequestHelper.controlDoor(UserInfo.getId(), roomId, close, new Callback<JsonObject>() {
+                    @Override
+                    public void success(JsonObject jsonObject, Response response) {
+                        int result = jsonObject.get("result").getAsInt();
+
+                        switch (result) {
+                            //문 관리 실패
+                            case 0:
+                                Toast.makeText(getContext(), "거절 되었습니다.", Toast.LENGTH_SHORT).show();
+                                break;
+                            //문 열기 가능
+                            case 1:
+                                Toast.makeText(getContext(), "문이 닫혔습니다.", Toast.LENGTH_SHORT).show();
+                                break;
+                        }
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+
+                    }
+                });
+            }
+        });
 
 
         restRequestHelper.getSmartKey(info, new Callback<JsonObject>() {
@@ -55,13 +113,11 @@ public class KeyFragment extends Fragment implements View.OnClickListener {
                 JsonObject data = jsonObject.getAsJsonObject("responseData");
                 int id = data.getAsJsonPrimitive("key").getAsInt();
 
-                System.out.println("KF"+ id);
-                if(id == -1)//키가 아예 존재하지 않을 경우
+                if (id == -1)//키가 아예 존재하지 않을 경우
                 {
                     textDate.setText("There is no valid key");
-                    btnSmartKey.setEnabled(false);
-                }
-                else// 키가 있을 경우
+                    btnSmartKeyOpen.setEnabled(false);
+                } else// 키가 있을 경우
                 {
                     String stime = data.getAsJsonPrimitive("startTime").getAsString();
                     String etime = data.getAsJsonPrimitive("endTime").getAsString();
@@ -72,16 +128,16 @@ public class KeyFragment extends Fragment implements View.OnClickListener {
                     textDate.setText(date);
                     textStime.setText(stime);
                     textEtime.setText(etime);
-                    textRoom.setText(roomName.replace("\"",""));
+                    textRoom.setText(roomName.replace("\"", ""));
 
-                    if(id == 1)//현재 시간이 예약 시간 안에 겹칠 때
-                        btnSmartKey.setEnabled(true);
+                    if (id == 1)//현재 시간이 예약 시간 안에 겹칠 때
+                        btnSmartKeyOpen.setEnabled(true);
                 }
             }
 
             @Override
             public void failure(RetrofitError error) {
-                btnSmartKey.setClickable(false);
+                btnSmartKeyOpen.setClickable(false);
                 Log.e("KF", error.toString());
             }
         });
@@ -92,44 +148,17 @@ public class KeyFragment extends Fragment implements View.OnClickListener {
     public void init(View view){
         info = new TransmissionUserInfo("null");
 
-        btnSmartKey = (ImageButton)view.findViewById(R.id.button_smartkey);
+        btnSmartKeyOpen = (Button)view.findViewById(R.id.button_smartkey_open);
+        btnSmartKeyClose = (Button)view.findViewById(R.id.button_smartkey_close);
+
         textDate = (TextView)view.findViewById(R.id.text_key_date);
         textStime = (TextView)view.findViewById(R.id.text_key_stime);
         textEtime = (TextView)view.findViewById(R.id.text_key_etime);
         textRoom = (TextView)view.findViewById(R.id.text_key_room);
         roomName = null;
 
-        btnSmartKey.setEnabled(false); //키는 비활성화
-
-        textDate.setText("Network error!"); //서버 연결이 안되어 있음.
-        // info = new TransmissionUserInfo(UserInfo.getId(), "ALL");
-    }
-
-    @Override
-    public void onClick(View v) {
-        restRequestHelper.controlDoor(UserInfo.getId(), roomId ,open, new Callback<JsonObject>(){
-            @Override
-            public void success(JsonObject jsonObject, Response response) {
-                int result = jsonObject.get("result").getAsInt();
-
-                switch (result) {
-                    //문 관리 실패
-                    case 0:
-                        Toast.makeText(getContext(), "거절 되었습니다.", Toast.LENGTH_SHORT).show();
-                        break;
-                    //문 열기 가능
-                    case 1:
-                        Toast.makeText(getContext(), "문이 열렸습니다.", Toast.LENGTH_SHORT).show();
-                        break;
-                }
-
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-
-            }
-        });
+        btnSmartKeyOpen.setEnabled(false); //키는 비활성화
 
     }
+
 }
