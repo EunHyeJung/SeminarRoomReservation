@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.JsonObject;
 
@@ -20,6 +21,7 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
+
 public class KeyFragment extends Fragment implements View.OnClickListener {
     ImageButton btnSmartKey;
     TextView textDate;
@@ -28,7 +30,10 @@ public class KeyFragment extends Fragment implements View.OnClickListener {
     TextView textRoom;
     RestRequestHelper restRequestHelper;
     TransmissionUserInfo info;
-    String roomId;
+    String roomName;
+    int roomId;
+
+    final int open = 1;
 
     public KeyFragment() {
         // Required empty public constructor
@@ -60,13 +65,14 @@ public class KeyFragment extends Fragment implements View.OnClickListener {
                 {
                     String stime = data.getAsJsonPrimitive("startTime").getAsString();
                     String etime = data.getAsJsonPrimitive("endTime").getAsString();
-                    roomId = RoomInfo.getRoomName(data.getAsJsonPrimitive("roomId").getAsInt());
+                    roomId = data.getAsJsonPrimitive("roomId").getAsInt();
+                    roomName = RoomInfo.getRoomName(data.getAsJsonPrimitive("roomId").getAsInt());
                     String date = data.getAsJsonPrimitive("date").getAsString();
 
                     textDate.setText(date);
                     textStime.setText(stime);
                     textEtime.setText(etime);
-                    textRoom.setText(roomId.replace("\"",""));
+                    textRoom.setText(roomName.replace("\"",""));
 
                     if(id == 1)//현재 시간이 예약 시간 안에 겹칠 때
                         btnSmartKey.setEnabled(true);
@@ -91,16 +97,39 @@ public class KeyFragment extends Fragment implements View.OnClickListener {
         textStime = (TextView)view.findViewById(R.id.text_key_stime);
         textEtime = (TextView)view.findViewById(R.id.text_key_etime);
         textRoom = (TextView)view.findViewById(R.id.text_key_room);
-        roomId = null;
+        roomName = null;
 
         btnSmartKey.setEnabled(false); //키는 비활성화
 
         textDate.setText("Network error!"); //서버 연결이 안되어 있음.
-           // info = new TransmissionUserInfo(UserInfo.getId(), "ALL");
-        }
+        // info = new TransmissionUserInfo(UserInfo.getId(), "ALL");
+    }
 
     @Override
     public void onClick(View v) {
+        restRequestHelper.controlDoor(UserInfo.getId(), roomId ,open, new Callback<JsonObject>(){
+            @Override
+            public void success(JsonObject jsonObject, Response response) {
+                int result = jsonObject.get("result").getAsInt();
+
+                switch (result) {
+                    //문 관리 실패
+                    case 0:
+                        Toast.makeText(getContext(), "거절 되었습니다.", Toast.LENGTH_SHORT).show();
+                        break;
+                    //문 열기 가능
+                    case 1:
+                        Toast.makeText(getContext(), "문이 열렸습니다.", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
 
     }
 }

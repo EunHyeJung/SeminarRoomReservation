@@ -29,8 +29,6 @@ public class JoinActivity extends Activity {
 
     SharedPreferenceClass sharedPreference = new SharedPreferenceClass(this);
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,30 +47,6 @@ public class JoinActivity extends Activity {
         });
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_join, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-
     public void signup() {
 
         final String id = editTextId.getText().toString();
@@ -80,23 +54,20 @@ public class JoinActivity extends Activity {
         final String name = editTextName.getText().toString();
         final String phone = editTextPhone.getText().toString();
 
+        TransmissionJoinInfo transmissionJoinInfo = new TransmissionJoinInfo(id, password, name, phone);
 
         RestRequestHelper requestHelper = RestRequestHelper.newInstance();
-        requestHelper.signUp(id, password, name, phone, new Callback<Integer>() {
-
+        requestHelper.signUp(transmissionJoinInfo, new Callback<Integer>() {
             @Override
             public void success(Integer signUpCallback, Response response) {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
             }
-
             @Override
             public void failure(RetrofitError error) {
                 error.printStackTrace();
             }
         });
-
     }
-
 }
 

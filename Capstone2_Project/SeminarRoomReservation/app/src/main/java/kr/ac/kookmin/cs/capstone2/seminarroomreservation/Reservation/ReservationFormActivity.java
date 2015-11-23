@@ -111,6 +111,8 @@ public class ReservationFormActivity extends AppCompatActivity {
         autoTextViewMember.setThreshold(1);
         textViewParticipants = (TextView) findViewById(R.id.textView_participants);
         selectedUsers = new HashMap<Integer, String>();
+
+        spinnerRoom = (Spinner) findViewById(R.id.spinner_roomList);
     }
 
 
@@ -124,12 +126,13 @@ public class ReservationFormActivity extends AppCompatActivity {
                 setUsableTextView(textViewCheckInTime, false);
                 setUsableTextView(textViewCheckOutTime, false);
                 setUsableEditText(editTextContent, false);
+                setUsableTextView(autoTextViewMember, false);
                 autoTextViewMember.setHint(" ");
                 buttonMakeReservation.setVisibility(View.INVISIBLE);
-
                 getReservationInfo();       // 초기 설정을 마친 뒤 서버로 예약 데이터 요청
                 break;
             case REQUEST_MODE:
+                setUsableTextView(autoTextViewMember, true);
                 textViewCheckInDate.setOnClickListener(clickListener);
                 textViewCheckInTime.setOnClickListener(clickListener);
                 textViewCheckOutTime.setOnClickListener(clickListener);
@@ -161,7 +164,7 @@ public class ReservationFormActivity extends AppCompatActivity {
 
     public void jsonParsing(JsonObject jsonObject) {
         JsonObject responseData = jsonObject.getAsJsonObject("responseData");
-        int userId = responseData.getAsJsonPrimitive("user").getAsInt();
+        String userId = responseData.getAsJsonPrimitive("user").getAsString();
         int roomID = responseData.getAsJsonPrimitive("room").getAsInt();
         String checkInDate = responseData.getAsJsonPrimitive("date").getAsString();
         String checkInTime = responseData.getAsJsonPrimitive("startTime").getAsString();
@@ -179,14 +182,22 @@ public class ReservationFormActivity extends AppCompatActivity {
 
 
     // set reservation data received from server
-    public void setReservationInfo(int userId, int roomId, String checkInDate, String checkInTime, String checkOutTime,
+    public void setReservationInfo(String userId, int roomId, String checkInDate, String checkInTime, String checkOutTime,
                                    String content, ArrayList<String> participant) {
         textViewCheckInDate.setText(checkInDate);
         textViewCheckInTime.setText(checkInTime);
         textViewCheckOutTime.setText(checkOutTime);
+
+        ArrayList<String> roomNames = new ArrayList<String>();
+        roomNames.add(RoomInfo.getRoomName(roomId));
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, roomNames);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerRoom.setAdapter(adapter);
         editTextContent.setText(content);
+        textViewParticipants.setText(userId);
         for (int i = 0; i < participant.size() && participant.get(i) != null; i++) {
-            textViewParticipants.append(participant.get(i));
+            textViewParticipants.append(", "+participant.get(i));
         }
     }
 
@@ -217,7 +228,6 @@ public class ReservationFormActivity extends AppCompatActivity {
         ArrayList<String> roomNames = new ArrayList<String>();
         roomNames = RoomInfo.getRoomNames();
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, roomNames);
-        spinnerRoom = (Spinner) findViewById(R.id.spinner_roomList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerRoom.setAdapter(adapter);
     }
@@ -248,7 +258,7 @@ public class ReservationFormActivity extends AppCompatActivity {
             @Override
             public void success(Integer requestResponse, Response response) {
                 System.out.println("예약 신청 응답 : " + requestResponse);
-                switch (requestResponse){
+                switch (requestResponse) {
                     case 1: // 예약 성공
                         Toast.makeText(getApplicationContext(), getString(R.string.reservation_request_completed), Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(getApplicationContext(), UserActivity.class);
@@ -262,6 +272,7 @@ public class ReservationFormActivity extends AppCompatActivity {
                         break;
                 }
             }
+
             @Override
             public void failure(RetrofitError error) {
                 error.printStackTrace();
@@ -322,6 +333,7 @@ public class ReservationFormActivity extends AppCompatActivity {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             // TODO Auto-generated method stub
+            hourOfDay = 9;
             String msg = String.format("%02d:%02d:00", hourOfDay, minute);
             Toast.makeText(ReservationFormActivity.this, msg, Toast.LENGTH_SHORT).show();
             setTextView(textViewCheckInDate, msg);
@@ -331,6 +343,7 @@ public class ReservationFormActivity extends AppCompatActivity {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             // TODO Auto-generated method stub
+            hourOfDay = 9;
             String msg = String.format("%02d:%02d:00", hourOfDay, minute);
             Toast.makeText(ReservationFormActivity.this, msg, Toast.LENGTH_SHORT).show();
             setTextView(textViewCheckOutTime, msg);
@@ -346,4 +359,4 @@ public class ReservationFormActivity extends AppCompatActivity {
             }
         });
     }
-}
+}	

@@ -59,9 +59,6 @@ public class MainActivity extends AppCompatActivity {
     Button buttonLogin;
     Button buttonJoin;
 
-
-    //
-
     DatabaseHelper databaseHelper;
     SQLiteDatabase database;
 
@@ -161,8 +158,10 @@ public class MainActivity extends AppCompatActivity {
             password = EncryptionClass.encryptSHA256(editTextPassword.getText().toString());
         }
 
+        TransmissionLoginInfo transmissionLoginInfo = new TransmissionLoginInfo(id, password, instanceId);
+
         RestRequestHelper requestHelper = RestRequestHelper.newInstance();
-        requestHelper.login(id, password, instanceId, new Callback<JsonObject>() {
+        requestHelper.login(transmissionLoginInfo, new Callback<JsonObject>() {
             @Override
             public void success(JsonObject loginCallback, Response response) {
                 UserInfo.setUserInfo(id, password);
@@ -239,7 +238,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    // InstanceId를 이용하여 디바이스 토큰을 가져오는 RegistrationIntentService를 실행한다.
+    // Execute RegistrationIntentService to get device token using instnace Id.
     public void getInstanceIdToken() {
         if (checkPlayServices()) {
             Intent intent = new Intent(this, RegistrationIntentService.class);

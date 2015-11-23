@@ -29,6 +29,8 @@ public class ControlDialogActivity extends AppCompatActivity {
     int userId = 0;
 
     RestRequestHelper requestHelper;
+    final int open = 1;
+    final int close = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +44,7 @@ public class ControlDialogActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //문을 컨트롤하기 위한 함수를 부른다.
-                requestHelper.controlDoor(userId, roomId, true, new Callback<JsonObject>() {
+                requestHelper.controlDoor(userId, roomId, open, new Callback<JsonObject>() {
                     @Override
                     public void success(JsonObject jsonObject, Response response) {
                         int result = jsonObject.get("result").getAsInt();
@@ -70,14 +72,14 @@ public class ControlDialogActivity extends AppCompatActivity {
         CloseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                requestHelper.controlDoor(userId, roomId, false, new Callback<JsonObject>() {
+                requestHelper.controlDoor(userId, roomId, close, new Callback<JsonObject>() {
                     @Override
                     public void success(JsonObject jsonObject, Response response) {
                         int result = jsonObject.get("result").getAsInt();
                         switch (result) {
                             //문 닫기 실패
                             case 0:
-                               break;
+                                break;
                             //문 닫기 성공
                             case 1:
                                 DoorStatusText.setText("Door Status : Close");

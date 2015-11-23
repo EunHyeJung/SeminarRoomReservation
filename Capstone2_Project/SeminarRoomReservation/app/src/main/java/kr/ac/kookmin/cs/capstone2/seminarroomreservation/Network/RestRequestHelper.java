@@ -2,6 +2,8 @@ package kr.ac.kookmin.cs.capstone2.seminarroomreservation.Network;
 
 import com.google.gson.JsonObject;
 
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Authentication.TransmissionLoginInfo;
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Join.TransmissionJoinInfo;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Manager.TransmissionHistory;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation.TransmissionData;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Reservation.TransmissionResInfo;
@@ -25,7 +27,7 @@ public class RestRequestHelper {
     private RestRequest restRequest;
 
 
-    private static final String url = "http://192.168.1.100:8081/smartdoorlock";
+    private static final String url = "http://192.168.1.102:8081/smartdoorlock";
 
     public static RestRequestHelper newInstance(){
         if(instance == null){
@@ -42,13 +44,14 @@ public class RestRequestHelper {
     }
 
     public interface RestRequest{
-        @FormUrlEncoded
         @POST("/signup")
-        void signUp(@Field("id") String id,
-                    @Field("password") String password,
-                    @Field("name") String name,
-                    @Field("phone") String phone,
+        void signUp(@Body TransmissionJoinInfo transmissionJoinInfo,
                     Callback<Integer> signUpCallback);
+
+        @POST("/login")
+        void login(@Body TransmissionLoginInfo transmissionLoginInfo,
+                   Callback<JsonObject> loginCallback
+        );
 
 
         @POST("/bookingrequest")
@@ -56,23 +59,12 @@ public class RestRequestHelper {
                 Callback<Integer> makeReservationCallback);
 
 
-
-
-        @FormUrlEncoded
-        @POST("/login")
-        void login(@Field("id") String id,
-                   @Field("password") String password,
-                   @Field("instanceId") String instanceId,
-                   Callback<JsonObject> loginCallback
-        );
-
-
         @POST("/usingstatus")
         void receiveUsingStatus(@Body TransmissionData transmissionData,
                                 Callback<JsonObject> usingStatusCallback
         );
 
-        @FormUrlEncoded
+
         @POST("/roomstatus")
         void roomStatus(@Field("id") int id,
                         @Field("roomName")String roomName,
@@ -82,7 +74,7 @@ public class RestRequestHelper {
         @POST("/doorcontrol")
         void controlDoor(@Field("id") int id,
                          @Field("roomName") int roomId,
-                         @Field("command") boolean status,
+                         @Field("command") int status,
                          Callback<JsonObject> doorControllCallback
         );
 
@@ -101,7 +93,7 @@ public class RestRequestHelper {
         void requestList(@Body TransmissionUserInfo info,
                          Callback<JsonObject> requestListCallback);
 
-        //@FormUrlEncoded
+
         @POST("/mybooking")
         void myBooking(@Body TransmissionUserInfo info,
                        Callback<JsonObject> mybookingListCallback);
@@ -132,28 +124,28 @@ public class RestRequestHelper {
 
     }
 
-    // 회원가입시 호출
-    public void signUp(String id, String password, String name, String phone, Callback<Integer> signUpCallback){
-        restRequest.signUp(id, password, name, phone, signUpCallback);
+    // for signup
+    public void signUp(TransmissionJoinInfo transmissionJoinInfo, Callback<Integer> signUpCallback){
+        restRequest.signUp(transmissionJoinInfo, signUpCallback);
     }
 
-    // 로그인 시 호출
-    public void login(String id, String password, String instanceId,  Callback<JsonObject> loginCallback){
-        restRequest.login(id, password, instanceId, loginCallback);
+    // for login
+    public void login(TransmissionLoginInfo transmissionLoginInfo,  Callback<JsonObject> loginCallback){
+        restRequest.login(transmissionLoginInfo, loginCallback);
     }
 
-    // 예약하기
+    // for make a reservation
     public void makeReservation(TransmissionResInfo transmissionResInfo, Callback<Integer> makeReservationCallback){
         restRequest.makeReservation(transmissionResInfo, makeReservationCallback);
     }
 
 
-    // 예약 현황 호출 시, 서버로 날짜를 전송 후 날짜에 해당하는 예약 내역 정보를 받아옴
+    // for getting seminar room using status
     public void receiveUsingStatue(TransmissionData transmissionData, Callback<JsonObject> usingStatusCallback){
         restRequest.receiveUsingStatus(transmissionData, usingStatusCallback);
     }
 
-    // 관리자모드의 경우, 예약대기, 확정 된 예약 상세내역을 받아볼 수 있음
+
     public void getReservationInfo(int reservationId, Callback<JsonObject> reservationInfoCallback){
         restRequest.getReservationInfo(reservationId, reservationInfoCallback);
     }
@@ -166,7 +158,7 @@ public class RestRequestHelper {
         restRequest.roomStatus(id, roomName, roomStatusCallback);
     }
 
-    public void controlDoor(int id, int doorId, boolean status, Callback<JsonObject> controlDoorCallback ){
+    public void controlDoor(int id, int doorId, int status, Callback<JsonObject> controlDoorCallback ){
         restRequest.controlDoor(id, doorId, status, controlDoorCallback);
     }
 

@@ -108,7 +108,6 @@ public class ReservationStatusFragment extends Fragment {
             restRequestHelper.myBooking(requestDate, new Callback<JsonObject>() {
                 @Override
                 public void success(JsonObject jsonObject, Response response) {
-                    System.out.println("송미송미 : "+jsonObject);
                     addList(jsonObject);
                 }
 
