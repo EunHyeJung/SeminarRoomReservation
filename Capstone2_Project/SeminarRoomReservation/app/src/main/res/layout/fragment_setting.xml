@@ -106,19 +106,7 @@
                 android:layout_marginLeft="100dp"
                 />
 
-
         </LinearLayout>
-        <Button
-            android:id="@+id/gcm"
-            android:layout_width="200dp"
-            android:layout_height="30dp"
-            android:background="#80ef6070"
-            android:layout_marginTop= "17dp"
-            android:layout_marginLeft="60dp"
-            android:text="GCMTEST"
-            />
-
-
 
     </LinearLayout>
     </LinearLayout>

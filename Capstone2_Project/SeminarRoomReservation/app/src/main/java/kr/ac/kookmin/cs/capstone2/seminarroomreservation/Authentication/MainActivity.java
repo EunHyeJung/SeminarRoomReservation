@@ -129,12 +129,20 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void init() {
-        if (SharedPreferenceClass.getValue("autoLogin", false)) {       // 자동로그인 설정일 경우, 아이디 저장도 같이 체크
+        if (SharedPreferenceClass.getValue("autoLogin", false)) {
             autoLogin();
-        } else if (SharedPreferenceClass.getValue("storeId", false)) {        // 아이디 저장이 되어 있는 상태이면
+        } else{
+            checkBoxId.setChecked(false);
+            editTextId.clearComposingText();
+            editTextPassword.clearComposingText();
+        }
+        if (SharedPreferenceClass.getValue("storeId", false)) {
             checkBoxId.setChecked(true);
             String userId = SharedPreferenceClass.getValue("id", "false");
             editTextId.setText(userId);
+        }else{
+            checkBoxId.setChecked(false);
+            editTextId.clearComposingText();
         }
     }
 
@@ -171,6 +179,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void failure(RetrofitError error) {
                 makeToast(getApplicationContext(), getString(R.string.network_connection_error));
+                sharedPreference.putValue("autoLogin", false);
                 error.printStackTrace();
             }
         });

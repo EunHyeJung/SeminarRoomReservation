@@ -38,7 +38,9 @@ public class SettingFragment extends Fragment {
               //  SharedPreferenceClass.removeAllPreferences();
                 SharedPreferenceClass.putValue("autoLogin", false);
                 SharedPreferenceClass.putValue("storeId", false);
+                getActivity().moveTaskToBack(true);
                 getActivity().finish();
+                android.os.Process.killProcess(android.os.Process.myPid() );
             }
         });
 

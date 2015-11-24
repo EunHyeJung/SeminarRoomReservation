@@ -1,0 +1,73 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="260dp"
+    android:layout_height="wrap_content"
+    android:background="#FFFFFF"
+    android:orientation="vertical"
+    android:layout_gravity="center_horizontal"
+    android:gravity="center_horizontal"
+    tools:context="kr.ac.kookmin.cs.capstone2.seminarroomreservation.CustomExitDialog">
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="#58b7bc">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:padding="13dp"
+            android:text="세미나실 예약서비스 : 오픈잇"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:textSize="15dp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="40dp"
+        android:layout_marginTop="40dp"
+        android:text="앱을 종료하시겠습니까 ? "
+
+        android:textColor="#90000000"
+        android:textSize="14dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="#90000000"
+        android:orientation="horizontal"
+        >
+
+
+        <Button
+            android:id="@+id/button_cancel"
+            android:layout_width="129dp"
+            android:layout_height="39dp"
+            android:background="#FFFFFF"
+            android:text="취소"
+            android:textSize="12dp"
+            android:textColor="#90124F54"
+            android:layout_marginTop="1dp"
+            />
+
+
+        <Button
+            android:id="@+id/button_ok"
+            android:layout_width="130dp"
+            android:layout_height="39dp"
+            android:layout_marginLeft="1dp"
+            android:background="#FFFFFF"
+            android:text="확인"
+            android:textSize="12dp"
+            android:textColor="#90124F54"
+            android:layout_marginTop="1dp"
+            />
+    </LinearLayout>
+    </LinearLayout>
+

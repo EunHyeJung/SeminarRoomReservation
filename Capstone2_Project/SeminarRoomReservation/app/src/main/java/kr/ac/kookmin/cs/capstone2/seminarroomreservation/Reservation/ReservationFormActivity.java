@@ -30,6 +30,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Manager.ControlDialogActivity;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Model.DatabaseHelper;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.Network.RestRequestHelper;
 import kr.ac.kookmin.cs.capstone2.seminarroomreservation.R;
@@ -53,7 +54,7 @@ import static kr.ac.kookmin.cs.capstone2.seminarroomreservation.UpdateView.*;
 
 public class ReservationFormActivity extends AppCompatActivity {
 
-    // 출력모드 / 1 - 예약 내역 출력  /  2 - 예약 신청
+
     private int mode;
 
     private TextView textViewFormTitle;
@@ -73,7 +74,7 @@ public class ReservationFormActivity extends AppCompatActivity {
     UserListAdapter userListAdapter;
     private ArrayList<ItemUser> mUsers;
     public static HashMap<Integer, String> selectedUsers;
-    public static int addedMember = 0;
+    private int controlRoomId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,17 +107,15 @@ public class ReservationFormActivity extends AppCompatActivity {
         textViewCheckOutTime = (TextView) findViewById(R.id.textView_checkOutTime);
         editTextContent = (EditText) findViewById(R.id.editText_content);
         buttonMakeReservation = (Button) findViewById(R.id.button_makereservation);
-
         autoTextViewMember = (AutoCompleteTextView) findViewById(R.id.textView_userName);
         autoTextViewMember.setThreshold(1);
         textViewParticipants = (TextView) findViewById(R.id.textView_participants);
         selectedUsers = new HashMap<Integer, String>();
-
         spinnerRoom = (Spinner) findViewById(R.id.spinner_roomList);
     }
 
 
-    /*  초기 화면 설정   */
+    /*  Set initialView   */
 
     public void initView(int mode) {
         switch (mode) {
@@ -128,8 +127,7 @@ public class ReservationFormActivity extends AppCompatActivity {
                 setUsableEditText(editTextContent, false);
                 setUsableTextView(autoTextViewMember, false);
                 autoTextViewMember.setHint(" ");
-                buttonMakeReservation.setVisibility(View.INVISIBLE);
-                getReservationInfo();       // 초기 설정을 마친 뒤 서버로 예약 데이터 요청
+                getReservationInfo();       // request reservationData to server
                 break;
             case REQUEST_MODE:
                 setUsableTextView(autoTextViewMember, true);
@@ -184,9 +182,12 @@ public class ReservationFormActivity extends AppCompatActivity {
     // set reservation data received from server
     public void setReservationInfo(String userId, int roomId, String checkInDate, String checkInTime, String checkOutTime,
                                    String content, ArrayList<String> participant) {
+        controlRoomId = roomId;
         textViewCheckInDate.setText(checkInDate);
         textViewCheckInTime.setText(checkInTime);
         textViewCheckOutTime.setText(checkOutTime);
+        buttonMakeReservation.setText(getString(R.string.smart_key_usage));
+        buttonMakeReservation.setOnClickListener(clickListener);
 
         ArrayList<String> roomNames = new ArrayList<String>();
         roomNames.add(RoomInfo.getRoomName(roomId));
@@ -208,7 +209,13 @@ public class ReservationFormActivity extends AppCompatActivity {
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.button_makereservation:
-                    requestReservation();
+                    if(mode == REQUEST_MODE) {
+                        requestReservation();
+                    }else{
+                        Intent intent = new Intent(getApplicationContext(), ControlDialogActivity.class);
+                        intent.putExtra("roomId", controlRoomId);
+                        startActivity(intent);
+                    }
                     break;
                 case R.id.textView_checkInDate:
                     new DatePickerDialog(ReservationFormActivity.this, dateSetListener, year, month, day).show();
@@ -333,17 +340,17 @@ public class ReservationFormActivity extends AppCompatActivity {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             // TODO Auto-generated method stub
-            hourOfDay = 9;
+
             String msg = String.format("%02d:%02d:00", hourOfDay, minute);
             Toast.makeText(ReservationFormActivity.this, msg, Toast.LENGTH_SHORT).show();
-            setTextView(textViewCheckInDate, msg);
+            setTextView(textViewCheckInTime, msg);
         }
     };
     private CustomTimePickerDialog.OnTimeSetListener timeSetListener2 = new CustomTimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             // TODO Auto-generated method stub
-            hourOfDay = 9;
+
             String msg = String.format("%02d:%02d:00", hourOfDay, minute);
             Toast.makeText(ReservationFormActivity.this, msg, Toast.LENGTH_SHORT).show();
             setTextView(textViewCheckOutTime, msg);
@@ -359,4 +366,9 @@ public class ReservationFormActivity extends AppCompatActivity {
             }
         });
     }
+
+   /* @Override
+    public void onBackPressed(){
+        makeToast(getApplicationContext(), "back버튼 확인");
+    }*/
 }	

@@ -23,11 +23,8 @@ public class RegistrationIntentService extends IntentService{
     public RegistrationIntentService(){
         super(TAG);
     }
-    /*
-     * GCM을 위한 Instance ID의 토큰을 생성하여 가져온다
-     * @param Intent
-     */
 
+    // Create and Take token of Instance ID for GCM
     @Override
     protected void onHandleIntent(Intent intent) {
         // GCM Instance ID의 토큰을 가져오는 작업이 시작되면
@@ -35,7 +32,6 @@ public class RegistrationIntentService extends IntentService{
         LocalBroadcastManager.getInstance(this)
                 .sendBroadcast(new Intent(QuickstartPreferences.REGISTRATION_GENERATING));
 
-        // GCM을 위한 Instance ID를 가져온다.
         InstanceID instanceID = InstanceID.getInstance(this);
         String token = null;
         try {

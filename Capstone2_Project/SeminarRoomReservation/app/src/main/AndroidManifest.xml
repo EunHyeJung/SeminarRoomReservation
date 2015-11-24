@@ -13,7 +13,7 @@
         android:protectionLevel="signature" />
 
     <uses-permission android:name="com.example.gcm.permission.C2D_MESSAGE" />
-
+    <uses-permission android:name="android.permission.RESTART_PACKAGES"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -24,10 +24,10 @@
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".Manager.ManagerActivity"
             android:label="@string/title_activity_manager" />
@@ -38,7 +38,6 @@
             android:name=".Join.JoinActivity"
             android:label="@string/title_activity_join" />
         <activity android:name=".Reservation.ReservationFormActivity" >
-
         </activity>
         <activity
             android:name=".Manager.ControlDialogActivity"
@@ -87,6 +86,10 @@
             android:name=".Gcm.RegistrationIntentService"
             android:exported="false" />
         <!-- [END gcm_registration_service] -->
+        <activity
+            android:name=".CustomExitDialog"
+            android:label="@string/title_activity_custom_dialog" >
+        </activity>
     </application>
 
 </manifest>

@@ -76,7 +76,8 @@ public class UsingStatusFragment extends Fragment {
 
 
     public interface AccidentListener {
-        void refershFragment(int page);     // to update fragmentView
+        public void refershFragment(int page);     // to update fragmentView
+
     }
 
 
@@ -93,6 +94,7 @@ public class UsingStatusFragment extends Fragment {
         month = calendar.get(Calendar.MONTH);
         day = calendar.get(Calendar.DAY_OF_MONTH);
         date = year + "-" + (month + 1) + "-" + day;
+        buttonDate.setOnClickListener(clickListener);
 
         // show seminar room using status for the selected day
         initView(date);
@@ -283,6 +285,4 @@ public class UsingStatusFragment extends Fragment {
 
         }
     }
-
-
 }
