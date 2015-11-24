@@ -84,13 +84,29 @@
         android:paddingLeft="40dp"
         android:paddingBottom="50dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <ImageButton
-            android:id="@+id/button_smartkey"
+        <Button
+            android:id="@+id/button_smartkey_open"
+            android:layout_marginTop="30dp"
+            android:paddingLeft ="10dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/smartkey"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/img_unlock"
+            android:text = "Open"
+            android:background="#90124F54"
+            android:scaleType="fitXY"
+            />
+
+        <Button
+            android:id="@+id/button_smartkey_close"
+            android:paddingLeft ="10dp"
+            android:layout_marginTop="150dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/img_lock"
+            android:text = "Close"
             android:background="#90124F54"
             android:scaleType="fitXY"
             />
@@ -98,3 +114,4 @@
     </LinearLayout>
 
 </LinearLayout>
+
