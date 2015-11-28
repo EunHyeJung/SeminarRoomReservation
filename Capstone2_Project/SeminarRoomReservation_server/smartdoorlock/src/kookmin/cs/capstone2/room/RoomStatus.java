@@ -38,7 +38,7 @@ public class RoomStatus extends MyHttpServlet {
 		System.out.println(roomId);
 				
 		PrintWriter pw = response.getWriter();
-		
+
 		try {
 			
 			conn = DriverManager.getConnection(StaticVariables.JOCL); //커넥션 풀에서 대기 상태인 커넥션을 얻는다

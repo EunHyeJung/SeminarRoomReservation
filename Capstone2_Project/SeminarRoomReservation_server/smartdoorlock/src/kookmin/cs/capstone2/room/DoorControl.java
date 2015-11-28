@@ -39,8 +39,7 @@ import kookmin.cs.capstone2.common.StaticVariables;
  * filename : DoorControl.java
  * 기능 : 관리자가 요청할 때 세미나실 문을 열고 닫는다.
  */
-public class DoorControl extends MyHttpServlet { // 1.httpservlet 상속
-												// 2.drivermanager상속 두 가지 방법
+public class DoorControl extends MyHttpServlet {
 
 	String command = null;
 
@@ -48,21 +47,22 @@ public class DoorControl extends MyHttpServlet { // 1.httpservlet 상속
 	protected void service(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
-		// request, response 인코딩 방식 지정
-		request.setCharacterEncoding("UTF-8");
-		response.setContentType("text/html;charset=utf-8");
+		super.service(request, response);
 
+		//RequestBody to String
+		//String requestString = StaticMethods.getBody(request);
+		//System.out.println(requestString);
+				
 		// request 파라미터로 전송된 값 얻기 => !!json으로 수정해야 함
 		// ******************************* //송미랑도 맞춰야함
 		String userId = request.getParameter("id"); // 사용자 고유 id
-		String roomStr = request.getParameter("roomId");
-		int roomId = Integer.parseInt(roomStr);
+		String roomStr = request.getParameter("roomName");
 		command = request.getParameter("command");
-		
-		System.out.println("doorControl : " + userId + " " + roomId + " " + command);
+
+		System.out.println("doorControl : " + userId + " " + roomStr + " " + command);
 
 		PrintWriter pw = response.getWriter();
-		
+
 		try {
 			conn = DriverManager.getConnection(StaticVariables.JOCL); // 커넥션 풀에서 대기상태인 커넥션을 얻는다
 			stmt = conn.createStatement(); // DB에 SQL문을 보내기 위한 Statement를 생성
@@ -70,7 +70,7 @@ public class DoorControl extends MyHttpServlet { // 1.httpservlet 상속
 			conn.setAutoCommit(false);// 오토커밋을 false로 지정하여 트랜잭션 조건을 맞춘다
 
 			String sql = // 방 잠금 장치 상태 변경 명령
-			"update room set status=" + command + " where id=" + roomId + ";";
+			"update room set status=" + command + " where id=" + roomStr + ";";
 			
 			int updateResult = stmt.executeUpdate(sql);// return the row count for SQL DML statements
 
@@ -78,11 +78,11 @@ public class DoorControl extends MyHttpServlet { // 1.httpservlet 상속
 
 				// 출입 기록 삽입
 				sql = "insert into roomhistory (room_id, user_id, command) values "
-						+ "(" + roomId + ", " + userId + ", " + command + ");";
+						+ "(" + roomStr + ", " + userId + ", " + command + ");";
 				int insertResult = stmt.executeUpdate(sql); // roomhistory에 기록 추가
 
 				if (insertResult == 1) {
-					int result = StaticMethods.rasberrySocket(command, roomId); // 라즈베리파이에 요청 보내기
+					int result = StaticMethods.rasberrySocket(command, roomStr); // 라즈베리파이에 요청 보내기
 					if (result == StaticVariables.SUCCESS) {
 						responseJsonObj.put("result", StaticVariables.SUCCESS);
 						conn.commit();

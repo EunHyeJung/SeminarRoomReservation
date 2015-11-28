@@ -31,9 +31,7 @@ public class SpecificKey extends MyHttpServlet {
 	protected void service(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 	
-		// request, response 인코딩 방식 지정
-		request.setCharacterEncoding("utf-8");
-		response.setContentType("text/html;charset=utf-8");
+		super.service(request, response);
 
 		// RequestBody to String
 		String requestString = StaticMethods.getBody(request);
@@ -56,13 +54,14 @@ public class SpecificKey extends MyHttpServlet {
 			
 			rs = stmt.executeQuery(sql); //sql문 실행
 			String date = "", startTime = "", endTime = "";
-			int status = -1, roomId=-1;
+			int status = -1;
+			String roomId= "-1";
 			System.out.println("1");
 			if (rs.next()) {
 				date = rs.getString("date");
 				startTime = rs.getString("start_time");
 				endTime = rs.getString("end_time");
-				roomId = rs.getInt("room_id");
+				roomId = rs.getString("room_id");
 				status = rs.getInt("status");
 			}
 			System.out.println("2");

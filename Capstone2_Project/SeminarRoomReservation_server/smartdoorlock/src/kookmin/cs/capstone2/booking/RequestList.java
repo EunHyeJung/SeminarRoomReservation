@@ -31,21 +31,18 @@ public class RequestList extends MyHttpServlet {
 	protected void service(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
-		// request, response 인코딩 방식 지정
-		request.setCharacterEncoding("utf-8");
-		response.setContentType("text/html;charset=utf-8");
+		super.service(request, response);
 		
 		//RequestBody to String
 		String requestString = StaticMethods.getBody(request);
-		
+		System.out.println(requestString);
 		// request 파라미터에서 json 파싱
 		JSONObject requestObject = (JSONObject)JSONValue.parse(requestString);
-		
 		String date = requestObject.get("date").toString(); // get date
 		System.out.println("requestlist : " + requestObject.toString());
 
 		PrintWriter pw = response.getWriter();
-		
+
 		try {
 			conn = DriverManager.getConnection(StaticVariables.JOCL); //커넥션 풀에서 대기 상태인 커넥션을 얻는다
 			stmt = conn.createStatement(); //DB에 SQL문을 보내기 위한 Statement를 생성

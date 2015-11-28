@@ -34,9 +34,7 @@ public class BookingSpec extends MyHttpServlet {
 	protected void service(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
-		// request, response 인코딩 방식 지정
-		request.setCharacterEncoding("utf-8");
-		response.setContentType("text/html;charset=utf-8");
+		super.service(request, response);
 		
 		//RequestBody to String
 		//String requestString = StaticMethods.getBody(request);
@@ -46,16 +44,17 @@ public class BookingSpec extends MyHttpServlet {
 		//String reservationId = requestObject.get("id").toString(); // get reservation id
 		// request 파라미터로 전송된 값 얻기
 		String reservationId = request.getParameter("reservationId");
+		System.out.println("BookingSpec : " + reservationId + "\n");
 		PrintWriter pw = response.getWriter();
 		
 		try {
 			conn = DriverManager.getConnection(StaticVariables.JOCL); //커넥션 풀에서 대기 상태인 커넥션을 얻는다
 			stmt = conn.createStatement(); //DB에 SQL문을 보내기 위한 Statement를 생성
-			String sql = "select * from reservationinfo where id='" + reservationId + "';";
+			String sql = "select room_id,date,start_time,end_time,context, user.text_id from reservationinfo, user where reservationinfo.user_id=user.id and reservationinfo.id='" + reservationId + "';";
 			rs = stmt.executeQuery(sql);
 			if (rs.next()) {
 				subJsonObj.put("room", rs.getString("room_id"));
-				subJsonObj.put("user", rs.getString("user_id"));
+				subJsonObj.put("user", rs.getString("text_id"));
 				subJsonObj.put("date", rs.getString("date"));
 				subJsonObj.put("startTime", rs.getString("start_time"));
 				subJsonObj.put("endTime", rs.getString("end_time"));

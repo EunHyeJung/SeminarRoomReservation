@@ -41,9 +41,7 @@ public class BookingRequest extends MyHttpServlet {
 	protected void service(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
-		// request, response 인코딩 방식 지정
-		request.setCharacterEncoding("utf-8");
-		response.setContentType("text/html;charset=utf-8");
+		super.service(request, response);
 
 		// RequestBody to String
 		String requestString = StaticMethods.getBody(request);
@@ -74,41 +72,58 @@ public class BookingRequest extends MyHttpServlet {
 			// 오토커밋을 false로 지정하여 트랜잭션 조건을 맞춘다
 			conn.setAutoCommit(false);
 
-			// table reservationinfo에 데이터 insert
 			String sql;
-			sql = "insert into reservationinfo(room_id, user_id, date, start_time, end_time, context) "
-					+ "values (" + roomId+ "," + userId+ ", '" + date + "', '" + startTime + "', '" + endTime+ "', '"+ context+ "');";
-
-			// insert 후 생성된 고유 id값(key) 받아오기
-			stmt.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
-			rs = stmt.getGeneratedKeys();
-			rs.next();
-			int key = rs.getInt(1);
-
-			// participantsArray의 회원들, table seminarmember에 insert하기
-			sql = "insert into seminarmember(id, user_id) " + "values ";
-			JSONObject participantObject = new JSONObject();
-			String participantId = "";
-			for (int i = 0; i < participantsJSONArray.size(); i++) {
-				participantObject = (JSONObject) participantsJSONArray.get(i);
-				participantId = participantObject.get("id").toString();
-				sql += "(" + key + "," + participantId + ")";
-				if ( i != participantsJSONArray.size() - 1 ) 
-					sql += ", ";
-			}
-			System.out.println(sql);
-			if(stmt.executeUpdate(sql) != 0){ // the row count for SQL DML stmt
-				conn.commit();
-				//responseJSONObj.put("status", StaticVariables.SUCCESS);
-				result = StaticVariables.SUCCESS;
-			}
 			
-			// 예약 신청 완료 후 관리자에게 푸시 알람 전송
-			GcmSender gs = new GcmSender();
-			sql = "select reg_id from gcmid, user where gcmid.id=user.id and b_admin=1";
+			// 중복된 데이터가 있는지 확인하기
+			sql = "select * from reservationinfo where "
+					+ "date='" + date + "'" + 
+					" and room_id=" + roomId + 
+					" and ("+
+					"(start_time < '" + startTime + "' and end_time > '" + startTime +"') or " +
+					"(start_time > '" + startTime + "' and start_time < '" + endTime +"') or " +
+					"(start_time <= '" + startTime + "' and end_time >='" + endTime + "') or " +
+					"(start_time >= '" + startTime + "' and end_time <= '" + endTime + "'));";
 			rs = stmt.executeQuery(sql);
-			while (rs.next()) {
-							gs.sendPush(rs.getString("reg_id"), "새로운 예약 신청");
+			System.out.println("bookingrequest sql : " + sql + "\n\n");
+			
+			if(rs.next()){ // 중복이 있을 때
+				result = StaticVariables.DUPLICATION;
+			} else {
+				sql = "insert into reservationinfo(room_id, user_id, date, start_time, end_time, context) "
+						+ "values (" + roomId+ "," + userId+ ", '" + date + "', '" + startTime + "', '" + endTime+ "', '"+ context+ "');";
+	
+				// insert 후 생성된 고유 id값(key) 받아오기
+				stmt.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
+				rs = stmt.getGeneratedKeys();
+				rs.next();
+				int key = rs.getInt(1);
+	
+				if(participantsJSONArray.size() != 0){
+					////////////////////////////////////////////////////////참석자 없을 때.
+					// participantsArray의 회원들, table seminarmember에 insert하기
+					sql = "insert into seminarmember(id, user_id) " + "values ";
+					JSONObject participantObject = new JSONObject();
+					String participantId = "";
+					for (int i = 0; i < participantsJSONArray.size(); i++) {
+						participantObject = (JSONObject) participantsJSONArray.get(i);
+						participantId = participantObject.get("id").toString();
+						sql += "(" + key + "," + participantId + ")";
+						if ( i != participantsJSONArray.size() - 1 ) 
+							sql += ", ";
+					}
+					System.out.println(sql);
+					stmt.executeUpdate(sql);
+				}
+				
+				conn.commit();
+				result = StaticVariables.SUCCESS;
+				// 예약 신청 완료 후 관리자에게 푸시 알람 전송
+				GcmSender gs = new GcmSender();
+				sql = "select reg_id from gcmid, user where gcmid.id=user.id and b_admin=1";
+				rs = stmt.executeQuery(sql);
+				while (rs.next()) {
+								gs.sendPush(rs.getString("reg_id"), "새로운 예약 신청");
+				}
 			}
 		} catch (SQLException se) {
 			System.out.println(se.getMessage());

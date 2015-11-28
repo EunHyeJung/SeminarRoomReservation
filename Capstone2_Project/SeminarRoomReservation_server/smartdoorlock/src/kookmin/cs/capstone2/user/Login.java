@@ -15,9 +15,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 
 import kookmin.cs.capstone2.GCM.GcmSender;
 import kookmin.cs.capstone2.common.MyHttpServlet;
+import kookmin.cs.capstone2.common.StaticMethods;
 import kookmin.cs.capstone2.common.StaticVariables;
 
 public class Login extends MyHttpServlet {
@@ -29,14 +31,19 @@ public class Login extends MyHttpServlet {
 	protected void service(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
-		// request, response 인코딩 방식 지정
-		request.setCharacterEncoding("utf-8");
-		response.setContentType("text/html;charset=utf-8");
+		super.service(request, response);;
 
+		//RequestBody to String
+		String requestString = StaticMethods.getBody(request);
+		System.out.println("Login : " + requestString);
+				
+		// request 파라미터에서 json 파싱
+		JSONObject requestObject = (JSONObject)JSONValue.parse(requestString);
+		
 		// request 파라미터로 전송된 값 얻기
-		String text_id = request.getParameter("id");
-		String password = request.getParameter("password");
-		String gcmRegId = request.getParameter("instanceId");
+		String text_id = requestObject.get("id").toString();
+		String password = requestObject.get("password").toString();
+		String gcmRegId = requestObject.get("instanceId").toString();
 
 		PrintWriter pw = response.getWriter();
 
@@ -76,6 +83,7 @@ public class Login extends MyHttpServlet {
 					System.out.println("registered the new regId");
 				} else {
 					sql = "update gcmid set reg_id='" + gcmRegId +"' where id=" + userId;
+					stmt.executeUpdate(sql);
 					System.out.println("update the regId");
 				}
 				

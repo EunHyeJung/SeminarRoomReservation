@@ -34,9 +34,7 @@ public class SmartKey extends MyHttpServlet {
 	protected void service(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 	
-		// request, response 인코딩 방식 지정
-		request.setCharacterEncoding("utf-8");
-		response.setContentType("text/html;charset=utf-8");
+		super.service(request, response);
 
 		// RequestBody to String
 		String requestString = StaticMethods.getBody(request);
@@ -45,7 +43,7 @@ public class SmartKey extends MyHttpServlet {
 		// request 파라미터에서 json 파싱
 		JSONObject requestJsonObj = (JSONObject) JSONValue.parse(requestString);
 		String userId = requestJsonObj.get("Id").toString();
-
+		System.out.println("smartkey : " + userId);
 		PrintWriter pw = response.getWriter();
 		
 		try {

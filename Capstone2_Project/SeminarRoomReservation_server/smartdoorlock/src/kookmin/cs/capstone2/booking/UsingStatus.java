@@ -26,13 +26,12 @@ public class UsingStatus extends MyHttpServlet {
 	 * request : date(yyyy-MM-dd) 
 	 * response : 예약 고유 id(id), 세미나실 id(roomId), 예약시작 시간(startTime), 예약 끝 시간(endTime), 예약 상태(status)
 	 */
+	
 	@Override
 	protected void service(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
-		// request, response 인코딩 방식 지정
-		request.setCharacterEncoding("utf-8");
-		response.setContentType("text/html;charset=utf-8");
+		super.service(request, response);
 		
 		//RequestBody to String
 		String requestString = StaticMethods.getBody(request);
@@ -77,7 +76,6 @@ public class UsingStatus extends MyHttpServlet {
 				while (rs.next()) {
 					jsonArrayInfo = new JSONObject();
 					jsonArrayInfo.put("reservationId", rs.getInt("id"));
-					System.out.println("reservaitonId : " + rs.getInt("id"));
 					jsonArrayInfo.put("roomId", rs.getInt("room_id"));
 					jsonArrayInfo.put("startTime", rs.getString("start_time"));
 					jsonArrayInfo.put("endTime", rs.getString("end_time"));

@@ -30,8 +30,7 @@ public class CancelMyBooking extends MyHttpServlet {
 	protected void service(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
-		// request, response 인코딩 방식 지정
-		response.setContentType("text/html;charset=utf-8");
+		super.service(request, response);
 		
 		//RequestBody to String
 		String requestString = StaticMethods.getBody(request);

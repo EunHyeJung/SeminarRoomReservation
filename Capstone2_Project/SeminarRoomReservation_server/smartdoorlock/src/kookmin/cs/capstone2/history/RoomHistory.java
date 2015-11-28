@@ -14,10 +14,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import kookmin.cs.capstone2.common.MyHttpServlet;
+import kookmin.cs.capstone2.common.StaticMethods;
 import kookmin.cs.capstone2.common.StaticVariables;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 
 /*
  * filename : RoomHistory.java
@@ -34,20 +36,21 @@ public class RoomHistory extends MyHttpServlet {
 	protected void service(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
-		// request, response 인코딩 방식 지정
-		request.setCharacterEncoding("utf-8");
-		response.setContentType("text/html;charset=utf-8");
-
-		String date = "";
-		String room = "";
+		super.service(request, response);
 		
-		// request 파라미터로 전송된 값 얻기
-		date = request.getParameter("date");
-		room = request.getParameter("room");
+		//RequestBody to String
+		String requestString = StaticMethods.getBody(request);
+		System.out.println(requestString);
+				
+		// request 파라미터에서 json 파싱
+		JSONObject requestObject = (JSONObject)JSONValue.parse(requestString);
+		String date = requestObject.get("date").toString(); // get date
+		String room = requestObject.get("roomName").toString(); // get room
 		
-		System.out.println(date + " " + room);
+		System.out.println("roomhistory : " + date + " " + room);
 
 		PrintWriter pw = response.getWriter();
+		MyHttpServlet mv = new MyHttpServlet();
 		
 		try {
 			conn = DriverManager.getConnection(StaticVariables.JOCL); //커넥션 풀에서 대기 상태인 커넥션을 얻는다
@@ -59,10 +62,11 @@ public class RoomHistory extends MyHttpServlet {
 			
 			//string room이 ALL일때는 방과 관계없이 해당 날짜 기록을 모두 보여준다
 			if(!room.equals("ALL")){
-				sql += "and room.room_id='" + room + "'";
+				sql = sql + " and room.id=" + room;
 			}
 			sql += ";";
 			
+			System.out.println("Sql : " + sql);
 			rs = stmt.executeQuery(sql);
 			while (rs.next()) {
 				jsonArrayInfo = new JSONObject();

@@ -5,6 +5,7 @@ public class StaticVariables {
 	public static final int FAIL = -1;
 	public static final int REJECTION = 0;
 	public static final int SUCCESS = 1;
+	public static final int DUPLICATION = 4;
 	public static final int ADMIN_SUCCESS = 2;
 	public static final int RESERVATION = 2;
 	public static final int ERROR_MYSQL = 3;

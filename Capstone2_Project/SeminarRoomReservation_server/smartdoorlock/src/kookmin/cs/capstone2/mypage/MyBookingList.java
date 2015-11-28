@@ -34,8 +34,7 @@ public class MyBookingList extends MyHttpServlet{
 	protected void service(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
-		// request, response 인코딩 방식 지정
-		response.setContentType("text/html;charset=utf-8");
+		super.service(request, response);
 		
 		//RequestBody to String
 		String requestString = StaticMethods.getBody(request);
@@ -69,7 +68,7 @@ public class MyBookingList extends MyHttpServlet{
 				jsonArrayInfo.put("date", rs.getString("date"));
 				jsonArrayInfo.put("startTime", rs.getString("start_time"));
 				jsonArrayInfo.put("endTime", rs.getString("end_time"));
-				
+				jsonArrayInfo.put("status", rs.getInt("status"));
 				jsonArray.add(jsonArrayInfo); //Array에 Object 추가
 			}
 			

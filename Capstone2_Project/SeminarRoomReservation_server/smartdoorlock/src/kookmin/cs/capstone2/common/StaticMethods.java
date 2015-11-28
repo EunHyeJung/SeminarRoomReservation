@@ -56,7 +56,7 @@ public class StaticMethods {
 	}
 
 	// 라즈베리파이로 명령 보내기
-	public static int rasberrySocket(String command, int roomId) {
+	public static int rasberrySocket(String command, String roomId) {
 
 		int result = StaticVariables.FAIL;
 		
