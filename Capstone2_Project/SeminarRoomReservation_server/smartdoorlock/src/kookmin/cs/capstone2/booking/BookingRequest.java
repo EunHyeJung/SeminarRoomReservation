@@ -44,7 +44,7 @@ public class BookingRequest extends MyHttpServlet {
 		super.service(request, response);
 
 		// RequestBody to String
-		String requestString = StaticMethods.getBody(request);
+		//String requestString = StaticMethods.getBody(request);
 
 		// request 파라미터에서 json 파싱
 		JSONObject requestJSON = (JSONObject) JSONValue.parse(requestString);

@@ -26,13 +26,17 @@ public class MyHttpServlet extends HttpServlet{
     public JSONObject subJsonObj = new JSONObject(); // 결과 저장 객체
     public JSONArray jsonArray = new JSONArray(); // 배열 저장 객체
     public JSONObject jsonArrayInfo = new JSONObject(); // 배열 원소 하나
+    
+    protected String requestString = null;
 
     @Override
     protected void service(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
     
     	// request, response 인코딩 방식 지정
-    			request.setCharacterEncoding("utf-8");
-    			response.setContentType("text/html;chamv.rset=utf-8");
+    	request.setCharacterEncoding("utf-8");
+    	response.setContentType("text/html;chamv.rset=utf-8");
+    	
+    	requestString = StaticMethods.getBody(request);
     }
 }

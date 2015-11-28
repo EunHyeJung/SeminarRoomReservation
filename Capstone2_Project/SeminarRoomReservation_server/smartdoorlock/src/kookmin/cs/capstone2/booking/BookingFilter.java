@@ -31,10 +31,6 @@ public class BookingFilter extends MyHttpServlet {
     @Override
     protected void service(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
-
-        // request, response 인코딩 방식 지정
-        //request.setCharacterEncoding("utf-8");
-        //response.setContentType("text/html;charset=utf-8");
     	
     	super.service(request, response);
         

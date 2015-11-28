@@ -33,7 +33,6 @@ public class CancelMyBooking extends MyHttpServlet {
 		super.service(request, response);
 		
 		//RequestBody to String
-		String requestString = StaticMethods.getBody(request);
 		System.out.println(requestString);
 		
 		// request 파라미터에서 json 파싱

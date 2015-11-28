@@ -32,9 +32,6 @@ public class UsingStatus extends MyHttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 
 		super.service(request, response);
-		
-		//RequestBody to String
-		String requestString = StaticMethods.getBody(request);
 				
 		// request 파라미터에서 json 파싱
 		JSONObject requestObject = (JSONObject)JSONValue.parse(requestString);
